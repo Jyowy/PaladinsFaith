@@ -1,0 +1,16 @@
+{
+    "name": "FirstSliceAssembley",
+    "rootNamespace": "FirstSlice",
+    "references": [
+        "GUID:8a93e3dd368411249b23543a1cbf2244"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
