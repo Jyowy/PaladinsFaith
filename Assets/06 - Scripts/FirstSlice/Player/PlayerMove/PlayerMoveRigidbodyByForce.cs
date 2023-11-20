@@ -12,16 +12,13 @@ namespace FirstSlice.Player
         private float runForce = 2f;
 
         [SerializeField]
-        private Rigidbody rigibody = null;
+        private new Rigidbody rigidbody = null;
 
-        public override void PlanarMove(Vector2 worldDirection)
+        public override void PlanarMove(Vector3 worldDirection)
         {
             float forceFactor = GetForceFactor();
-            Vector2 planeMoveScaled = forceFactor * worldDirection;
-            Vector3 force = Vector3.zero;
-            force.x = planeMoveScaled.x;
-            force.z = planeMoveScaled.y;
-            rigibody.AddForce(force);
+            Vector3 force = worldDirection * forceFactor;
+            rigidbody.AddForce(force);
         }
 
         private float GetForceFactor()

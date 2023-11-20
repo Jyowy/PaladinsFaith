@@ -21,6 +21,8 @@ namespace FirstSlice.PlayerInput
         [SerializeField]
         private InputActionReference run = null;
 
+        [SerializeField]
+        private InputActionReference rotation = null;
 
         [ShowInInspector, ReadOnly]
         private PlayerInputData playerInputData = null;
@@ -38,6 +40,7 @@ namespace FirstSlice.PlayerInput
             InitializeInputMap();
             move = GetActionReference(inputActionMap, "Move");
             run = GetActionReference(inputActionMap, "Run");
+            rotation = GetActionReference(inputActionMap, "CameraRotation");
         }
 
         [Button]
@@ -45,6 +48,7 @@ namespace FirstSlice.PlayerInput
         {
             move = null;
             run = null;
+            rotation = null;
         }
 
         private InputActionReference GetActionReference(InputActionMap actionMap, string actionName)
@@ -64,6 +68,7 @@ namespace FirstSlice.PlayerInput
         private void Process()
         {
             playerInputData.movement = move.action.ReadValue<Vector2>();
+            playerInputData.cameraRotation = rotation.action.ReadValue<Vector2>();
         }
 
         private void OnEnable()

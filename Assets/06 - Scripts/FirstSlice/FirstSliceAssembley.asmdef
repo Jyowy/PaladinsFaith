@@ -2,7 +2,8 @@
     "name": "FirstSliceAssembley",
     "rootNamespace": "FirstSlice",
     "references": [
-        "GUID:8a93e3dd368411249b23543a1cbf2244"
+        "GUID:8a93e3dd368411249b23543a1cbf2244",
+        "GUID:10991440e7f7a9643bbf43f49c953279"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

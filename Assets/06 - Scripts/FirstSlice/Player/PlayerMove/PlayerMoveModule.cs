@@ -21,7 +21,7 @@ namespace FirstSlice.Player
         }
 
         [Button]
-        public abstract void PlanarMove(Vector2 worldDirection);
+        public abstract void PlanarMove(Vector3 worldDirection);
 
         public void SetMoveMode(PlayerMoveMode moveMode)
         {

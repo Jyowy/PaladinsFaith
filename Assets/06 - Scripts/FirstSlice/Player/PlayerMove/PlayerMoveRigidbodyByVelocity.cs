@@ -1,3 +1,4 @@
+using log4net.Util;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,28 +14,26 @@ namespace FirstSlice.Player
         private float runVelocity = 2f;
 
         [SerializeField]
-        private Rigidbody rigibody = null;
+        private new Rigidbody rigidbody = null;
 
-        public override void PlanarMove(Vector2 worldDirection)
+        public override void PlanarMove(Vector3 worldDirection)
         {
             if (worldDirection.magnitude == 0f)
             {
+                rigidbody.velocity = Vector3.zero;
+                rigidbody.angularVelocity = Vector3.zero;
                 return;
             }
 
             float velocityFactor = GetVelocityFactor();
-            Vector3 planarDirection = Vector3.zero;
-            planarDirection.x = worldDirection.x;
-            planarDirection.z = worldDirection.y;
+            Vector3 planarVelocity = worldDirection * velocityFactor;
+            Vector3 currentVelocity = rigidbody.velocity;
 
-            Vector3 planarVelocity = planarDirection * velocityFactor;
-            Vector3 currentVelocity = rigibody.velocity;
-
-            bool tooDifferent = AreDirectionsTooDifferent(planarDirection, currentVelocity);
+            bool tooDifferent = AreDirectionsTooDifferent(worldDirection, currentVelocity);
 
             if (tooDifferent)
             {
-                rigibody.velocity = planarVelocity;
+                rigidbody.velocity = planarVelocity;
             }
             else
             {
@@ -42,9 +41,11 @@ namespace FirstSlice.Player
                 float currentSpeed = currentVelocity.magnitude;
                 float resultSpeed = Mathf.Max(newSpeed, currentSpeed);
 
-                Vector3 newVelocity = planarDirection * resultSpeed;
-                rigibody.velocity = newVelocity;
+                Vector3 newVelocity = worldDirection * resultSpeed;
+                rigidbody.velocity = newVelocity;
             }
+
+            OnMoved();
         }
 
         private float GetVelocityFactor()
@@ -60,6 +61,21 @@ namespace FirstSlice.Player
             float dotProduct = Vector2.Dot(dir1.normalized, dir2.normalized);
             bool tooDifferent = dotProduct < tooDifferentThresshold;
             return tooDifferent;
+        }
+
+        private void OnMoved()
+        {
+            RotateToForward();
+        }
+
+        private void RotateToForward()
+        {
+            Vector3 direction = rigidbody.velocity.normalized;
+            Vector3 normalizedDirecition = direction.WithY(0f).normalized;
+            Quaternion rotation = Quaternion.LookRotation(normalizedDirecition, Vector3.up);
+            rigidbody.rotation = rotation;
+
+            //Debug.Log($"Rotate To Forward {rotation}, direction {direction}");
         }
     }
 }
