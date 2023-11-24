@@ -18,9 +18,11 @@ namespace FirstSlice.Player
 
         public override void PlanarMove(Vector3 worldDirection)
         {
+            Vector3 gravity = rigidbody.velocity.OnlyY();
+
             if (worldDirection.magnitude == 0f)
             {
-                rigidbody.velocity = Vector3.zero;
+                rigidbody.velocity = gravity;
                 rigidbody.angularVelocity = Vector3.zero;
                 return;
             }
@@ -30,20 +32,18 @@ namespace FirstSlice.Player
             Vector3 currentVelocity = rigidbody.velocity;
 
             bool tooDifferent = AreDirectionsTooDifferent(worldDirection, currentVelocity);
+            Vector3 newVelocity = planarVelocity;
 
-            if (tooDifferent)
+            if (!tooDifferent)
             {
-                rigidbody.velocity = planarVelocity;
+                //float newSpeed = planarVelocity.magnitude;
+                //float currentSpeed = currentVelocity.magnitude;
+                //float resultSpeed = Mathf.Max(newSpeed, currentSpeed);
+                //
+                //newVelocity = worldDirection * resultSpeed;
             }
-            else
-            {
-                float newSpeed = planarVelocity.magnitude;
-                float currentSpeed = currentVelocity.magnitude;
-                float resultSpeed = Mathf.Max(newSpeed, currentSpeed);
 
-                Vector3 newVelocity = worldDirection * resultSpeed;
-                rigidbody.velocity = newVelocity;
-            }
+            rigidbody.velocity = newVelocity + gravity;
 
             OnMoved();
         }

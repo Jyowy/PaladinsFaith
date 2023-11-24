@@ -11,6 +11,13 @@ public static class Vector3_Extensions
         return newVector;
     }
 
+    public static Vector3 OnlyY(this Vector3 vector)
+    {
+        Vector3 newVector = Vector3.zero;
+        newVector.y = vector.y;
+        return newVector;
+    }
+
     public static Vector3 NormalizedWithoutY(this Vector3 vector)
     {
         return vector.WithY(0f).normalized;

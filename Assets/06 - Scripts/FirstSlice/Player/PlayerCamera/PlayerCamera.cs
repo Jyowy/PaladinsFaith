@@ -18,12 +18,29 @@ namespace FirstSlice.Player
         private float maxDistance = 10f;
 
         [SerializeField]
+        private float horizontalRotationSpeedFactor = 0.25f;
+        [SerializeField]
+        private float verticalRotationSpeedFactor = 0.25f;
+
+        [SerializeField]
         private float rotationSpeedFactor = 0.25f;
         [SerializeField]
         private float zoomSpeedFactor = 0.1f;
 
         [SerializeField]
         private float height = 5f;
+
+        [SerializeField]
+        private float distance = 20f;
+
+        [SerializeField]
+        private bool invertedHorizontal = false;
+        [SerializeField]
+        private bool invertedVertical = false;
+        [SerializeField]
+        private float maxVerticalAngle = 60f;
+        [SerializeField]
+        private float minVerticalAngle = -10f;
 
         [SerializeField]
         private Transform target = null;
@@ -33,12 +50,20 @@ namespace FirstSlice.Player
         [SerializeField]
         private float colliderToTargetWidth = 5f;
 
+        [ShowInInspector]
+        private float verticalAngle = 22.5f;
+        [ShowInInspector]
+        private float horizontalAngle = 0f;
+
         private float rotation = 0f;
-        private float distance = 0f;
+        private float currentDistance = 0f;
+
+        private Vector3 startDirection = Vector3.zero;
 
         private void Awake()
         {
-            distance = defaultDistance;
+            currentDistance = defaultDistance;
+            startDirection = -target.forward;
         }
 
         public Vector3 GetVectorRelativeToView(Vector3 vector)
@@ -79,10 +104,18 @@ namespace FirstSlice.Player
 
         private Vector3 GetOffsetRelativeToTarget()
         {
+            Quaternion offsetRotation = Quaternion.Euler(verticalAngle, horizontalAngle, 0f);
+            Vector3 offsetDirection = offsetRotation * startDirection;
+            Vector3 offsetPosition = offsetDirection * distance;
+            return offsetPosition;
+        }
+
+        private Vector3 GetOffsetRelativeToTarget_FixedHeight()
+        {
             Vector3 offsetPosition = Vector3.zero;
             offsetPosition.y = height;
 
-            float planarDistance = Mathf.Sqrt(distance * distance - height * height);
+            float planarDistance = Mathf.Sqrt(currentDistance * currentDistance - height * height);
             Vector3 direction = -Vector3.forward;
             direction = Quaternion.Euler(0f, rotation, 0f) * direction;
 
@@ -117,14 +150,31 @@ namespace FirstSlice.Player
 
         public void Rotate(float angle)
         {
-            angle *= rotationSpeedFactor;
+            if (invertedHorizontal)
+            {
+                angle = -angle;
+            }
+
+            angle *= horizontalRotationSpeedFactor;
             rotation = Mathf.Repeat(rotation + angle, 360f);
+
+            horizontalAngle = Mathf.Repeat(horizontalAngle + angle, 360f);
         }
 
         public void Zoom(float zoom)
         {
+            if (invertedVertical)
+            {
+                zoom = -zoom;
+            }
+
+            float angle = -zoom * verticalRotationSpeedFactor;
+
             zoom *= zoomSpeedFactor;
-            distance = Mathf.Clamp(distance + zoom, minDistance, maxDistance);
+            currentDistance = Mathf.Clamp(currentDistance + zoom, minDistance, maxDistance);
+
+            verticalAngle = Mathf.Clamp(verticalAngle + angle, minVerticalAngle, maxVerticalAngle);
+            //verticalAngle = Mathf.Repeat(verticalAngle + angle, 360f);
         }
     }
 }
