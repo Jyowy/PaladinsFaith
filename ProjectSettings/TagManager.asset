@@ -16,11 +16,11 @@ TagManager:
   - PlayerCamera
   - Scenary
   - 
+  - Weapon
+  - Shield
   - 
-  - 
-  - 
-  - 
-  - 
+  - Destructible
+  - Enemy
   - 
   - 
   - 

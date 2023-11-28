@@ -5,14 +5,15 @@ using UnityEngine;
 
 namespace FirstSlice.Player
 {
+    public enum PlayerMoveMode
+    {
+        None,
+        Walking,
+        Running
+    }
+
     public abstract class PlayerMoveModule : MonoBehaviour
     {
-        public enum PlayerMoveMode
-        {
-            Walking,
-            Running
-        }
-
         protected PlayerMoveMode MoveMode { get; private set; } = PlayerMoveMode.Walking;
 
         protected void Awake()

@@ -1,5 +1,6 @@
 using Codice.Client.Common.GameUI;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,10 @@ namespace FirstSlice.PlayerInput
         private InputActionReference move = null;
         [SerializeField]
         private InputActionReference run = null;
+        [SerializeField]
+        private InputActionReference defense = null;
+        [SerializeField]
+        private InputActionReference attack = null;
 
         [SerializeField]
         private InputActionReference rotation = null;
@@ -41,6 +46,8 @@ namespace FirstSlice.PlayerInput
             move = GetActionReference(inputActionMap, "Move");
             run = GetActionReference(inputActionMap, "Run");
             rotation = GetActionReference(inputActionMap, "CameraRotation");
+            defense = GetActionReference(inputActionMap, "Defense");
+            attack = GetActionReference(inputActionMap, "Attack");
         }
 
         [Button]
@@ -69,6 +76,7 @@ namespace FirstSlice.PlayerInput
         {
             playerInputData.movement = move.action.ReadValue<Vector2>();
             playerInputData.cameraRotation = rotation.action.ReadValue<Vector2>();
+            playerInputData.CheckAttackState();
         }
 
         private void OnEnable()
@@ -116,8 +124,17 @@ namespace FirstSlice.PlayerInput
 
         private void SetupActionCallbacks()
         {
-            run.action.performed += OnRunStarted;
-            run.action.canceled += OnRunFinished;
+            AddPerformedCanceledCallbacks(run, OnRunStarted, OnRunFinished);
+            AddPerformedCanceledCallbacks(defense, OnDefenseStarted, OnDefenseFinished);
+            attack.action.performed += OnAttack;
+        }
+
+        private void AddPerformedCanceledCallbacks(InputActionReference actionReference,
+            Action<InputAction.CallbackContext> OnPerformed,
+            Action<InputAction.CallbackContext> OnCanceled)
+        {
+            actionReference.action.performed += OnPerformed;
+            actionReference.action.canceled += OnCanceled;
         }
 
         private void OnDestroy()
@@ -127,18 +144,42 @@ namespace FirstSlice.PlayerInput
 
         private void RemoveActionCallbacks()
         {
-            run.action.performed -= OnRunStarted;
-            run.action.canceled -= OnRunFinished;
+            RemovePerformedCanceledCallbacks(run, OnRunStarted, OnRunFinished);
+            RemovePerformedCanceledCallbacks(defense, OnDefenseStarted, OnDefenseFinished);
+            attack.action.performed -= OnAttack;
+        }
+
+        private void RemovePerformedCanceledCallbacks(InputActionReference actionReference,
+            Action<InputAction.CallbackContext> OnPerformed,
+            Action<InputAction.CallbackContext> OnCanceled)
+        {
+            actionReference.action.performed -= OnPerformed;
+            actionReference.action.canceled -= OnCanceled;
         }
 
         private void OnRunStarted(InputAction.CallbackContext _)
         {
-            playerInputData.run = true;
+            playerInputData.runMode = true;
         }
 
         private void OnRunFinished(InputAction.CallbackContext _)
         {
-            playerInputData.run = false;
+            playerInputData.runMode = false;
+        }
+
+        private void OnDefenseStarted(InputAction.CallbackContext _)
+        {
+            playerInputData.defenseActive = true;
+        }
+
+        private void OnDefenseFinished(InputAction.CallbackContext _)
+        {
+            playerInputData.defenseActive = false;
+        }
+
+        private void OnAttack(InputAction.CallbackContext _)
+        {
+            playerInputData.Attack();
         }
     }
 }

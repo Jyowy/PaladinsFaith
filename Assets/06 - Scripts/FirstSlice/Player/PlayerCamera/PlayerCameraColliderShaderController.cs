@@ -29,6 +29,8 @@ namespace FirstSlice.Player
                 return;
             }
 
+            renderer.enabled = false;
+            return;
             foreach (var material in renderer.materials)
             {
                 if (material.shader == shader)
@@ -47,6 +49,8 @@ namespace FirstSlice.Player
                 return;
             }
 
+            renderer.enabled = true;
+            return;
             foreach (var material in renderer.materials)
             {
                 if (material.shader == shader)

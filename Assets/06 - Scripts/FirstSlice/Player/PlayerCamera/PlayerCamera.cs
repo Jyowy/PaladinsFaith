@@ -28,6 +28,13 @@ namespace FirstSlice.Player
         private float zoomSpeedFactor = 0.1f;
 
         [SerializeField]
+        private float separationDistance = 0.25f;
+        [SerializeField]
+        private float radiusToCheck = 0.5f;
+        [SerializeField]
+        private LayerMask layersToCheck = 0;
+
+        [SerializeField]
         private float height = 5f;
 
         [SerializeField]
@@ -126,7 +133,31 @@ namespace FirstSlice.Player
 
         private void MoveTo(Vector3 position)
         {
-            cameraRigidbody.Move(position, Quaternion.identity);
+            //cameraRigidbody.Move(position, Quaternion.identity);
+
+            //Vector3 inc = position - cameraRigidbody.position;
+            //cameraRigidbody.velocity = inc;
+
+            Vector3 bestPosition = GetBestPosition(position);
+            cameraRigidbody.Move(bestPosition, Quaternion.identity);
+        }
+
+        private Vector3 GetBestPosition(Vector3 desiredPosition)
+        {
+            Vector3 targetPosition = GetTargetPosition();
+            Vector3 bestPosition = desiredPosition;
+            Vector3 vector = bestPosition - targetPosition;
+            float maxDistance = vector.magnitude;
+            Vector3 direction = vector.normalized;
+
+            Ray ray = new Ray(targetPosition, direction);
+            //if (Physics.Raycast(ray, out RaycastHit info, maxDistance, layersToCheck))
+            if (Physics.SphereCast(ray, radiusToCheck, out RaycastHit info, maxDistance, layersToCheck))
+            {
+                bestPosition = info.point + direction * separationDistance;
+            }
+
+            return bestPosition;
         }
 
         private void UpdateColliderToTarget()
@@ -148,7 +179,7 @@ namespace FirstSlice.Player
             colliderToTarget.SetPositionAndRotation(position, rotation);
         }
 
-        public void Rotate(float angle)
+        public void HorizontalRotation(float angle)
         {
             if (invertedHorizontal)
             {
@@ -161,7 +192,7 @@ namespace FirstSlice.Player
             horizontalAngle = Mathf.Repeat(horizontalAngle + angle, 360f);
         }
 
-        public void Zoom(float zoom)
+        public void VerticalRotation(float zoom)
         {
             if (invertedVertical)
             {
