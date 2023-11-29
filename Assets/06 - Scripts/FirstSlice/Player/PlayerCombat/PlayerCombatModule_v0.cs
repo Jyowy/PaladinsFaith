@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FirstSlice.Player;
 
 namespace FirstSlice
 {
@@ -18,11 +19,14 @@ namespace FirstSlice
         private bool canAttack = true;
 
         [ShowInInspector, ReadOnly]
-        private int currentAttackIndex = -1;
-        [ShowInInspector, ReadOnly]
         private bool canTriggerNextAttack = false;
         [ShowInInspector, ReadOnly]
         private bool nextAttackRequested = false;
+
+        private void Start()
+        {
+            weapon.SetWielder(player.gameObject);
+        }
 
         public override void StartDefending()
         {
@@ -47,6 +51,11 @@ namespace FirstSlice
 
             defending = false;
             OnDefenseFinished?.Invoke();
+        }
+
+        public override bool IsDefending()
+        {
+            return defending;
         }
 
         public override void Attack()
@@ -83,7 +92,16 @@ namespace FirstSlice
             attacking = true;
             canTriggerNextAttack = false;
             nextAttackRequested = false;
-            OnAttackTriggered?.Invoke(attackIndex);
+
+            AttackData attackData = GetAttackData(attackIndex);
+            weapon.SetAttackData(attackData);
+            OnAttackTriggered?.Invoke(attackData);
+        }
+
+        private AttackData GetAttackData(int attackIndex)
+        {
+            AttackData attack = attacks[attackIndex];
+            return attack;
         }
 
         public override void NextAttackAvailable()

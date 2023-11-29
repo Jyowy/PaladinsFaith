@@ -7,15 +7,17 @@ namespace FirstSlice
 {
     public class Shield : MonoBehaviour
     {
+        // TODO
+
         [SerializeField]
-        private DamageReceiver damageReceiver = null;
+        private AttackReceiver attackReceiver = null;
 
         [ShowInInspector, ReadOnly]
-        private readonly List<DamageDealer> dealersBlocked = new List<DamageDealer>();
+        private readonly List<AttackDeliverer> dealersBlocked = new List<AttackDeliverer>();
 
         private void OnTriggerEnter(Collider other)
         {
-            DamageDealer damageDealer = other.GetComponent<DamageDealer>();
+            AttackDeliverer damageDealer = other.GetComponent<AttackDeliverer>();
             if (damageDealer != null)
             {
                 BlockDamageDealer(damageDealer);
@@ -27,7 +29,7 @@ namespace FirstSlice
             dealersBlocked.Clear();
         }
 
-        private void BlockDamageDealer(DamageDealer damageDealer)
+        private void BlockDamageDealer(AttackDeliverer damageDealer)
         {
             if (dealersBlocked.Contains(damageDealer))
             {
@@ -38,7 +40,7 @@ namespace FirstSlice
             dealersBlocked.Add(damageDealer);
         }
 
-        public bool HasBlocked(DamageDealer damageDealer)
+        public bool HasBlocked(AttackDeliverer damageDealer)
         {
             return dealersBlocked.Contains(damageDealer);
         }

@@ -5,15 +5,12 @@ using UnityEngine;
 
 namespace FirstSlice
 {
-    public class Destructible : MonoBehaviour, DamageReceiver
+    public class Destructible : MonoBehaviour, AttackReceiver
     {
         [SerializeField]
         private bool oneHit = true;
         [SerializeField, HideIf("oneHit")]
         private HealthBar healthBar = new HealthBar();
-
-        [SerializeField]
-        private Shield shield = null;
 
         [ShowInInspector, ReadOnly]
         private bool destroyed = false;
@@ -24,10 +21,9 @@ namespace FirstSlice
         }
 
         [Button]
-        public void ReceiveDamage(DamageDealer damageDealer, float damage)
+        public void ReceiveAttack(Attack attack)
         {
-            if (destroyed
-                || (shield != null && shield.HasBlocked(damageDealer)))
+            if (destroyed)
             {
                 return;
             }
@@ -38,7 +34,7 @@ namespace FirstSlice
             }
             else
             {
-                healthBar.ReceiveDamage(damageDealer, damage);
+                healthBar.ReceiveAttack(attack);
             }
         }
 

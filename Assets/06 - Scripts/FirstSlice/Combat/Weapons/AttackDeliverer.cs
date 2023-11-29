@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace FirstSlice
 {
-    public interface DamageReceiver
+    public interface AttackDeliverer
     {
-        public void ReceiveDamage(DamageDealer damageDealer, float damage);
+        public void Attack(AttackReceiver receiver, Attack attack);
     }
 }

@@ -5,12 +5,27 @@ using UnityEngine;
 
 namespace FirstSlice
 {
-    public class Weapon : MonoBehaviour, DamageDealer
+    public class Weapon : MonoBehaviour, AttackDeliverer
     {
         [SerializeField]
         private float baseDamage = 10f;
 
-        private readonly List<DamageReceiver> receiversDamaged = new List<DamageReceiver>();
+        private readonly List<AttackReceiver> receiversDamaged = new List<AttackReceiver>();
+
+        private GameObject wielder = null;
+        private AttackData currentAttackData = null;
+
+        public float GetBaseDamage() => baseDamage;
+
+        public void SetWielder(GameObject wielder)
+        {
+            this.wielder = wielder;
+        }
+
+        public void SetAttackData(AttackData attackData)
+        {
+            currentAttackData = attackData;
+        }
 
         private void OnDisable()
         {
@@ -19,36 +34,38 @@ namespace FirstSlice
 
         private void OnTriggerEnter(Collider other)
         {
-            DamageReceiver damageReceiver = other.GetComponent<DamageReceiver>();
-            if (damageReceiver != null)
+            AttackReceiver receiver = other.GetComponent<AttackReceiver>();
+            if (receiver != null
+                && currentAttackData != null)
             {
-                float damage = GetDamage();
-                Damage(damageReceiver, damage);
+                Attack attack = GetAttack();
+                Attack(receiver, attack);
             }
         }
 
-        private bool CanDamage(DamageReceiver damageReceiver)
+        private Attack GetAttack()
+        {
+            float damage = baseDamage * currentAttackData.damageMultiplier;
+            Attack attack = new Attack(wielder, damage);
+            return attack;
+        }
+
+        private bool CanDamage(AttackReceiver damageReceiver)
         {
             bool canDamage = damageReceiver != null
                 && !receiversDamaged.Contains(damageReceiver);
             return canDamage;
         }
 
-        public void Damage(DamageReceiver damageReceiver, float damage)
+        public void Attack(AttackReceiver receiver, Attack attack)
         {
-            if (!CanDamage(damageReceiver))
+            if (!CanDamage(receiver))
             {
                 return;
             }
 
-            damageReceiver.ReceiveDamage(this, damage);
-            receiversDamaged.Add(damageReceiver);
-        }
-
-        private float GetDamage()
-        {
-            float damage = baseDamage;
-            return damage;
+            receiver.ReceiveAttack(attack);
+            receiversDamaged.Add(receiver);
         }
     }
 }

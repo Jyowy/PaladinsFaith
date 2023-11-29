@@ -15,8 +15,11 @@ namespace FirstSlice.Player
         Attacking
     }
 
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, AttackReceiver
     {
+        [SerializeField]
+        private HealthBar healthBar = new HealthBar();
+
         [SerializeField]
         private PlayerInputDataProvider inputDataProvider = null;
         [SerializeField]
@@ -37,6 +40,11 @@ namespace FirstSlice.Player
         private PlayerState currentState = PlayerState.Idle;
         private PlayerMoveMode currentMoveMode = PlayerMoveMode.None;
         private float currentSpeed = 0f;
+
+        private void Awake()
+        {
+            healthBar.Initialize(OnDead);
+        }
 
         private void FixedUpdate()
         {
@@ -62,12 +70,6 @@ namespace FirstSlice.Player
                 ? PlayerMoveMode.Running
                 : PlayerMoveMode.Walking;
             moveModule.SetMoveMode(newMoveMode);
-
-            if (newMoveMode != currentMoveMode
-                && currentSpeed > 0f)
-            {
-                OnPlayerMoveModeChanged?.Invoke(newMoveMode);
-            }
 
             currentMoveMode = newMoveMode;
 
@@ -187,6 +189,23 @@ namespace FirstSlice.Player
             }
 
             ForceMoveState();
+        }
+
+        public void ReceiveAttack(Attack attack)
+        {
+            if (combatModule.IsDefending())
+            {
+                return;
+            }
+
+            healthBar.ReceiveAttack(attack);
+        }
+
+        private void OnDead()
+        {
+            Debug.Log($"GameOver");
+
+            gameObject.SetActive(false);
         }
     }
 }

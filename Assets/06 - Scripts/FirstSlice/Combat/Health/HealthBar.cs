@@ -7,15 +7,15 @@ using UnityEngine.Events;
 namespace FirstSlice
 {
     [System.Serializable]
-    public class HealthBar : DamageReceiver
+    public class HealthBar : AttackReceiver
     {
         [SerializeField]
         private float maxHealth = 10f;
 
         [ShowInInspector, ReadOnly]
-        public float CurrentHealth { get; private set; } = 0f;
-        [ShowInInspector, ReadOnly]
         public bool IsAlive { get; private set; } = true;
+        [ShowInInspector, ReadOnly]
+        public float CurrentHealth { get; private set; } = 0f;
 
         public UnityEvent<float> OnHealthChanged = new UnityEvent<float>();
         public UnityEvent OnDead = new UnityEvent();
@@ -34,11 +34,12 @@ namespace FirstSlice
             }
         }
 
-        public void ReceiveDamage(DamageDealer damageDealer, float damage)
+        public void ReceiveAttack(Attack attack)
         {
             if (IsAlive)
             {
-                ChangeHealth(-damage);
+                float healthChange = -attack.damage;
+                ChangeHealth(healthChange);
             }
         }
 
@@ -48,13 +49,18 @@ namespace FirstSlice
             if (newHealth != CurrentHealth)
             {
                 CurrentHealth = newHealth;
-                OnHealthChanged.Invoke(newHealth);
+                HealthChanged();
+            }
+        }
 
-                if (newHealth == 0f)
-                {
-                    IsAlive = false;
-                    OnDead?.Invoke();
-                }
+        private void HealthChanged()
+        {
+            OnHealthChanged.Invoke(CurrentHealth);
+
+            if (CurrentHealth == 0f)
+            {
+                IsAlive = false;
+                OnDead?.Invoke();
             }
         }
     }

@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace FirstSlice
 {
-    public interface ShieldWielder
+    public interface AttackReceiver
     {
-        public void EquipShield(Shield shield);
+        public void ReceiveAttack(Attack attack);
     }
 }

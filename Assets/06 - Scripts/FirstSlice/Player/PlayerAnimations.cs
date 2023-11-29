@@ -21,11 +21,13 @@ namespace FirstSlice.Player
         private PlayableAsset runTimeline = null;
 
         [SerializeField]
-        private PlayableAsset attack1Timeline = null;
-        [SerializeField]
-        private PlayableAsset attack2Timeline = null;
-        [SerializeField]
-        private PlayableAsset attack3Timeline = null;
+        private PlayerCombatModule combatModule = null;
+        //[SerializeField]
+        //private PlayableAsset attack1Timeline = null;
+        //[SerializeField]
+        //private PlayableAsset attack2Timeline = null;
+        //[SerializeField]
+        //private PlayableAsset attack3Timeline = null;
 
         public UnityEvent OnNextAttackReady = null;
         public UnityEvent OnAttackFinished = null;
@@ -91,22 +93,13 @@ namespace FirstSlice.Player
             defenseDirector.Stop();
         }
 
-        public void AttackStarted(int attackIndex)
+        public void AttackStarted(AttackData attackData)
         {
-            PlayAttackAnimation(attackIndex);
+            PlayAttackAnimation(attackData.animation);
         }
 
-        private void PlayAttackAnimation(int attackIndex)
+        private void PlayAttackAnimation(PlayableAsset timeline)
         {
-            PlayableAsset timeline = attackIndex switch
-            {
-                0 => attack1Timeline,
-                1 => attack2Timeline,
-                2 => attack3Timeline,
-
-                _ => attack1Timeline
-            };
-
             PlayTimeline(attackDirector, timeline);
         }
 
