@@ -7,6 +7,11 @@ namespace FirstSlice.Characters
     public class Character : MonoBehaviour
     {
         [SerializeField]
-        private CharacteMoveModule moveModule = null;
+        protected CharacterMoveModule moveModule = null;
+
+        public void MoveTo(Vector3 position)
+        {
+            moveModule.MoveTo(position);
+        }
     }
 }

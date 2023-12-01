@@ -156,7 +156,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1600569887627229567}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.13316135, y: 0.29117596, z: -0.04096629, w: 0.9464705}
+  m_LocalRotation: {x: 0.13316134, y: 0.29117593, z: -0.040966284, w: 0.9464705}
   m_LocalPosition: {x: 0.000011444092, y: 6.125, z: -10.000015}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -484,13 +484,13 @@ MonoBehaviour:
   radiusToCheck: 0.5
   layersToCheck:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   height: 5
   distance: 20
   invertedHorizontal: 0
   invertedVertical: 1
   maxVerticalAngle: 60
-  minVerticalAngle: 20
+  minVerticalAngle: 5
   target: {fileID: 5356265476197509521}
   colliderToTarget: {fileID: 4820799945332864233}
   colliderToTargetWidth: 0.5
@@ -624,16 +624,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 369036589086359209, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
+    - target: {fileID: 2210828089482978324, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
         type: 3}
-      propertyPath: m_Radius
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1396771594427629552, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
+      propertyPath: caster
+      value: 
+      objectReference: {fileID: 6023575193207344971}
+    - target: {fileID: 2210828089482978324, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 2210828089482978324, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
+        type: 3}
     - target: {fileID: 4324059231694827579, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
         type: 3}
       propertyPath: m_Name
@@ -644,11 +645,6 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1780607662132191263}
-    - target: {fileID: 6261241833337126506, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
-        type: 3}
-      propertyPath: healthBar.maxHealth
-      value: 50
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -657,6 +653,12 @@ PrefabInstance:
 --- !u!4 &5356265476197509521 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2724513248041850593, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
+    type: 3}
+  m_PrefabInstance: {fileID: 8041789903158230896}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6023575193207344971 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4324059231694827579, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
     type: 3}
   m_PrefabInstance: {fileID: 8041789903158230896}
   m_PrefabAsset: {fileID: 0}

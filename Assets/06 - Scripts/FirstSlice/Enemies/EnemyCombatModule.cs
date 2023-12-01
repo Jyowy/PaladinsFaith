@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace FirstSlice
+namespace FirstSlice.Enemies
 {
-    public class EnemyCombatModule : MonoBehaviour
+    public class EnemyCombatModule : CombatModule
     {
         [SerializeField]
         private Enemy enemy = null;
@@ -16,16 +16,12 @@ namespace FirstSlice
         [SerializeField]
         private Weapon weapon = null;
 
-        public UnityEvent<AttackData> OnAttackTriggered = null;
-
-        public bool IsAttacking { get; private set; } = false;
-
         private void Start()
         {
             weapon.SetWielder(enemy.gameObject);
         }
 
-        public void Attack()
+        public override void Attack()
         {
             if (IsAttacking)
             {
@@ -37,7 +33,7 @@ namespace FirstSlice
             OnAttackTriggered?.Invoke(attackData);
         }
 
-        public void AttackFinished()
+        public override void AttackFinished()
         {
             IsAttacking = false;
         }

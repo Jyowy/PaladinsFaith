@@ -2,55 +2,120 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace FirstSlice
+namespace FirstSlice.Player
 {
-    public abstract class PlayerCombatModule : MonoBehaviour
+    public class PlayerCombatModule : CombatModule
     {
         [SerializeField]
-        protected Player.Player player;
-
-        [SerializeField]
-        protected List<AttackData> attacks = null;
+        protected Player player = null;
 
         [SerializeField]
         protected Weapon weapon = null;
         [SerializeField]
         protected Shield shield = null;
 
-        public UnityEvent OnDefenseStarted = null;
-        public UnityEvent OnDefenseFinished = null;
-        public UnityEvent<AttackData> OnAttackTriggered = null;
-        public UnityEvent OnAttackCancelled = null;
-        public UnityEvent OnAttackFinished = null;
+        [SerializeField]
+        private int maxSteps = 3;
+
+        [ShowInInspector, ReadOnly]
+        private bool canAttack = true;
 
         [ShowInInspector, ReadOnly]
         protected int currentAttackIndex = -1;
+        [ShowInInspector, ReadOnly]
+        private bool canTriggerNextAttack = false;
+        [ShowInInspector, ReadOnly]
+        private bool nextAttackRequested = false;
 
 
-        public AttackData GetCurrentAttackData() => currentAttackIndex >= 0
-            ? attacks[currentAttackIndex]
-            : null;
+        private void Start()
+        {
+            weapon.SetWielder(player.gameObject);
+        }
+
+        public override void Attack()
+        {
+            if (!canAttack)
+            {
+                return;
+            }
+
+            if (IsAttacking)
+            {
+                nextAttackRequested = true;
+                if (!canTriggerNextAttack)
+                {
+                    return;
+                }
+            }
+
+            TriggerNextAttack();
+        }
 
         [Button]
-        public abstract void StartDefending();
+        private void TriggerNextAttack()
+        {
+            int nextAttack = Mathf.Min(currentAttackIndex + 1, maxSteps - 1);
+            TriggerAttack(nextAttack);
+        }
 
-        [Button]
-        public abstract void StopDefending();
+        private void TriggerAttack(int attackIndex)
+        {
+            canAttack = attackIndex < maxSteps - 1;
 
-        public abstract bool IsDefending();
+            currentAttackIndex = attackIndex;
+            IsAttacking = true;
+            canTriggerNextAttack = false;
+            nextAttackRequested = false;
 
-        [Button]
-        public abstract void Attack();
+            AttackData attackData = GetAttackData(attackIndex);
+            weapon.SetAttackData(attackData);
+            OnAttackTriggered?.Invoke(attackData);
+        }
 
-        [Button]
-        public abstract void NextAttackAvailable();
+        private AttackData GetAttackData(int attackIndex)
+        {
+            AttackData attack = attacks[attackIndex];
+            return attack;
+        }
 
-        [Button]
-        public abstract void CancelAttack();
+        public override void NextAttackAvailable()
+        {
+            canTriggerNextAttack = true;
+            if (nextAttackRequested)
+            {
+                TriggerNextAttack();
+            }
+        }
 
-        [Button]
-        public abstract void AttackFinished();
+        public override void CancelAttack()
+        {
+            if (!IsAttacking)
+            {
+                return;
+            }
+
+            ResetAttacks();
+            OnAttackCancelled?.Invoke();
+        }
+
+        private void ResetAttacks()
+        {
+            IsAttacking = false;
+            canAttack = true;
+            currentAttackIndex = -1;
+        }
+
+        public override void AttackFinished()
+        {
+            if (!IsAttacking)
+            {
+                return;
+            }
+
+            ResetAttacks();
+            OnAttackFinished?.Invoke();
+        }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using FirstSlice.PlayerInput;
 using UnityEngine.Events;
+using FirstSlice.Characters;
+using FirstSlice.Spells;
 
 namespace FirstSlice.Player
 {
@@ -12,14 +14,12 @@ namespace FirstSlice.Player
         Walking,
         Running,
         Defending,
-        Attacking
+        Attacking,
+        Casting
     }
 
-    public class Player : MonoBehaviour, AttackReceiver
+    public class Player : CombatantCharacter
     {
-        [SerializeField]
-        private HealthBar healthBar = new HealthBar();
-
         [SerializeField]
         private PlayerInputDataProvider inputDataProvider = null;
         [SerializeField]
@@ -27,18 +27,16 @@ namespace FirstSlice.Player
         [SerializeField]
         private new PlayerCamera camera = null;
         [SerializeField]
-        private PlayerMoveModule moveModule = null;
-        [SerializeField]
-        private PlayerCombatModule combatModule = null;
+        private SpellModule spellModule = null;
 
         [SerializeField]
         private float defendingMovePenalizer = 0.5f;
 
-        public UnityEvent<PlayerMoveMode> OnPlayerMoveModeChanged = null;
+        public UnityEvent<CharacterMoveType> OnPlayerMoveModeChanged = null;
         public UnityEvent OnPlayerStopped = null;
 
         private PlayerState currentState = PlayerState.Idle;
-        private PlayerMoveMode currentMoveMode = PlayerMoveMode.None;
+        private CharacterMoveType currentMoveMode = CharacterMoveType.Walking;
         private float currentSpeed = 0f;
 
         private void Awake()
@@ -62,31 +60,33 @@ namespace FirstSlice.Player
             UpdateCameraRotation(playerInputData.cameraRotation);
 
             UpdateCombat(playerInputData);
+
+            UpdateMagic(playerInputData);
         }
 
         private void UpdateMoveMode(bool run)
         {
-            PlayerMoveMode newMoveMode = run
-                ? PlayerMoveMode.Running
-                : PlayerMoveMode.Walking;
-            moveModule.SetMoveMode(newMoveMode);
+            CharacterMoveType newMoveMode = run
+                ? CharacterMoveType.Running
+                : CharacterMoveType.Walking;
+            moveModule.SetMoveType(newMoveMode);
 
             currentMoveMode = newMoveMode;
 
             if (currentState != PlayerState.Defending
                 && currentState != PlayerState.Attacking)
             {
-                ForceMoveState();
+                SetMoveState();
             }
         }
 
-        private void ForceMoveState()
+        private void SetMoveState()
         {
             PlayerState newState;
 
             if (currentSpeed > 0f)
             {
-                newState = currentMoveMode == PlayerMoveMode.Running
+                newState = currentMoveMode == CharacterMoveType.Running
                     ? PlayerState.Running
                     : PlayerState.Walking;
             }
@@ -161,9 +161,9 @@ namespace FirstSlice.Player
         {
             if (currentState != PlayerState.Attacking)
             {
-                if (inputData.AttackRequested)
+                if (inputData.IsLightAttackActive())
                 {
-                    inputData.ConsumeAttack();
+                    inputData.ConsumeLightAttack();
                     combatModule.Attack();
                 }
                 else if (inputData.defenseActive
@@ -176,7 +176,7 @@ namespace FirstSlice.Player
                     && !inputData.defenseActive)
                 {
                     combatModule.StopDefending();
-                    ForceMoveState();
+                    SetMoveState();
                 }
             }
         }
@@ -188,17 +188,56 @@ namespace FirstSlice.Player
                 return;
             }
 
-            ForceMoveState();
+            SetMoveState();
         }
 
-        public void ReceiveAttack(Attack attack)
+        private void UpdateMagic(PlayerInputData inputData)
         {
-            if (combatModule.IsDefending())
+            if (inputData.IsPrevSpellRequested())
+            {
+                inputData.ConsumePrevSpellRequest();
+                spellModule.PrevSpell();
+            }
+            else if (inputData.IsNextSpellRequested())
+            {
+                inputData.ConsumeNextSpellRequest();
+                spellModule.NextSpell();
+            }
+
+            if (currentState != PlayerState.Attacking)
+            {
+                if (inputData.IsSpellActive())
+                {
+                    inputData.ConsumeSpell();
+                    CastSpell();
+                }
+            }
+        }
+
+        private void CastSpell()
+        {
+            Debug.Log($"CastSpell!");
+            spellModule.CastSpell();
+        }
+
+        public void MagicCastFinished()
+        {
+            if (currentState != PlayerState.Casting)
             {
                 return;
             }
 
-            healthBar.ReceiveAttack(attack);
+            SetMoveState();
+        }
+
+        public override void ReceiveAttack(Attack attack)
+        {
+            if (combatModule.IsDefending)
+            {
+                return;
+            }
+
+            base.ReceiveAttack(attack);
         }
 
         private void OnDead()

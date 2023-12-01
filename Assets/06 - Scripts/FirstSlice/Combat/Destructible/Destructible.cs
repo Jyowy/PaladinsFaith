@@ -34,7 +34,7 @@ namespace FirstSlice
             }
             else
             {
-                healthBar.ReceiveAttack(attack);
+                healthBar.InflictDamage(attack.damage);
             }
         }
 

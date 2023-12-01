@@ -1,23 +1,16 @@
+using FirstSlice.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FirstSlice
+namespace FirstSlice.Enemies
 {
-    public class Enemy : MonoBehaviour, AttackReceiver
+    public class Enemy : CombatantCharacter
     {
-        [SerializeField]
-        private HealthBar healthBar = new HealthBar();
-
         [SerializeField]
         private PlayerDetector detector = null;
         [SerializeField]
         private PlayerDetector range = null;
-
-        [SerializeField]
-        private EnemyMoveModule moveModule = null;
-        [SerializeField]
-        private EnemyCombatModule combatModule = null;
 
         private GameObject player = null;
         private bool playerInRange = false;
@@ -78,16 +71,6 @@ namespace FirstSlice
         {
             Vector3 position = player.transform.position;
             moveModule.MoveTo(position);
-        }
-
-        public void ReceiveAttack(Attack attack)
-        {
-            healthBar.ReceiveAttack(attack);
-        }
-
-        public void Attack()
-        {
-            combatModule.Attack();
         }
 
         private void OnDead()

@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &405915043356793533
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2813080567812801223}
+  m_Layer: 7
+  m_Name: SpellModules
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2813080567812801223
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405915043356793533}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6189720220046865087}
+  m_Father: {fileID: 45401210309134337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &800887425457137192
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,9 +76,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efdf63790a49fe943b2258445f8b9709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkForce: 1
-  runForce: 2
+  defaultMoveType: 0
+  walkFactor: 1
+  runFactor: 2
+  OnMoveTypeChanged:
+    m_PersistentCalls:
+      m_Calls: []
   rigidbody: {fileID: 7871733014303789619}
+  force: 1
 --- !u!1 &1570863420066816838
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +158,7 @@ PlayableDirector:
   m_GameObject: {fileID: 2357613627804093000}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: cf80c3ceccad6e545a3140f9bd47c383, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 1e3dc3e13b530784da7a68ad27de577a, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -198,8 +235,12 @@ MonoBehaviour:
   move: {fileID: 0}
   run: {fileID: 0}
   defense: {fileID: 0}
-  attack: {fileID: 0}
+  lightAttack: {fileID: 0}
+  heavyAttack: {fileID: 0}
   rotation: {fileID: 0}
+  magic: {fileID: 0}
+  prevMagic: {fileID: 0}
+  nextMagic: {fileID: 0}
 --- !u!1 &3908451853900301440
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,7 +339,7 @@ GameObject:
   - component: {fileID: 2331716852729760790}
   - component: {fileID: 4665628607627025148}
   m_Layer: 7
-  m_Name: CombatModule_v0
+  m_Name: CombatModule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -331,13 +372,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7405fb1c886c5d49a78a43b7e8645c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 6261241833337126506}
   attacks:
   - {fileID: 11400000, guid: d667121560b4c1f45b706955a8f16060, type: 2}
   - {fileID: 11400000, guid: 3112f790fb7c50142a299f0cdf7d95c9, type: 2}
   - {fileID: 11400000, guid: 59caa279a7c4a984cb1a8f27771a4b34, type: 2}
-  weapon: {fileID: 8829872858627796409}
-  shield: {fileID: 6430016344413741076}
   OnDefenseStarted:
     m_PersistentCalls:
       m_Calls:
@@ -413,6 +451,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  player: {fileID: 6261241833337126506}
+  weapon: {fileID: 8829872858627796409}
+  shield: {fileID: 6430016344413741076}
   maxSteps: 3
 --- !u!1 &4324059231694827579
 GameObject:
@@ -452,6 +493,7 @@ Transform:
   - {fileID: 2681187466304565496}
   - {fileID: 3209434856781870423}
   - {fileID: 209559381962480593}
+  - {fileID: 2813080567812801223}
   - {fileID: 2724513248041850593}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -467,19 +509,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368fb57aecf21c04fbc7b26d344475a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveModule: {fileID: 7613817612412428374}
   healthBar:
-    maxHealth: 10
+    maxHealth: 50
     OnHealthChanged:
       m_PersistentCalls:
         m_Calls: []
+    OnHealthProgressChanged:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: FirstSlice.Gauge, FirstSliceAssembley
+          m_MethodName: SetProgress
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     OnDead:
       m_PersistentCalls:
         m_Calls: []
+  combatModule: {fileID: 4665628607627025148}
   inputDataProvider: {fileID: 1070679038022560085}
   dataProvider: {fileID: 2536670283354568713}
   camera: {fileID: 0}
-  moveModule: {fileID: 7613817612412428374}
-  combatModule: {fileID: 4665628607627025148}
+  spellModule: {fileID: 2210828089482978324}
   defendingMovePenalizer: 0.5
   OnPlayerMoveModeChanged:
     m_PersistentCalls:
@@ -687,9 +745,9 @@ MonoBehaviour:
     m_Events:
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 4665628607627025148}
-          m_TargetAssemblyTypeName: FirstSlice.PlayerCombatModule_v0, FirstSliceAssembley
-          m_MethodName: NextAttackAvailable
+        - m_Target: {fileID: 6565613740540865526}
+          m_TargetAssemblyTypeName: FirstSlice.Player.PlayerAnimations, FirstSliceAssembley
+          m_MethodName: NextAttackReady
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -758,6 +816,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerRigidbody: {fileID: 7871733014303789619}
+--- !u!1 &6085099544454182090
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6189720220046865087}
+  - component: {fileID: 2210828089482978324}
+  m_Layer: 7
+  m_Name: SpellModule
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6189720220046865087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6085099544454182090}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2813080567812801223}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2210828089482978324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6085099544454182090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57fadc0cccaa3bc4aaf0ebf61ff1cabe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  spells:
+  - {fileID: 11400000, guid: 7572b3fc6e3c30e429dad9c5d05581c1, type: 2}
+  - {fileID: 11400000, guid: f9a784068c254b44bab73cd438b6d6a7, type: 2}
+  OnAvailableSpellChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSpellCasted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6266756682667987278
 GameObject:
   m_ObjectHideFlags: 0
@@ -857,10 +977,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d6728b63356ce9498e3772bc191cc10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkVelocity: 5
-  runVelocity: 11
+  defaultMoveType: 0
+  walkFactor: 1
+  runFactor: 1.5
+  OnMoveTypeChanged:
+    m_PersistentCalls:
+      m_Calls: []
   rigidbody: {fileID: 7871733014303789619}
-  tooDifferentThresshold: 0.75
+  velocity: 12
 --- !u!1001 &711099388951170264
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -869,6 +993,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 45401210309134337}
     m_Modifications:
+    - target: {fileID: 919088310892343921, guid: be6efa3a43a61934bb9638f154ddd9d3,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3175389019467930169, guid: be6efa3a43a61934bb9638f154ddd9d3,
         type: 3}
       propertyPath: m_LocalScale.x

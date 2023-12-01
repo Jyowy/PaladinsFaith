@@ -1,3 +1,4 @@
+using FirstSlice.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace FirstSlice.Player
         private PlayableAsset runTimeline = null;
 
         [SerializeField]
-        private PlayerCombatModule combatModule = null;
+        private CombatModule combatModule = null;
         //[SerializeField]
         //private PlayableAsset attack1Timeline = null;
         //[SerializeField]
@@ -50,17 +51,17 @@ namespace FirstSlice.Player
             moveDirector.playableAsset = null;
         }
 
-        public void PlayerMoveModeChanged(PlayerMoveMode mode)
+        public void PlayerMoveModeChanged(CharacterMoveType mode)
         {
             PlayMoveAnimation(mode);
         }
 
-        private void PlayMoveAnimation(PlayerMoveMode mode)
+        private void PlayMoveAnimation(CharacterMoveType mode)
         {
             PlayableAsset timeline = mode switch
             {
-                PlayerMoveMode.Walking => walkTimeline,
-                PlayerMoveMode.Running => runTimeline,
+                CharacterMoveType.Walking => walkTimeline,
+                CharacterMoveType.Running => runTimeline,
 
                 _ => walkTimeline
             };
