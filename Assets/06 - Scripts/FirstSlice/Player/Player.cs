@@ -5,9 +5,17 @@ using FirstSlice.PlayerInput;
 using UnityEngine.Events;
 using FirstSlice.Characters;
 using FirstSlice.Spells;
+using FirstSlice.Dialogs;
+using Sirenix.OdinInspector;
 
 namespace FirstSlice.Player
 {
+    public enum PlayerMode
+    {
+        Normal,
+        Dialog
+    }
+
     public enum PlayerState
     {
         Idle,
@@ -35,13 +43,111 @@ namespace FirstSlice.Player
         public UnityEvent<CharacterMoveType> OnPlayerMoveModeChanged = null;
         public UnityEvent OnPlayerStopped = null;
 
+        [ShowInInspector, ReadOnly]
+        private PlayerMode playerMode = PlayerMode.Normal;
+        [ShowInInspector, ReadOnly]
         private PlayerState currentState = PlayerState.Idle;
+        [ShowInInspector, ReadOnly]
         private CharacterMoveType currentMoveMode = CharacterMoveType.Walking;
         private float currentSpeed = 0f;
+
+        private readonly List<Interactable> availableInteractables = new List<Interactable>();
 
         private void Awake()
         {
             healthBar.Initialize(OnDead);
+        }
+
+        public void SetPlayerMode(PlayerMode playerMode)
+        {
+            this.playerMode = playerMode;
+
+            if (playerMode == PlayerMode.Dialog)
+            {
+                StopPlayer();
+            }
+        }
+
+        private void StopPlayer()
+        {
+            moveModule.Stop();
+            currentSpeed = 0f;
+        }
+
+        public void SetNormalMode()
+        {
+            SetPlayerMode(PlayerMode.Normal);
+        }
+
+        public void SetDialogMode()
+        {
+            SetPlayerMode(PlayerMode.Dialog);
+        }
+
+        private void Update()
+        {
+            ProcessInteraction();
+        }
+
+        private void ProcessInteraction()
+        {
+            PlayerInputData playerInputData = inputDataProvider.GetPlayerInputData();
+
+            if (playerMode == PlayerMode.Normal)
+            {
+                if (playerInputData.IsInteractActive()
+                    && CanInteract())
+                {
+                    playerInputData.ConsumeInteract();
+                    Interact();
+                }
+            }
+            else if (playerMode == PlayerMode.Dialog)
+            {
+                if (playerInputData.IsInteractActive())
+                {
+                    playerInputData.ConsumeInteract();
+                    DialogPlayer.CompleteLine();
+                }
+            }
+        }
+
+        private bool CanInteract()
+        {
+            bool canInteract = availableInteractables.Count > 0;
+            return canInteract;
+        }
+
+        private void Interact()
+        {
+            availableInteractables[0].Interact();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            Interactable interactable = GetInteractable(other.gameObject);
+            if (interactable != null
+                && !availableInteractables.Contains(interactable))
+            {
+                availableInteractables.Add(interactable);
+                interactable.InRangeOfInteraction();
+            }
+        }
+
+        private Interactable GetInteractable(GameObject gameObject)
+        {
+            return gameObject.GetComponent<Interactable>();
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            Interactable interactable = GetInteractable(other.gameObject);
+            if (interactable != null
+                && availableInteractables.Contains(interactable))
+            {
+                availableInteractables.Remove(interactable);
+                interactable.OutRangeOfInteraction();
+            }
         }
 
         private void FixedUpdate()
@@ -53,6 +159,11 @@ namespace FirstSlice.Player
         {
             PlayerInputData playerInputData = inputDataProvider.GetPlayerInputData();
             PlayerData playerData = dataProvider.GetPlayerData();
+
+            if (playerMode != PlayerMode.Normal)
+            {
+                return;
+            }
 
             UpdateMoveMode(playerInputData.runMode);
             UpdateMove(playerInputData.movement);
@@ -216,7 +327,6 @@ namespace FirstSlice.Player
 
         private void CastSpell()
         {
-            Debug.Log($"CastSpell!");
             spellModule.CastSpell();
         }
 

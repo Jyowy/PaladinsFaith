@@ -23,12 +23,6 @@ namespace FirstSlice.Player
 
         [SerializeField]
         private CombatModule combatModule = null;
-        //[SerializeField]
-        //private PlayableAsset attack1Timeline = null;
-        //[SerializeField]
-        //private PlayableAsset attack2Timeline = null;
-        //[SerializeField]
-        //private PlayableAsset attack3Timeline = null;
 
         public UnityEvent OnNextAttackReady = null;
         public UnityEvent OnAttackFinished = null;

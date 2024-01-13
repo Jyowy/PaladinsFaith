@@ -1,12 +1,9 @@
-using Codice.Client.Common.GameUI;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 
 namespace FirstSlice.PlayerInput
 {
@@ -38,6 +35,9 @@ namespace FirstSlice.PlayerInput
         [SerializeField]
         private InputActionReference nextSpell = null;
 
+        [SerializeField]
+        private InputActionReference interact = null;
+
         [ShowInInspector, ReadOnly]
         private PlayerInputData playerInputData = null;
 
@@ -61,6 +61,7 @@ namespace FirstSlice.PlayerInput
             spell = GetActionReference(inputActionMap, "Spell");
             prevSpell = GetActionReference(inputActionMap, "PrevSpell");
             nextSpell = GetActionReference(inputActionMap, "NextSpell");
+            interact = GetActionReference(inputActionMap, "Interact");
         }
 
         [Button]
@@ -69,6 +70,11 @@ namespace FirstSlice.PlayerInput
             move = null;
             run = null;
             rotation = null;
+        }
+
+        private void InitializeInputMap()
+        {
+            inputActionMap = inputActionAsset.FindActionMap("PlayerInputMap");
         }
 
         private InputActionReference GetActionReference(InputActionMap actionMap, string actionName)
@@ -87,11 +93,9 @@ namespace FirstSlice.PlayerInput
 
         private void Process()
         {
-            float dt = Time.deltaTime;
-
             playerInputData.movement = move.action.ReadValue<Vector2>();
             playerInputData.cameraRotation = rotation.action.ReadValue<Vector2>();
-            playerInputData.Update(dt);
+            playerInputData.Update();
         }
 
         private void OnEnable()
@@ -132,11 +136,6 @@ namespace FirstSlice.PlayerInput
             playerInputData = new PlayerInputData();
         }
 
-        private void InitializeInputMap()
-        {
-            inputActionMap = inputActionAsset.FindActionMap("PlayerInputMap");
-        }
-
         private void SetupActionCallbacks()
         {
             AddPerformedCanceledCallbacks(run, OnRunStarted, OnRunFinished);
@@ -147,6 +146,7 @@ namespace FirstSlice.PlayerInput
             prevSpell.action.performed += OnPrevSpell;
             nextSpell.action.performed += OnNextSpell;
             spell.action.performed += OnSpell;
+            interact.action.performed += OnInteract;
         }
 
         private void AddPerformedCanceledCallbacks(InputActionReference actionReference,
@@ -172,6 +172,7 @@ namespace FirstSlice.PlayerInput
             prevSpell.action.performed -= OnPrevSpell;
             nextSpell.action.performed -= OnNextSpell;
             spell.action.performed -= OnSpell;
+            interact.action.performed -= OnInteract;
         }
 
         private void RemovePerformedCanceledCallbacks(InputActionReference actionReference,
@@ -229,8 +230,12 @@ namespace FirstSlice.PlayerInput
 
         private void OnSpell(InputAction.CallbackContext _)
         {
-            Debug.Log($"OnSpell");
             playerInputData.Spell();
+        }
+
+        private void OnInteract(InputAction.CallbackContext _)
+        {
+            playerInputData.Interact();
         }
     }
 }

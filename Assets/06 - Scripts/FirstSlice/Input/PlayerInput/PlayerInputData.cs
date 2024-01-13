@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace FirstSlice.PlayerInput
 {
@@ -23,10 +22,26 @@ namespace FirstSlice.PlayerInput
         public readonly ButtonActivation prevSpell = new ButtonActivation();
         public readonly ButtonActivation nextSpell = new ButtonActivation();
 
-        public void Update(float dt)
+        public readonly BufferedActivation interact = new BufferedActivation();
+        private readonly float intearctionBufferTime = 0.25f;
+
+        private float prevUpdateTime = 0f;
+
+        public void Update()
         {
+            float currentTime = Time.time;
+            float dt = currentTime - prevUpdateTime;
+            prevUpdateTime = currentTime;
+
+            if (prevUpdateTime == 0f
+                || dt <= 0f)
+            {
+                return;
+            }
+
             lightAttack.UpdateTime(dt);
             spell.UpdateTime(dt);
+            interact.UpdateTime(dt);
         }
 
         public void LightAttack()
@@ -77,6 +92,21 @@ namespace FirstSlice.PlayerInput
         public void ConsumeSpell()
         {
             spell.Finish();
+        }
+
+        public void Interact()
+        {
+            interact.Activate(intearctionBufferTime);
+        }
+
+        public bool IsInteractActive()
+        {
+            return interact.Active;
+        }
+
+        public void ConsumeInteract()
+        {
+            interact.Finish();
         }
     }
 }

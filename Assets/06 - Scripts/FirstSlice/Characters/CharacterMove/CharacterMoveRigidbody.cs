@@ -16,5 +16,12 @@ namespace FirstSlice.Characters
             Quaternion rotation = Quaternion.LookRotation(normalizedDirecition, Vector3.up);
             rigidbody.rotation = rotation;
         }
+
+        public override void Stop()
+        {
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+            OnStopped?.Invoke();
+        }
     }
 }

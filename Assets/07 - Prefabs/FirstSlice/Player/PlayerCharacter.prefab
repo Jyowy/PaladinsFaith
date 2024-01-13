@@ -82,6 +82,9 @@ MonoBehaviour:
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
+  OnStopped:
+    m_PersistentCalls:
+      m_Calls: []
   rigidbody: {fileID: 7871733014303789619}
   force: 1
 --- !u!1 &1570863420066816838
@@ -238,9 +241,10 @@ MonoBehaviour:
   lightAttack: {fileID: 0}
   heavyAttack: {fileID: 0}
   rotation: {fileID: 0}
-  magic: {fileID: 0}
-  prevMagic: {fileID: 0}
-  nextMagic: {fileID: 0}
+  spell: {fileID: 0}
+  prevSpell: {fileID: 0}
+  nextSpell: {fileID: 0}
+  interact: {fileID: 0}
 --- !u!1 &3908451853900301440
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,6 +873,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  caster: {fileID: 0}
   spells:
   - {fileID: 11400000, guid: 7572b3fc6e3c30e429dad9c5d05581c1, type: 2}
   - {fileID: 11400000, guid: f9a784068c254b44bab73cd438b6d6a7, type: 2}
@@ -983,6 +988,21 @@ MonoBehaviour:
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
+  OnStopped:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6565613740540865526}
+        m_TargetAssemblyTypeName: FirstSlice.Player.PlayerAnimations, FirstSliceAssembley
+        m_MethodName: PlayerStopped
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   rigidbody: {fileID: 7871733014303789619}
   velocity: 12
 --- !u!1001 &711099388951170264

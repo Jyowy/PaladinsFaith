@@ -25,6 +25,7 @@ namespace FirstSlice.Characters
         protected CharacterMoveType moveType = CharacterMoveType.Walking;
 
         public UnityEvent<CharacterMoveType> OnMoveTypeChanged = new UnityEvent<CharacterMoveType>();
+        public UnityEvent OnStopped = null;
 
         protected virtual void Start()
         {
