@@ -77,6 +77,9 @@ namespace FirstSlice.Dialogs
             StartCoroutine(DisplayTextDelayed(message, line, null));
         }
 
+        private readonly string invisiblePrefix = "<color=#0000>";
+        private readonly string invisibleSuffix = "</color>";
+
         private IEnumerator DisplayTextDelayed(TMP_Text tmp, string text, UnityAction onFinished)
         {
             float time = 0f;
@@ -86,9 +89,17 @@ namespace FirstSlice.Dialogs
 
             while (index < text.Length)
             {
-                tmp.text = text.Substring(0, index + 1);
+                string textThisFrame = text[0..(index + 1)];
 
-                float timeNeeded = GetCharacterTime(text[index]);
+                if (index < text.Length - 1)
+                {
+                    textThisFrame += invisiblePrefix + text[(index + 1)..] + invisibleSuffix;
+                }
+
+                tmp.text = textThisFrame;
+
+                char character = text[index];
+                float timeNeeded = GetCharacterTime(character);
                 while (timeNeeded > time)
                 {
                     yield return null;
@@ -103,19 +114,21 @@ namespace FirstSlice.Dialogs
             onFinished?.Invoke();
         }
 
+        [SerializeField]
+        private float LetterTime = 0.05f;
+        [SerializeField]
+        private float SpaceTime = 0.025f;
+        [SerializeField]
+        private float CommaTime = 0.075f;
+        [SerializeField]
+        private float DotTime = 0.4f;
 
-        [ShowInInspector]
-        private readonly float LetterTime = 0.04f;
-        [ShowInInspector]
-        private readonly float SpaceTime = 0.08f;
-        [ShowInInspector]
-        private readonly float CommaTime = 0.4f;
-        [ShowInInspector]
-        private readonly float DotTime = 0.8f;
+        [SerializeField]
+        private float randomFactor = 0.25f;
 
         private float GetCharacterTime(char character)
         {
-            return character switch
+            float characterTime = character switch
             {
                 char letter when char.IsLetter(letter) => LetterTime,
                 ' ' => SpaceTime,
@@ -126,6 +139,10 @@ namespace FirstSlice.Dialogs
 
                 _ => LetterTime
             };
+
+            characterTime += characterTime * Random.Range(-randomFactor, randomFactor);
+
+            return characterTime;
         }
     }
 }

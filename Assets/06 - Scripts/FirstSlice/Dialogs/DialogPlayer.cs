@@ -5,10 +5,8 @@ using UnityEngine.Events;
 
 namespace FirstSlice.Dialogs
 {
-    public class DialogPlayer : MonoBehaviour
+    public class DialogPlayer : HiddenSingleton<DialogPlayer>
     {
-        private static DialogPlayer instance = null;
-
         public UnityEvent<Dialog> onDialogStarted = null;
         public UnityEvent<DialogLine> onDialogLineChanged = null;
         public UnityEvent onDialogFinished = null;
@@ -20,35 +18,9 @@ namespace FirstSlice.Dialogs
         public DialogLine CurrentDialogLine { get; private set; } = new DialogLine();
         private UnityAction dialogFinishedCallback = null;
 
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Debug.LogError($"DialogPlayer: multiple instances detected! (current '{instance.name}, new '{name}'')");
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (instance == this)
-            {
-                instance = null;
-            }
-        }
-
         public static void StartDialog(Dialog dialog, UnityAction onDialogFinished)
         {
-            if (instance == null)
-            {
-                Debug.LogError($"PlayDialog: no instance of DialogPlayer.");
-                return;
-            }
-
-            instance.StartDialog_Internal(dialog, onDialogFinished);
+            Instance.StartDialog_Internal(dialog, onDialogFinished);
         }
 
         private void StartDialog_Internal(Dialog dialog, UnityAction onDialogFinished)
@@ -124,13 +96,7 @@ namespace FirstSlice.Dialogs
 
         public static void CompleteLine()
         {
-            if (instance == null)
-            {
-                Debug.LogError($"PlayDialog: no instance of DialogPlayer.");
-                return;
-            }
-
-            instance.CompleteLine_Internal();
+            Instance.CompleteLine_Internal();
         }
 
         private void CompleteLine_Internal()

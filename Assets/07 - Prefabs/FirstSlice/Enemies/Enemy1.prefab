@@ -324,6 +324,9 @@ MonoBehaviour:
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
+  OnStopped:
+    m_PersistentCalls:
+      m_Calls: []
   agent: {fileID: 718615963811065220}
   OnMoveStarted:
     m_PersistentCalls:
@@ -1676,6 +1679,7 @@ GameObject:
   - component: {fileID: 4897435398182475902}
   - component: {fileID: 718615963811065220}
   - component: {fileID: 8975792396674608624}
+  - component: {fileID: 5765186703846842921}
   m_Layer: 15
   m_Name: Enemy1
   m_TagString: Untagged
@@ -1766,7 +1770,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 1
@@ -1808,6 +1812,29 @@ CapsuleCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 3.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.8, z: 0}
+--- !u!136 &5765186703846842921
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5745672276512869147}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
