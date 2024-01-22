@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
-using FirstSlice.PlayerInput;
 using UnityEngine.Events;
+
+using FirstSlice.PlayerInput;
 using FirstSlice.Characters;
 using FirstSlice.Spells;
 using FirstSlice.Dialogs;
+
 using Sirenix.OdinInspector;
 
 namespace FirstSlice.Player
@@ -13,7 +16,8 @@ namespace FirstSlice.Player
     public enum PlayerMode
     {
         Normal,
-        Dialog
+        Dialog,
+        Cinematic
     }
 
     public enum PlayerState
@@ -82,6 +86,11 @@ namespace FirstSlice.Player
         public void SetDialogMode()
         {
             SetPlayerMode(PlayerMode.Dialog);
+        }
+
+        public void SetCinematicMode()
+        {
+            SetPlayerMode(PlayerMode.Cinematic);
         }
 
         private void Update()

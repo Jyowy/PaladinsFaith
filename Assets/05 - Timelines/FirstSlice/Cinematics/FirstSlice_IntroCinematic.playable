@@ -56,6 +56,33 @@ MonoBehaviour:
   m_Markers:
     m_Objects:
     - {fileID: 3596369398791865832}
+--- !u!114 &-5664561380049320447
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 570206ff3d779dc4a9e8af62f95af27a, type: 3}
+  m_Name: Dialog Track
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects:
+    - {fileID: 4684862310031263640}
+    - {fileID: 1571095850803930677}
+    - {fileID: 2657986937943831043}
+    - {fileID: 3451466146767749262}
 --- !u!114 &-5280851452438140989
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65625,12 +65652,49 @@ MonoBehaviour:
   - {fileID: -5280851452438140989}
   - {fileID: -4702583540309510771}
   - {fileID: 8117543970543101928}
+  - {fileID: -5664561380049320447}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
     m_ScenePreview: 1
   m_DurationMode: 0
   m_MarkerTrack: {fileID: -6690149829987552583}
+--- !u!114 &1571095850803930677
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3432b8e99b28854bb6784640af0138c, type: 3}
+  m_Name: Dialog Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 6.5
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 0}
+  dialog: {fileID: 11400000, guid: 47acc8364cea59144bbd83364ca97ea2, type: 2}
+  type: 1
+--- !u!114 &2657986937943831043
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3432b8e99b28854bb6784640af0138c, type: 3}
+  m_Name: Dialog Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 11
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 0}
+  dialog: {fileID: 11400000, guid: 47acc8364cea59144bbd83364ca97ea2, type: 2}
+  type: 1
 --- !u!114 &2775790569504969662
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65658,6 +65722,24 @@ MonoBehaviour:
     - {fileID: -4883265809891247706}
     - {fileID: -7851161918596439334}
     - {fileID: -6969210960394829627}
+--- !u!114 &3451466146767749262
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3432b8e99b28854bb6784640af0138c, type: 3}
+  m_Name: Dialog Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 16
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 0}
+  dialog: {fileID: 11400000, guid: 47acc8364cea59144bbd83364ca97ea2, type: 2}
+  type: 2
 --- !u!114 &3596369398791865832
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65671,6 +65753,24 @@ MonoBehaviour:
   m_Name: End Point Marker
   m_EditorClassIdentifier: 
   m_Time: 15
+--- !u!114 &4684862310031263640
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3432b8e99b28854bb6784640af0138c, type: 3}
+  m_Name: Dialog Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 2.5
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 0}
+  dialog: {fileID: 11400000, guid: 47acc8364cea59144bbd83364ca97ea2, type: 2}
+  type: 0
 --- !u!114 &6850048000952384538
 MonoBehaviour:
   m_ObjectHideFlags: 1

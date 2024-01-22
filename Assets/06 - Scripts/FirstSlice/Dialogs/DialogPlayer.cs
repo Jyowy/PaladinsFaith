@@ -18,7 +18,7 @@ namespace FirstSlice.Dialogs
         public DialogLine CurrentDialogLine { get; private set; } = new DialogLine();
         private UnityAction dialogFinishedCallback = null;
 
-        public static void StartDialog(Dialog dialog, UnityAction onDialogFinished)
+        public static void StartDialog(Dialog dialog, UnityAction onDialogFinished = null)
         {
             Instance.StartDialog_Internal(dialog, onDialogFinished);
         }
@@ -31,7 +31,7 @@ namespace FirstSlice.Dialogs
                 return;
             }
 
-            EndDialog();
+            EndDialog_Internal();
 
             CurrentDialog = dialog;
             dialogFinishedCallback = onDialogFinished;
@@ -40,7 +40,12 @@ namespace FirstSlice.Dialogs
             PlayFirstLine();
         }
 
-        private void EndDialog()
+        public static void EndDialog()
+        {
+            Instance.EndDialog_Internal();
+        }
+
+        private void EndDialog_Internal()
         {
             if (CurrentDialog == null)
             {
@@ -115,7 +120,7 @@ namespace FirstSlice.Dialogs
             switch (nextType)
             {
                 case NextDialogType.EndDialog:
-                    EndDialog();
+                    EndDialog_Internal();
                     break;
 
                 case NextDialogType.JumpTo:
