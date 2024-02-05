@@ -19,12 +19,14 @@ namespace FirstSlice.Dialogs
 
         public UnityEvent OnDialogStarted = null;
         public UnityEvent OnDialogFinished = null;
+        public UnityEvent OnDialogAnimationStarted = null;
+        public UnityEvent OnDialogAnimationFinished = null;
 
         private Dialog dialog = null;
         private string speakerName = "";
         private string line = "";
 
-        private bool lineDisplayedCompletely = true;
+        private bool dialogLineCompletelyDisplayed = false;
 
         public void DialogStarted(Dialog dialog)
         {
@@ -53,10 +55,11 @@ namespace FirstSlice.Dialogs
         {
             StopAllCoroutines();
 
-            lineDisplayedCompletely = false;
             speakerName = dialogLine.differentSpeaker ? dialogLine.speakerName : dialog.speakerName;
             line = dialogLine.line;
 
+            dialogLineCompletelyDisplayed = false;
+            OnDialogAnimationStarted?.Invoke();
             DisplaySpeakerName();
         }
 
@@ -74,17 +77,20 @@ namespace FirstSlice.Dialogs
 
         private void DisplayDialogLine()
         {
-            StartCoroutine(DisplayTextDelayed(message, line, null));
+            StartCoroutine(DisplayTextDelayed(message, line, DialogLineCompleted));
         }
 
         private readonly string invisiblePrefix = "<color=#0000>";
         private readonly string invisibleSuffix = "</color>";
+
+        private string currentText = "";
 
         private IEnumerator DisplayTextDelayed(TMP_Text tmp, string text, UnityAction onFinished)
         {
             float time = 0f;
             int index = 0;
 
+            currentText = text;
             tmp.text = "";
 
             while (index < text.Length)
@@ -111,7 +117,28 @@ namespace FirstSlice.Dialogs
             }
 
             tmp.text = text;
+            OnDialogAnimationFinished?.Invoke();
+
             onFinished?.Invoke();
+        }
+
+        public void CompleteLine()
+        {
+            if (dialogLineCompletelyDisplayed)
+            {
+                return;
+            }
+
+            StopAllCoroutines();
+            dialogLineCompletelyDisplayed = true;
+            speaker.text = speakerName;
+            message.text = line;
+            OnDialogAnimationFinished?.Invoke();
+        }
+
+        private void DialogLineCompleted()
+        {
+            OnDialogAnimationFinished?.Invoke();
         }
 
         [SerializeField]

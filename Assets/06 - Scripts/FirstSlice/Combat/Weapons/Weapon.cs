@@ -36,7 +36,8 @@ namespace FirstSlice
         {
             AttackReceiver receiver = other.GetComponent<AttackReceiver>();
             if (receiver != null
-                && currentAttackData != null)
+                && currentAttackData != null
+                && other.gameObject.layer != gameObject.layer)
             {
                 Attack attack = GetAttack();
                 Attack(receiver, attack);

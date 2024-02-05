@@ -72,11 +72,6 @@ namespace FirstSlice.PlayerInput
             rotation = null;
         }
 
-        private void InitializeInputMap()
-        {
-            inputActionMap = inputActionAsset.FindActionMap("PlayerInputMap");
-        }
-
         private InputActionReference GetActionReference(InputActionMap actionMap, string actionName)
         {
             InputAction action = actionMap.FindAction(actionName);
@@ -101,6 +96,11 @@ namespace FirstSlice.PlayerInput
         private void OnEnable()
         {
             EnableInputAsset();
+        }
+
+        private void InitializeInputMap()
+        {
+            inputActionMap = inputActionAsset.FindActionMap("PlayerInputMap");
         }
 
         private void EnableInputAsset()

@@ -25,8 +25,6 @@ namespace FirstSlice.Player
         Idle,
         Walking,
         Running,
-        Defending,
-        Attacking,
         Casting
     }
 
@@ -85,6 +83,11 @@ namespace FirstSlice.Player
 
         public void SetDialogMode()
         {
+            if (playerMode == PlayerMode.Cinematic)
+            {
+                return;
+            }
+
             SetPlayerMode(PlayerMode.Dialog);
         }
 
@@ -118,6 +121,10 @@ namespace FirstSlice.Player
                     playerInputData.ConsumeInteract();
                     DialogPlayer.CompleteLine();
                 }
+            }
+            else if (playerMode == PlayerMode.Cinematic)
+            {
+
             }
         }
 
@@ -193,8 +200,8 @@ namespace FirstSlice.Player
 
             currentMoveMode = newMoveMode;
 
-            if (currentState != PlayerState.Defending
-                && currentState != PlayerState.Attacking)
+            if (!combatModule.IsDefending
+                && !combatModule.IsAttacking)
             {
                 SetMoveState();
             }
@@ -234,7 +241,7 @@ namespace FirstSlice.Player
         private void UpdateMove(Vector2 move)
         {
             Vector3 worldMove = GetWorldDirectionFrom2DInput(move);
-            if (currentState == PlayerState.Defending)
+            if (combatModule.IsDefending)
             {
                 worldMove *= defendingMovePenalizer;
             }
@@ -279,7 +286,7 @@ namespace FirstSlice.Player
 
         private void UpdateCombat(PlayerInputData inputData)
         {
-            if (currentState != PlayerState.Attacking)
+            if (!combatModule.IsAttacking)
             {
                 if (inputData.IsLightAttackActive())
                 {
@@ -287,23 +294,30 @@ namespace FirstSlice.Player
                     combatModule.Attack();
                 }
                 else if (inputData.defenseActive
-                    && currentState != PlayerState.Defending)
+                    && !combatModule.IsDefending)
                 {
-                    currentState = PlayerState.Defending;
                     combatModule.StartDefending();
                 }
-                else if (currentState == PlayerState.Defending
+                else if (combatModule.IsDefending
                     && !inputData.defenseActive)
                 {
                     combatModule.StopDefending();
                     SetMoveState();
                 }
             }
+            else
+            {
+                if (inputData.IsLightAttackActive())
+                {
+                    inputData.ConsumeLightAttack();
+                    combatModule.Attack();
+                }
+            }
         }
 
         public void AttackFinished()
         {
-            if (currentState != PlayerState.Attacking)
+            if (!combatModule.IsAttacking)
             {
                 return;
             }
@@ -324,7 +338,7 @@ namespace FirstSlice.Player
                 spellModule.NextSpell();
             }
 
-            if (currentState != PlayerState.Attacking)
+            if (!combatModule.IsAttacking)
             {
                 if (inputData.IsSpellActive())
                 {

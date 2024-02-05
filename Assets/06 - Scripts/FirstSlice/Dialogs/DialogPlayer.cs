@@ -11,12 +11,16 @@ namespace FirstSlice.Dialogs
         public UnityEvent<DialogLine> onDialogLineChanged = null;
         public UnityEvent onDialogFinished = null;
 
+        public UnityEvent completeDialogLine = null;
+
         public bool IsPlaying => CurrentDialog != null;
         public Dialog CurrentDialog { get; private set; } = null;
 
         private int currentDialogLineIndex = -1;
         public DialogLine CurrentDialogLine { get; private set; } = new DialogLine();
         private UnityAction dialogFinishedCallback = null;
+
+        private bool dialogLineCompletelyDisplayed = true;
 
         public static void StartDialog(Dialog dialog, UnityAction onDialogFinished = null)
         {
@@ -89,9 +93,15 @@ namespace FirstSlice.Dialogs
                 return;
             }
 
+            dialogLineCompletelyDisplayed = false;
             currentDialogLineIndex = lineIndex;
             CurrentDialogLine = CurrentDialog.lines[lineIndex];
             onDialogLineChanged?.Invoke(CurrentDialogLine);
+        }
+
+        public void DialogLineCompletelyDisplayed()
+        {
+            dialogLineCompletelyDisplayed = true;
         }
 
         private bool IsLineIndexOutOfRange(int lineIndex)
@@ -106,6 +116,12 @@ namespace FirstSlice.Dialogs
 
         private void CompleteLine_Internal()
         {
+            if (!dialogLineCompletelyDisplayed)
+            {
+                completeDialogLine?.Invoke();
+                return;
+            }
+
             if (CurrentDialogLine.hasAnswers)
             {
                 Debug.LogError($"Line '{CurrentDialogLine.name}': can't complete line, choose an answer!");

@@ -28,7 +28,6 @@ namespace FirstSlice.Player
         [ShowInInspector, ReadOnly]
         private bool nextAttackRequested = false;
 
-
         private void Start()
         {
             weapon.SetWielder(player.gameObject);
@@ -39,6 +38,11 @@ namespace FirstSlice.Player
             if (!canAttack)
             {
                 return;
+            }
+
+            if (IsDefending)
+            {
+                StopDefending();
             }
 
             if (IsAttacking)
