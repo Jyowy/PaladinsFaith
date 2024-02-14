@@ -6,6 +6,6 @@ namespace PaladinsFaith.PlayerInput
 {
     public abstract class PlayerInputDataProvider : MonoBehaviour
     {
-        public abstract PlayerInputData GetPlayerInputData();
+        public abstract PlayerInputData UpdateAndGetPlayerInputData();
     }
 }

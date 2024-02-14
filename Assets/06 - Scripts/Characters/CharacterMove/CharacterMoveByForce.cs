@@ -10,10 +10,10 @@ namespace PaladinsFaith.Player
         [SerializeField]
         private float force = 1f;
 
-        public override void PlanarMove(Vector3 worldDirection)
+        public override void PlanarMove(Vector3 worldDirection, float speedFactor)
         {
             float moveModeFactor = GetMoveModeFactor();
-            float newForce = force * moveModeFactor;
+            float newForce = force * moveModeFactor * speedFactor;
             Vector3 directedForce = worldDirection * newForce;
             rigidbody.AddForce(directedForce);
 

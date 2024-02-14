@@ -9,5 +9,6 @@ namespace PaladinsFaith.Player
         public Vector3 direction = Vector3.zero;
         public float speed = 0f;
         public bool isMoving = false;
+        public bool isDefending = false;
     }
 }

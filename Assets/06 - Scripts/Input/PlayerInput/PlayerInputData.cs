@@ -6,9 +6,9 @@ namespace PaladinsFaith.PlayerInput
 {
     public class PlayerInputData
     {
-        public Vector2 movement = Vector2.zero;
+        public Vector2 move = Vector2.zero;
         public Vector2 cameraRotation = Vector2.zero;
-        public bool runMode = false;
+        public bool fastMove = false;
 
         public bool defenseActive = false;
         public bool heavyAttack = false;

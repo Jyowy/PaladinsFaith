@@ -15,7 +15,7 @@ namespace PaladinsFaith.Player
 {
     public enum PlayerMode
     {
-        Normal,
+        ControllingCharacter,
         Dialog,
         Cinematic
     }
@@ -25,6 +25,7 @@ namespace PaladinsFaith.Player
         Idle,
         Walking,
         Running,
+        Dashing,
         Casting
     }
 
@@ -45,8 +46,9 @@ namespace PaladinsFaith.Player
         public UnityEvent<CharacterMoveType> OnPlayerMoveModeChanged = null;
         public UnityEvent OnPlayerStopped = null;
 
+        private PlayerSharedData sharedData = new PlayerSharedData();
         [ShowInInspector, ReadOnly]
-        private PlayerMode playerMode = PlayerMode.Normal;
+        private PlayerMode playerMode = PlayerMode.ControllingCharacter;
         [ShowInInspector, ReadOnly]
         private PlayerState currentState = PlayerState.Idle;
         [ShowInInspector, ReadOnly]
@@ -55,9 +57,27 @@ namespace PaladinsFaith.Player
 
         private readonly List<Interactable> availableInteractables = new List<Interactable>();
 
-        private void Awake()
+        protected override void Awake()
+        {
+            base.Awake();
+            Initialize();
+        }
+
+        private void Initialize()
         {
             healthBar.Initialize(OnDead);
+            stamina.Fill();
+
+            InitializeSharedData();
+        }
+
+        private void InitializeSharedData()
+        {
+            sharedData.camera = camera;
+            sharedData.stamina = stamina;
+            sharedData.moveModule = moveModule;
+            sharedData.combatModule = combatModule;
+            sharedData.spellModule = spellModule;
         }
 
         public void SetPlayerMode(PlayerMode playerMode)
@@ -78,7 +98,7 @@ namespace PaladinsFaith.Player
 
         public void SetNormalMode()
         {
-            SetPlayerMode(PlayerMode.Normal);
+            SetPlayerMode(PlayerMode.ControllingCharacter);
         }
 
         public void SetDialogMode()
@@ -96,16 +116,17 @@ namespace PaladinsFaith.Player
             SetPlayerMode(PlayerMode.Cinematic);
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             ProcessInteraction();
         }
 
         private void ProcessInteraction()
         {
-            PlayerInputData playerInputData = inputDataProvider.GetPlayerInputData();
+            PlayerInputData playerInputData = inputDataProvider.UpdateAndGetPlayerInputData();
 
-            if (playerMode == PlayerMode.Normal)
+            if (playerMode == PlayerMode.ControllingCharacter)
             {
                 if (playerInputData.IsInteractActive()
                     && CanInteract())
@@ -124,7 +145,7 @@ namespace PaladinsFaith.Player
             }
             else if (playerMode == PlayerMode.Cinematic)
             {
-
+                // Nothing yet
             }
         }
 
@@ -171,18 +192,22 @@ namespace PaladinsFaith.Player
             ProcessPhysicsData();
         }
 
+        private bool CharacterControlBlocked()
+        {
+            return playerMode != PlayerMode.ControllingCharacter;
+        }
+
         private void ProcessPhysicsData()
         {
-            PlayerInputData playerInputData = inputDataProvider.GetPlayerInputData();
-            PlayerData playerData = dataProvider.GetPlayerData();
+            PlayerInputData playerInputData = inputDataProvider.UpdateAndGetPlayerInputData();
+            PlayerData playerData = dataProvider.UpdateAndGetPlayerData(this);
 
-            if (playerMode != PlayerMode.Normal)
+            if (CharacterControlBlocked())
             {
                 return;
             }
 
-            UpdateMoveMode(playerInputData.runMode);
-            UpdateMove(playerInputData.movement);
+            UpdateMove(playerInputData.fastMove, playerInputData.move);
 
             UpdateCameraRotation(playerInputData.cameraRotation);
 
@@ -191,20 +216,50 @@ namespace PaladinsFaith.Player
             UpdateMagic(playerInputData);
         }
 
-        private void UpdateMoveMode(bool run)
+        private void UpdateMove(bool fastMove, Vector2 move)
         {
-            CharacterMoveType newMoveMode = run
-                ? CharacterMoveType.Running
-                : CharacterMoveType.Walking;
-            moveModule.SetMoveType(newMoveMode);
-
-            currentMoveMode = newMoveMode;
-
-            if (!combatModule.IsDefending
-                && !combatModule.IsAttacking)
+            Vector3 worldMove = GetWorldDirectionFrom2DInput(move);
+            float speedFactor = 1f;
+            if (combatModule.IsDefending)
             {
-                SetMoveState();
+                speedFactor = defendingMovePenalizer;
             }
+
+            CheckFastMove(fastMove, worldMove, speedFactor);
+            moveModule.PlanarMove(worldMove, speedFactor);
+
+            float speed = move.magnitude;
+            if (speed == 0f
+                && currentSpeed > 0f)
+            {
+                OnPlayerStopped?.Invoke();
+                if (currentState == PlayerState.Walking
+                    || currentState == PlayerState.Running)
+                {
+                    currentState = PlayerState.Idle;
+                }
+            }
+            else if (speed > 0f
+                && currentSpeed == 0f)
+            {
+                OnPlayerMoveModeChanged?.Invoke(currentMoveMode);
+            }
+
+            currentSpeed = speed;
+        }
+
+        private Vector3 GetWorldDirectionFrom2DInput(Vector2 input2D)
+        {
+            Vector3 planarDirection = new Vector3(input2D.x, 0f, input2D.y);
+            Vector3 relativeWorldDirection = camera.GetVectorRelativeToView(planarDirection);
+            Vector3 normalizedWorldDirection = relativeWorldDirection.NormalizedWithoutY();
+            Vector3 worldDirection = normalizedWorldDirection * planarDirection.magnitude;
+            return worldDirection;
+        }
+
+        private void CheckFastMove(bool fastMove, Vector3 worldMove, float speedFactor)
+        {
+            moveModule.UpdateFastMove(fastMove, worldMove, speedFactor);
         }
 
         private void SetMoveState()
@@ -236,43 +291,6 @@ namespace PaladinsFaith.Player
             {
                 OnPlayerMoveModeChanged?.Invoke(currentMoveMode);
             }
-        }
-
-        private void UpdateMove(Vector2 move)
-        {
-            Vector3 worldMove = GetWorldDirectionFrom2DInput(move);
-            if (combatModule.IsDefending)
-            {
-                worldMove *= defendingMovePenalizer;
-            }
-            moveModule.PlanarMove(worldMove);
-
-            float speed = move.magnitude;
-            if (speed == 0f
-                && currentSpeed > 0f)
-            {
-                OnPlayerStopped?.Invoke();
-                if (currentState == PlayerState.Walking
-                    || currentState == PlayerState.Running)
-                {
-                    currentState = PlayerState.Idle;
-                }
-            }
-            else if (speed > 0f
-                && currentSpeed == 0f)
-            {
-                OnPlayerMoveModeChanged?.Invoke(currentMoveMode);
-            }
-
-            currentSpeed = speed;
-        }
-
-        private Vector3 GetWorldDirectionFrom2DInput(Vector2 input2D)
-        {
-            Vector3 planarDirection = new Vector3(input2D.x, 0f, input2D.y);
-            Vector3 worldDirection = camera.GetVectorRelativeToView(planarDirection);
-            Vector3 normalizedWorldDirection = worldDirection.NormalizedWithoutY();
-            return normalizedWorldDirection;
         }
 
         private void UpdateCameraRotation(Vector2 cameraRotation)

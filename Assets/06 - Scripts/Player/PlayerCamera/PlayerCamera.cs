@@ -131,6 +131,9 @@ namespace PaladinsFaith.Player
             return offsetPosition;
         }
 
+        [SerializeField]
+        private float positionFactor = 0.1f;
+
         private void MoveTo(Vector3 position)
         {
             //cameraRigidbody.Move(position, Quaternion.identity);
@@ -139,7 +142,8 @@ namespace PaladinsFaith.Player
             //cameraRigidbody.velocity = inc;
 
             Vector3 bestPosition = GetBestPosition(position);
-            cameraRigidbody.Move(bestPosition, Quaternion.identity);
+            Vector3 halfPosition = cameraRigidbody.position * (1f - positionFactor) + bestPosition * positionFactor;
+            cameraRigidbody.Move(halfPosition, Quaternion.identity);
         }
 
         private Vector3 GetBestPosition(Vector3 desiredPosition)

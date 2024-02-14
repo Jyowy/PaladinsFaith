@@ -1,3 +1,4 @@
+using PaladinsFaith.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,8 +17,15 @@ namespace PaladinsFaith
         public UnityEvent OnAttackCancelled = null;
         public UnityEvent OnAttackFinished = null;
 
+        private ContinuousResource stamina = null;
+
         public bool IsDefending { get; protected set; } = false;
         public bool IsAttacking { get; protected set; } = false;
+
+        public void SetStamina(ContinuousResource stamina)
+        {
+            this.stamina = stamina;
+        }
 
         public virtual void Attack() { }
 
@@ -39,6 +47,7 @@ namespace PaladinsFaith
             }
 
             IsDefending = true;
+            stamina.AddAutomaticRegainBlocker();
             OnDefenseStarted?.Invoke();
         }
 
@@ -50,6 +59,7 @@ namespace PaladinsFaith
             }
 
             IsDefending = false;
+            stamina.RemoveAutomaticRegainBlocker();
             OnDefenseFinished?.Invoke();
         }
     }

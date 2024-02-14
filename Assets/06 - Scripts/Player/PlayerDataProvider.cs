@@ -9,7 +9,6 @@ namespace PaladinsFaith.Player
     {
         [SerializeField]
         private Rigidbody playerRigidbody = null;
-
         [ShowInInspector, ReadOnly]
         private PlayerData playerData = null;
 
@@ -23,19 +22,18 @@ namespace PaladinsFaith.Player
             playerData = new PlayerData();
         }
 
-        public PlayerData GetPlayerData()
+        public PlayerData UpdateAndGetPlayerData(Player player)
         {
-            ProcessData();
-
+            UpdateData(player);
             return playerData;
         }
 
-        private void ProcessData()
+        private void UpdateData(Player player)
         {
             Vector3 velocity = playerRigidbody.velocity;
             playerData.direction = velocity.normalized;
             playerData.speed = velocity.magnitude;
-            playerData.isMoving = false;
+            playerData.isMoving = playerData.speed > 0f;
         }
     }
 }

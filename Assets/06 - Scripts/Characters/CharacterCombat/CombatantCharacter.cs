@@ -11,6 +11,12 @@ namespace PaladinsFaith.Characters
         [SerializeField]
         protected CombatModule combatModule = null;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            combatModule.SetStamina(stamina);
+        }
+
         public virtual void ReceiveAttack(Attack attack)
         {
             ReceiveDamage(attack.damage);

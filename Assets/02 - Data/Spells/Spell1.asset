@@ -23,17 +23,17 @@ MonoBehaviour:
     SerializationNodes:
     - Name: OnCast
       Entry: 7
-      Data: 0|FirstSlice.Spells.SpellEffects, FirstSliceAssembley
+      Data: 0|PaladinsFaith.Spells.SpellEffects, Assembly-CSharp
     - Name: effects
       Entry: 7
-      Data: 1|System.Collections.Generic.List`1[[FirstSlice.Effects.EffectBase, FirstSliceAssembley]],
-        mscorlib
+      Data: 1|System.Collections.Generic.List`1[[PaladinsFaith.Effects.EffectBase,
+        Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 2|FirstSlice.Effects.HealEffect, FirstSliceAssembley
+      Data: 2|PaladinsFaith.Effects.HealEffect, Assembly-CSharp
     - Name: amount
       Entry: 4
       Data: 10

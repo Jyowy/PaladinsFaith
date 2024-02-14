@@ -873,7 +873,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  caster: {fileID: 0}
+  caster: {fileID: 4324059231694827579}
   spells:
   - {fileID: 11400000, guid: 7572b3fc6e3c30e429dad9c5d05581c1, type: 2}
   - {fileID: 11400000, guid: f9a784068c254b44bab73cd438b6d6a7, type: 2}

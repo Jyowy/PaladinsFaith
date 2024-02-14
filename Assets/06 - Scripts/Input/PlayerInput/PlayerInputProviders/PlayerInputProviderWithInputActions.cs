@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace PaladinsFaith.PlayerInput
 {
-    public class PlayerInputProviderWithUnityInputSystem : PlayerInputDataProvider
+    public class PlayerInputProviderWithInputActions : PlayerInputDataProvider
     {
         [SerializeField, OnValueChanged("ReadActionMap")]
         private InputActionAsset inputActionAsset = null;
@@ -80,7 +80,7 @@ namespace PaladinsFaith.PlayerInput
         }
 #endif
 
-        public override PlayerInputData GetPlayerInputData()
+        public override PlayerInputData UpdateAndGetPlayerInputData()
         {
             Process();
             return playerInputData;
@@ -88,7 +88,7 @@ namespace PaladinsFaith.PlayerInput
 
         private void Process()
         {
-            playerInputData.movement = move.action.ReadValue<Vector2>();
+            playerInputData.move = move.action.ReadValue<Vector2>();
             playerInputData.cameraRotation = rotation.action.ReadValue<Vector2>();
             playerInputData.Update();
         }
@@ -138,7 +138,7 @@ namespace PaladinsFaith.PlayerInput
 
         private void SetupActionCallbacks()
         {
-            AddPerformedCanceledCallbacks(run, OnRunStarted, OnRunFinished);
+            AddPerformedCanceledCallbacks(run, OnFastMoveStarted, OnFastMoveFinished);
             AddPerformedCanceledCallbacks(defense, OnDefenseStarted, OnDefenseFinished);
             AddPerformedCanceledCallbacks(heavyAttack, OnHeavyAttackStarted, OnHeavyAttackFinished);
 
@@ -164,7 +164,7 @@ namespace PaladinsFaith.PlayerInput
 
         private void RemoveActionCallbacks()
         {
-            RemovePerformedCanceledCallbacks(run, OnRunStarted, OnRunFinished);
+            RemovePerformedCanceledCallbacks(run, OnFastMoveStarted, OnFastMoveFinished);
             RemovePerformedCanceledCallbacks(defense, OnDefenseStarted, OnDefenseFinished);
             RemovePerformedCanceledCallbacks(heavyAttack, OnHeavyAttackStarted, OnHeavyAttackFinished);
 
@@ -183,14 +183,14 @@ namespace PaladinsFaith.PlayerInput
             actionReference.action.canceled -= OnCanceled;
         }
 
-        private void OnRunStarted(InputAction.CallbackContext _)
+        private void OnFastMoveStarted(InputAction.CallbackContext _)
         {
-            playerInputData.runMode = true;
+            playerInputData.fastMove = true;
         }
 
-        private void OnRunFinished(InputAction.CallbackContext _)
+        private void OnFastMoveFinished(InputAction.CallbackContext _)
         {
-            playerInputData.runMode = false;
+            playerInputData.fastMove = false;
         }
 
         private void OnDefenseStarted(InputAction.CallbackContext _)
