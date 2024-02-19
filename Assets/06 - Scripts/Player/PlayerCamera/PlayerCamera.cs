@@ -2,43 +2,36 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace PaladinsFaith.Player
 {
     public class PlayerCamera : MonoBehaviour
     {
         [SerializeField]
+        private Transform target = null;
+
+        [SerializeField]
+        private Transform cameraTransform = null;
+        [SerializeField]
         private Rigidbody cameraRigidbody = null;
 
         [SerializeField]
-        private float defaultDistance = 7.5f;
+        private float minDistance = 2.5f;
         [SerializeField]
-        private float minDistance = 3f;
-        [SerializeField]
-        private float maxDistance = 10f;
+        private float maxDistance = 25f;
 
         [SerializeField]
-        private float horizontalRotationSpeedFactor = 0.25f;
+        private float horizontalSpeed = 1.25f;
         [SerializeField]
-        private float verticalRotationSpeedFactor = 0.25f;
+        private float verticalSpeed = 1.25f;
 
         [SerializeField]
-        private float rotationSpeedFactor = 0.25f;
+        private LayerMask scenaryLayers = 0;
         [SerializeField]
-        private float zoomSpeedFactor = 0.1f;
-
+        private float distanceFromScenary = 0.25f;
         [SerializeField]
-        private float separationDistance = 0.25f;
-        [SerializeField]
-        private float radiusToCheck = 0.5f;
-        [SerializeField]
-        private LayerMask layersToCheck = 0;
-
-        [SerializeField]
-        private float height = 5f;
-
-        [SerializeField]
-        private float distance = 20f;
+        private float radiusToCheckScenary = 0.5f;
 
         [SerializeField]
         private bool invertedHorizontal = false;
@@ -50,9 +43,6 @@ namespace PaladinsFaith.Player
         private float minVerticalAngle = -10f;
 
         [SerializeField]
-        private Transform target = null;
-
-        [SerializeField]
         private Transform colliderToTarget = null;
         [SerializeField]
         private float colliderToTargetWidth = 5f;
@@ -62,20 +52,29 @@ namespace PaladinsFaith.Player
         [ShowInInspector]
         private float horizontalAngle = 0f;
 
-        private float rotation = 0f;
-        private float currentDistance = 0f;
+        [SerializeField]
+        private float moveFactor = 0.1f;
 
         private Vector3 startDirection = Vector3.zero;
 
         private void Awake()
         {
-            currentDistance = defaultDistance;
             startDirection = -target.forward;
+        }
+
+        private void Start()
+        {
+            ForcePosition();
+        }
+
+        private void ForcePosition()
+        {
+            Vector3 desiredPosition = GetDesiredPosition();
+            cameraTransform.position = desiredPosition;
         }
 
         public Vector3 GetVectorRelativeToView(Vector3 vector)
         {
-            Transform cameraTransform = cameraRigidbody.transform;
             Vector3 relativeVector = cameraTransform.right * vector.x
                 + cameraTransform.up * vector.y
                 + cameraTransform.forward  * vector.z;
@@ -113,73 +112,57 @@ namespace PaladinsFaith.Player
         {
             Quaternion offsetRotation = Quaternion.Euler(verticalAngle, horizontalAngle, 0f);
             Vector3 offsetDirection = offsetRotation * startDirection;
-            Vector3 offsetPosition = offsetDirection * distance;
+            Vector3 offsetPosition = offsetDirection * maxDistance;
             return offsetPosition;
         }
-
-        private Vector3 GetOffsetRelativeToTarget_FixedHeight()
-        {
-            Vector3 offsetPosition = Vector3.zero;
-            offsetPosition.y = height;
-
-            float planarDistance = Mathf.Sqrt(currentDistance * currentDistance - height * height);
-            Vector3 direction = -Vector3.forward;
-            direction = Quaternion.Euler(0f, rotation, 0f) * direction;
-
-            offsetPosition += direction * planarDistance;
-
-            return offsetPosition;
-        }
-
-        [SerializeField]
-        private float positionFactor = 0.1f;
 
         private void MoveTo(Vector3 position)
         {
-            //cameraRigidbody.Move(position, Quaternion.identity);
-
-            //Vector3 inc = position - cameraRigidbody.position;
-            //cameraRigidbody.velocity = inc;
-
             Vector3 bestPosition = GetBestPosition(position);
-            Vector3 halfPosition = cameraRigidbody.position * (1f - positionFactor) + bestPosition * positionFactor;
-            cameraRigidbody.Move(halfPosition, Quaternion.identity);
+            Vector3 halfwayPosition = cameraTransform.position * (1f - moveFactor) + bestPosition * moveFactor;
+            cameraRigidbody.Move(halfwayPosition, Quaternion.identity);
         }
 
         private Vector3 GetBestPosition(Vector3 desiredPosition)
         {
             Vector3 targetPosition = GetTargetPosition();
-            Vector3 bestPosition = desiredPosition;
-            Vector3 vector = bestPosition - targetPosition;
-            float maxDistance = vector.magnitude;
+            Vector3 vector = desiredPosition - targetPosition;
             Vector3 direction = vector.normalized;
 
-            Ray ray = new Ray(targetPosition, direction);
-            //if (Physics.Raycast(ray, out RaycastHit info, maxDistance, layersToCheck))
-            if (Physics.SphereCast(ray, radiusToCheck, out RaycastHit info, maxDistance, layersToCheck))
-            {
-                bestPosition = info.point + direction * separationDistance;
-            }
+            float distance = GetDistanceToScenary(targetPosition, desiredPosition);
+            Vector3 bestPosition = targetPosition + direction * distance;
 
             return bestPosition;
         }
 
+        private float GetDistanceToScenary(Vector3 targetPosition, Vector3 desiredPosition)
+        {
+            float distance = maxDistance;
+
+            Vector3 direction = (desiredPosition - targetPosition).normalized;
+            Ray ray = new Ray(targetPosition, direction);
+            if (Physics.SphereCast(ray, radiusToCheckScenary, out RaycastHit info, maxDistance, scenaryLayers))
+            {
+                distance = info.distance - distanceFromScenary;
+            }
+
+            return distance;
+        }
+
         private void UpdateColliderToTarget()
         {
-            Vector3 cameraPosition = cameraRigidbody.transform.position;
+            Vector3 cameraPosition = cameraTransform.position;
             Vector3 targetPosition = target.position;
 
             Vector3 cameraToTargetVector = targetPosition - cameraPosition;
             Vector3 position = cameraPosition + cameraToTargetVector * 0.5f;
             float distance = cameraToTargetVector.magnitude;
             Vector3 scale = new Vector3(colliderToTargetWidth, distance, colliderToTargetWidth);
-
-            Quaternion rotation = cameraRigidbody.transform.rotation;
-            Vector3 euler = rotation.eulerAngles;
-            euler.x += 90f;
-            rotation.eulerAngles = euler;
-
             colliderToTarget.localScale = scale;
+
+            float verticalAngle = 90f;
+            Quaternion rotation = transform.rotation;
+            rotation.eulerAngles += new Vector3(verticalAngle, 0f, 0f);
             colliderToTarget.SetPositionAndRotation(position, rotation);
         }
 
@@ -190,26 +173,21 @@ namespace PaladinsFaith.Player
                 angle = -angle;
             }
 
-            angle *= horizontalRotationSpeedFactor;
-            rotation = Mathf.Repeat(rotation + angle, 360f);
+            angle *= horizontalSpeed;
 
             horizontalAngle = Mathf.Repeat(horizontalAngle + angle, 360f);
         }
 
-        public void VerticalRotation(float zoom)
+        public void VerticalRotation(float angle)
         {
             if (invertedVertical)
             {
-                zoom = -zoom;
+                angle = -angle;
             }
 
-            float angle = -zoom * verticalRotationSpeedFactor;
-
-            zoom *= zoomSpeedFactor;
-            currentDistance = Mathf.Clamp(currentDistance + zoom, minDistance, maxDistance);
+            angle *= verticalSpeed;
 
             verticalAngle = Mathf.Clamp(verticalAngle + angle, minVerticalAngle, maxVerticalAngle);
-            //verticalAngle = Mathf.Repeat(verticalAngle + angle, 360f);
         }
     }
 }

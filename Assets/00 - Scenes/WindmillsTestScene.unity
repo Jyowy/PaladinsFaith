@@ -520,6 +520,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2873294168507767559}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &329485167 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6913182056841743834, guid: 6220a7c2faa3d90429713a8cd5972230,
+    type: 3}
+  m_PrefabInstance: {fileID: 2873294168507767559}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &345262313
 GameObject:
   m_ObjectHideFlags: 0
@@ -2445,7 +2451,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 50, y: 125}
-  m_SizeDelta: {x: 300, y: 50}
+  m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &878511696
 MonoBehaviour:
@@ -5857,13 +5863,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
+      propertyPath: maxDistance
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: minDistance
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
       propertyPath: radiusToCheck
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: positionFactor
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 329485167}
+    - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: invertedVertical
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
@@ -5878,7 +5904,12 @@ PrefabInstance:
     - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: separationDistance
-      value: -0.75
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: scenaryLayers.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
@@ -6100,6 +6131,11 @@ PrefabInstance:
       propertyPath: lightAttack
       value: 
       objectReference: {fileID: 188771747}
+    - target: {fileID: 7109578527317487591, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8015107053838727025, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: m_LocalPosition.x
