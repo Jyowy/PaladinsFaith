@@ -2,6 +2,7 @@ using PaladinsFaith.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PaladinsFaith.Combat;
 
 namespace PaladinsFaith.Enemies
 {
@@ -15,8 +16,9 @@ namespace PaladinsFaith.Enemies
         private GameObject player = null;
         private bool playerInRange = false;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             healthBar.Initialize(OnDead);
 
             detector.OnPlayerFound?.AddListener(PlayerFound);
@@ -52,8 +54,9 @@ namespace PaladinsFaith.Enemies
             moveModule.Stop();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             if (player != null)
             {
                 if (playerInRange)

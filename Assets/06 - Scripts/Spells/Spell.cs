@@ -1,46 +1,66 @@
+using PaladinsFaith.Effects;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace PaladinsFaith.Spells
 {
-    public enum SpellStateAsdas
-    {
-        Ready,
-        Casting,
-        SearchingTarget,
-        Impacting
-    }
-
     public class Spell
     {
+        private enum SpellState
+        {
+            Ready,
+            Casting,
+            Holding
+        }
+
         private readonly SpellData data = null;
-        private SpellStateAsdas state = SpellStateAsdas.Ready;
-        private GameObject caster = null;
+        private readonly GameObject caster = null;
+        private SpellState state = SpellState.Ready;
 
         public Spell(GameObject caster, SpellData data)
         {
             this.caster = caster;
             this.data = data;
+            state = SpellState.Ready;
         }
 
-        public bool TryToCast()
+        public void StartCasting()
         {
-            if (state != SpellStateAsdas.Ready)
+            if (state != SpellState.Ready)
             {
-                return false;
+                throw new System.Exception("Spell was already casted.");
             }
 
-            Cast();
-            return true;
+            state = SpellState.Casting;
+            ApplyStartCastingEffects();
+
+            float timeToCast = data.timeToCast;
+            if (timeToCast > 0)
+            {
+                Timers.StartGameTimer(caster, "Preparing cast", timeToCast, Cast);
+            }
+            else
+            {
+                Cast();
+            }
+        }
+
+        private void ApplyStartCastingEffects()
+        {
+            if (data.EffectsOnStartCasting == null)
+            {
+                return;
+            }
+
+            data.EffectsOnStartCasting.Apply(caster);
         }
 
         private void Cast()
         {
-            // TODO
             Debug.Log($"Cast spell {data.spellName}");
-            data.OnCast.Apply(caster);
-            //data.OnCast.CastEffects();
+
+            data.EffectsOnSpellCasted.Apply(caster);
         }
     }
 }

@@ -321,6 +321,8 @@ MonoBehaviour:
   defaultMoveType: 0
   walkFactor: 1
   runFactor: 2
+  dashConsume: 25
+  runConsumePerSecond: 10
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -328,6 +330,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   agent: {fileID: 718615963811065220}
+  speed: 10
+  acceleration: 10
   OnMoveStarted:
     m_PersistentCalls:
       m_Calls:
@@ -1678,8 +1682,8 @@ GameObject:
   - component: {fileID: 266369585238239703}
   - component: {fileID: 4897435398182475902}
   - component: {fileID: 718615963811065220}
-  - component: {fileID: 8975792396674608624}
   - component: {fileID: 5765186703846842921}
+  - component: {fileID: 8975792396674608624}
   m_Layer: 15
   m_Name: Enemy1
   m_TagString: Untagged
@@ -1721,7 +1725,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveModule: {fileID: 7737104836090843365}
+  stamina:
+    maxValue: 100
+    autoRegainPerSecond: 10
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    OnProgressChanged:
+      m_PersistentCalls:
+        m_Calls: []
   healthBar:
+    oneHit: 0
     maxHealth: 10
     OnHealthChanged:
       m_PersistentCalls:
@@ -1744,7 +1758,17 @@ MonoBehaviour:
     OnDead:
       m_PersistentCalls:
         m_Calls: []
+  mana:
+    maxValue: 100
+    autoRegainPerSecond: 10
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    OnProgressChanged:
+      m_PersistentCalls:
+        m_Calls: []
   combatModule: {fileID: 2875999323649147632}
+  spellModule: {fileID: 0}
   detector: {fileID: 5871466623715499589}
   range: {fileID: 890583857084088008}
 --- !u!54 &4897435398182475902
@@ -1788,7 +1812,7 @@ NavMeshAgent:
   m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 3
+  m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1796,29 +1820,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!136 &8975792396674608624
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5745672276512869147}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1
-  m_Height: 3.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.8, z: 0}
 --- !u!136 &5765186703846842921
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1835,6 +1836,29 @@ CapsuleCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 3.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.8, z: 0}
+--- !u!136 &8975792396674608624
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5745672276512869147}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2

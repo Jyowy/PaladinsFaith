@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace PaladinsFaith
+using PaladinsFaith.Effects;
+using Sirenix.OdinInspector;
+
+namespace PaladinsFaith.Combat
 {
     [CreateAssetMenu()]
-    public class AttackData : ScriptableObject
+    public class AttackData : SerializedScriptableObject
     {
         public string attackName = "";
         public string description = "";
-        public float damageMultiplier = 1f;
         public PlayableAsset animation = null;
+        public EffectSet effectsOnImpact = null;
     }
 }

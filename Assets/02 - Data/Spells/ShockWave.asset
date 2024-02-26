@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0954cd6df17f1224fb584d6d1db84942, type: 3}
-  m_Name: PlayerLightAttack3
+  m_Script: {fileID: 11500000, guid: df050bf641dce56459426217c63c16e0, type: 3}
+  m_Name: ShockWave
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,7 +21,10 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: effectsOnImpact
+    - Name: EffectsOnStartCasting
+      Entry: 6
+      Data: 
+    - Name: EffectsOnSpellCasted
       Entry: 7
       Data: 0|PaladinsFaith.Effects.EffectSet, Assembly-CSharp
     - Name: effects
@@ -30,7 +33,7 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 1
     - Name: 
       Entry: 7
       Data: 2|PaladinsFaith.Effects.PushEffect, Assembly-CSharp
@@ -39,8 +42,11 @@ MonoBehaviour:
       Data: 3|PaladinsFaith.Effects.TargetDetector, Assembly-CSharp
     - Name: type
       Entry: 3
-      Data: 1
-    - Name: hasFriendlyFire
+      Data: 4
+    - Name: friendlyFire
+      Entry: 5
+      Data: false
+    - Name: shouldBeBlocked
       Entry: 5
       Data: false
     - Name: possibleTargets
@@ -54,7 +60,7 @@ MonoBehaviour:
       Data: 
     - Name: distance
       Entry: 4
-      Data: 5
+      Data: 25
     - Name: width
       Entry: 4
       Data: 0.25
@@ -66,49 +72,10 @@ MonoBehaviour:
       Data: 
     - Name: strength
       Entry: 4
-      Data: 20
+      Data: 10
     - Name: duration
       Entry: 4
-      Data: 0.5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 4|PaladinsFaith.Effects.DamageEffect, Assembly-CSharp
-    - Name: targetDetector
-      Entry: 7
-      Data: 5|PaladinsFaith.Effects.TargetDetector, Assembly-CSharp
-    - Name: type
-      Entry: 3
       Data: 1
-    - Name: hasFriendlyFire
-      Entry: 5
-      Data: false
-    - Name: possibleTargets
-      Entry: 7
-      Data: UnityEngine.LayerMask, UnityEngine.CoreModule
-    - Name: 
-      Entry: 3
-      Data: 32896
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: distance
-      Entry: 4
-      Data: 5
-    - Name: width
-      Entry: 4
-      Data: 0.25
-    - Name: coneAngle
-      Entry: 4
-      Data: 90
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: amount
-      Entry: 4
-      Data: 30
     - Name: 
       Entry: 8
       Data: 
@@ -121,6 +88,12 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  attackName: LightAttack3
-  description: 
-  animation: {fileID: 11400000, guid: 1e3dc3e13b530784da7a68ad27de577a, type: 2}
+    - Name: EffectsOnSpellFinished
+      Entry: 6
+      Data: 
+  spellName: Shock Wave
+  description: Pushes backward all enemies in range.
+  manaCost: 10
+  timeToCast: 2
+  castType: 0
+  spellDuration: 2

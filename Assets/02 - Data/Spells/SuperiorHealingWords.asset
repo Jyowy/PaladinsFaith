@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df050bf641dce56459426217c63c16e0, type: 3}
-  m_Name: Spell2
+  m_Name: SuperiorHealingWords
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,9 +21,12 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: OnCast
+    - Name: EffectsOnStartCasting
+      Entry: 6
+      Data: 
+    - Name: EffectsOnSpellCasted
       Entry: 7
-      Data: 0|PaladinsFaith.Spells.SpellEffects, Assembly-CSharp
+      Data: 0|PaladinsFaith.Effects.EffectSet, Assembly-CSharp
     - Name: effects
       Entry: 7
       Data: 1|System.Collections.Generic.List`1[[PaladinsFaith.Effects.EffectBase,
@@ -34,9 +37,42 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 2|PaladinsFaith.Effects.HealEffect, Assembly-CSharp
+    - Name: targetDetector
+      Entry: 7
+      Data: 3|PaladinsFaith.Effects.TargetDetector, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: friendlyFire
+      Entry: 5
+      Data: false
+    - Name: shouldBeBlocked
+      Entry: 5
+      Data: false
+    - Name: possibleTargets
+      Entry: 7
+      Data: UnityEngine.LayerMask, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: distance
+      Entry: 4
+      Data: 5
+    - Name: width
+      Entry: 4
+      Data: 0.25
+    - Name: coneAngle
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: amount
       Entry: 4
-      Data: 20
+      Data: 30
     - Name: 
       Entry: 8
       Data: 
@@ -46,22 +82,15 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: prefab
-      Entry: 6
-      Data: 
     - Name: 
       Entry: 8
       Data: 
-    - Name: OnHold
-      Entry: 6
-      Data: 
-    - Name: OnImpact
-      Entry: 6
-      Data: 
-    - Name: OnFinish
+    - Name: EffectsOnSpellFinished
       Entry: 6
       Data: 
   spellName: Superior Healing Words
   description: Heals the caster a great amount of hit points.
-  isInstant: 1
-  doesImpact: 0
+  manaCost: 10
+  timeToCast: 2
+  castType: 0
+  spellDuration: 2

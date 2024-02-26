@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-namespace PaladinsFaith
+namespace PaladinsFaith.Cinematics
 {
     public class CinematicPlayer : HiddenSingleton<CinematicPlayer>
     {

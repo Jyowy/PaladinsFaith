@@ -10,6 +10,8 @@ namespace PaladinsFaith
     public class HealthBar
     {
         [SerializeField]
+        private bool oneHit = false;
+        [SerializeField, HideIf(nameof(oneHit))]
         private float maxHealth = 10f;
 
         [ShowInInspector, ReadOnly]
@@ -27,6 +29,7 @@ namespace PaladinsFaith
             Fill();
         }
 
+        [Button]
         public void Fill()
         {
             if (!IsAlive)
@@ -38,11 +41,17 @@ namespace PaladinsFaith
             CurrentHealth = maxHealth;
         }
 
-        public void InflictDamage(float damage)
+        public void ReceiveDamage(float damage)
         {
             if (!IsAlive)
             {
                 Debug.LogError($"Trying to inflict damage to healthbar when is already dead.");
+                return;
+            }
+
+            if (oneHit)
+            {
+                Die();
                 return;
             }
 
@@ -80,9 +89,14 @@ namespace PaladinsFaith
 
             if (CurrentHealth == 0f)
             {
-                IsAlive = false;
-                OnDead?.Invoke();
+                Die();
             }
+        }
+
+        private void Die()
+        {
+            IsAlive = false;
+            OnDead?.Invoke();
         }
     }
 }

@@ -87,5 +87,19 @@ namespace PaladinsFaith.Characters
             float distance = hit ? hitInfo.distance - floorDetectionHeightOffset : 0f;
             return distance;
         }
+
+        protected override void PushStarted(Vector3 direction, float power)
+        {
+            ActivatePhysics();
+        }
+
+        protected override void PushFinished()
+        {
+            base.PushFinished();
+            if (IsStopped)
+            {
+                DeactivatePhysics();
+            }
+        }
     }
 }

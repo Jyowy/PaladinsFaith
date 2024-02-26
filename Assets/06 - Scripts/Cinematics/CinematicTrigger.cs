@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PaladinsFaith
+namespace PaladinsFaith.Cinematics
 {
     public class CinematicTrigger : MonoBehaviour
     {

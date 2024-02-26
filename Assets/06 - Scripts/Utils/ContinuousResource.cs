@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace PaladinsFaith.Player
+namespace PaladinsFaith
 {
     [Serializable]
     public class ContinuousResource

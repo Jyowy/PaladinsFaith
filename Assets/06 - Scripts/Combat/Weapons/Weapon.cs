@@ -1,9 +1,10 @@
+using PaladinsFaith.Effects;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PaladinsFaith
+namespace PaladinsFaith.Combat
 {
     public class Weapon : MonoBehaviour, AttackDeliverer
     {
@@ -46,8 +47,8 @@ namespace PaladinsFaith
 
         private Attack GetAttack()
         {
-            float damage = baseDamage * currentAttackData.damageMultiplier;
-            Attack attack = new Attack(wielder, damage);
+            EffectSet effectsOnImpact = currentAttackData.effectsOnImpact;
+            Attack attack = new Attack(wielder, effectsOnImpact);
             return attack;
         }
 

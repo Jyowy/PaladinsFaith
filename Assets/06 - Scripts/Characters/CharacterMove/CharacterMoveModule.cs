@@ -1,4 +1,3 @@
-using PaladinsFaith.Player;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,9 +31,13 @@ namespace PaladinsFaith.Characters
 
         public UnityEvent<CharacterMoveType> OnMoveTypeChanged = new UnityEvent<CharacterMoveType>();
         public UnityEvent OnStopped = null;
+        public UnityEvent OnPushed = null;
 
         private ContinuousResource stamina = null;
         private bool fastMoveCancelled = false;
+
+        [ShowInInspector, ReadOnly]
+        protected bool beingPushed = false;
 
         public void SetStamina(ContinuousResource stamina)
         {
@@ -75,7 +78,7 @@ namespace PaladinsFaith.Characters
 
         public void UpdateFastMove(bool fastMove, Vector3 direction, float speedFactor)
         {
-            if (fastMove)
+            if (fastMove && !beingPushed)
             {
                 fastMoveCancelled = false;
                 if (MoveType == CharacterMoveType.Walking
@@ -102,10 +105,11 @@ namespace PaladinsFaith.Characters
             stamina.AddAutomaticRegainBlocker();
         }
 
-        protected void DashCompleted()
+        protected virtual void DashCompleted()
         {
             if (fastMoveCancelled)
             {
+                Stop();
                 SetMoveType(CharacterMoveType.Walking);
                 stamina.RemoveAutomaticRegainBlocker();
                 return;
@@ -136,5 +140,25 @@ namespace PaladinsFaith.Characters
         }
 
         protected virtual void RotateToForward() { }
+
+        [Button]
+        public void Push(Vector3 direction, float power, float duration)
+        {
+            Stop();
+            beingPushed = true;
+            Timers.StartGameTimer(this, "Being Pushed", duration, PushProgress, PushFinished);
+            PushStarted(direction, power);
+            OnPushed?.Invoke();
+        }
+
+        protected virtual void PushStarted(Vector3 direction, float power) { }
+
+        protected virtual void PushProgress(float progress) { }
+
+        protected virtual void PushFinished()
+        {
+            beingPushed = false;
+            MoveType = CharacterMoveType.Walking;
+        }
     }
 }

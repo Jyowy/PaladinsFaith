@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PaladinsFaith.PlayerInput
+namespace PaladinsFaith.Input
 {
     public class PlayerInputProviderWithInputActions : PlayerInputDataProvider
     {

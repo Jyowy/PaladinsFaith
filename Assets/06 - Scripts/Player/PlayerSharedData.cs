@@ -2,7 +2,7 @@ using PaladinsFaith.Characters;
 using PaladinsFaith.Spells;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using PaladinsFaith.Combat;
 
 namespace PaladinsFaith.Player
 {
@@ -10,9 +10,9 @@ namespace PaladinsFaith.Player
     {
         public PlayerCamera camera = null;
         public ContinuousResource stamina = null;
+        public ContinuousResource mana = null;
         public CharacterMoveModule moveModule = null;
         public CombatModule combatModule = null;
         public SpellModule spellModule = null;
     }
 }
-

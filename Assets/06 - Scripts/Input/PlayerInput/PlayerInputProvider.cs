@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PaladinsFaith.PlayerInput
+namespace PaladinsFaith.Input
 {
     public abstract class PlayerInputDataProvider : MonoBehaviour
     {

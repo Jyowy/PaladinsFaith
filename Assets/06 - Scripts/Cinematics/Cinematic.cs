@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace PaladinsFaith
+namespace PaladinsFaith.Cinematics
 {
     [CreateAssetMenu()]
     public class Cinematic : ScriptableObject

@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-using PaladinsFaith.PlayerInput;
+using PaladinsFaith.Input;
 using PaladinsFaith.Characters;
 using PaladinsFaith.Spells;
 using PaladinsFaith.Dialogs;
+using PaladinsFaith.Combat;
 
 using Sirenix.OdinInspector;
 
@@ -37,8 +38,6 @@ namespace PaladinsFaith.Player
         private PlayerDataProvider dataProvider = null;
         [SerializeField]
         private new PlayerCamera camera = null;
-        [SerializeField]
-        private SpellModule spellModule = null;
 
         [SerializeField]
         private float defendingMovePenalizer = 0.5f;
@@ -67,6 +66,7 @@ namespace PaladinsFaith.Player
         {
             healthBar.Initialize(OnDead);
             stamina.Fill();
+            mana.Fill();
 
             InitializeSharedData();
         }
@@ -75,6 +75,7 @@ namespace PaladinsFaith.Player
         {
             sharedData.camera = camera;
             sharedData.stamina = stamina;
+            sharedData.mana = mana;
             sharedData.moveModule = moveModule;
             sharedData.combatModule = combatModule;
             sharedData.spellModule = spellModule;
@@ -368,7 +369,7 @@ namespace PaladinsFaith.Player
 
         private void CastSpell()
         {
-            spellModule.CastSpell();
+            spellModule.CastPreparedSpell();
         }
 
         public void MagicCastFinished()

@@ -14,33 +14,76 @@ namespace PaladinsFaith.Spells
         [SerializeField]
         private List<SpellData> spells = new List<SpellData>();
 
+        public UnityEvent NoSpellPrepared = null;
         public UnityEvent<SpellData> OnAvailableSpellChanged = null;
+        public UnityEvent NotEnoughMana = null;
         public UnityEvent<Spell> OnSpellCasted = null;
 
         private int currentSpellIndex = -1;
-        private SpellData currentSpellData = null;
-        private Spell currentSpell = null;
+        private SpellData preparedSpellData = null;
+        private Spell castingSpell = null;
 
         private bool casting = false;
+
+        private ContinuousResource mana = null;
+
+        public void SetMana(ContinuousResource mana)
+        {
+            this.mana = mana;
+        }
 
         private void Start()
         {
             SetSpellIndex(0);
         }
 
-        public void CastSpell()
+        public void CastPreparedSpell()
         {
-            if (currentSpellData == null)
+            if (preparedSpellData == null)
             {
+                NoSpellPrepared?.Invoke();
                 return;
             }
 
-            currentSpell = new Spell(caster, currentSpellData);
-            bool casted = currentSpell.TryToCast();
-            if (casted)
+            CastSpell(preparedSpellData);
+        }
+
+        private void CastSpell(SpellData spellData)
+        {
+            if (!HasEnoughManaToCast(spellData))
             {
-                OnSpellCasted?.Invoke(currentSpell);
+                NotEnoughMana?.Invoke();
+                return;
             }
+
+            ConsumeManaForSpell(spellData);
+
+            Spell spellToCast = CreateSpellInstance(preparedSpellData);
+            spellToCast.StartCasting();
+            castingSpell = spellToCast;
+            OnSpellCasted?.Invoke(castingSpell);
+        }
+
+        private bool HasEnoughManaToCast(SpellData spellData)
+        {
+            float manaAmount = preparedSpellData.manaCost;
+            return mana.HasEnough(manaAmount);
+        }
+
+        private void ConsumeManaForSpell(SpellData spellData)
+        {
+            mana.Consume(spellData.manaCost);
+        }
+
+        private bool HasEnoughMana(float amount)
+        {
+            return mana.HasEnough(amount);
+        }
+
+        private Spell CreateSpellInstance(SpellData spellData)
+        {
+            Spell spell = new Spell(caster, spellData);
+            return spell;
         }
 
         public void PrevSpell()
@@ -72,14 +115,14 @@ namespace PaladinsFaith.Spells
             }
 
             currentSpellIndex = index;
-            currentSpellData = spells[index];
+            preparedSpellData = spells[index];
             CurrentSpellChanged();
         }
 
         private void CurrentSpellChanged()
         {
-            Debug.Log($"Current spell changed to {currentSpellData.spellName}");
-            OnAvailableSpellChanged?.Invoke(currentSpellData);
+            Debug.Log($"Current spell changed to {preparedSpellData.spellName}");
+            OnAvailableSpellChanged?.Invoke(preparedSpellData);
         }
     }
 }

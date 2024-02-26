@@ -1,6 +1,3 @@
-using PaladinsFaith.Player;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +28,11 @@ namespace PaladinsFaith.Characters
             if (glueToFloor)
             {
                 GlueToFloor();
+            }
+
+            if (beingPushed)
+            {
+                return;
             }
 
             if (MoveType == CharacterMoveType.Dashing)
@@ -123,6 +125,12 @@ namespace PaladinsFaith.Characters
             }
 
             return dashDistance / dashDuration;
+        }
+
+        protected override void PushStarted(Vector3 direction, float power)
+        {
+            base.PushStarted(direction, power);
+            rigidbody.velocity = direction * power;
         }
     }
 }

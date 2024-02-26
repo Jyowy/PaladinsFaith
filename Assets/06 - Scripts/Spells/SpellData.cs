@@ -2,24 +2,32 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PaladinsFaith.Effects;
 
 namespace PaladinsFaith.Spells
 {
+    public enum SpellCastType
+    {
+        Instant,
+        Hold
+    }
+
     [CreateAssetMenu]
     public class SpellData : SerializedScriptableObject
     {
         public string spellName = "";
+        [TextArea]
         public string description = "";
 
-        public bool isInstant = true;
-        public bool doesImpact = false;
+        public float manaCost = 10f;
+        public float timeToCast = 2f;
+        public SpellCastType castType = SpellCastType.Instant;
+        [ShowIf(nameof(castType), SpellCastType.Hold)]
+        public float spellDuration = 2f;
 
-        public SpellEffects OnCast = null;
-        [HideIf("isInstant")]
-        public SpellEffects OnHold = null;
-        [ShowIf("doesImpact")]
-        public SpellEffects OnImpact = null;
-        [HideIf("isInstant")]
-        public SpellEffects OnFinish = null;
+        public EffectSet EffectsOnStartCasting = null;
+        public EffectSet EffectsOnSpellCasted = null;
+        [ShowIf(nameof(castType), SpellCastType.Hold)]
+        public EffectSet EffectsOnSpellFinished = null;
     }
 }

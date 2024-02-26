@@ -2,6 +2,7 @@ using PaladinsFaith.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PaladinsFaith.Combat;
 
 namespace PaladinsFaith.Effects
 {
@@ -11,11 +12,17 @@ namespace PaladinsFaith.Effects
         [SerializeField]
         private float amount = 10f;
 
-        public override void Apply(GameObject target)
+        protected override void ApplyToTarget(GameObject owner, GameObject target)
         {
-            Debug.Log($"Trying to apply heal to '{target.name}'");
-            if (!target.TryGetComponent(out CombatantCharacter combatant))
+            HealCombatantCharacter(target);
+        }
+
+        private void HealCombatantCharacter(GameObject healingTarget)
+        {
+            Debug.Log($"Trying to apply heal to '{healingTarget.name}'");
+            if (!healingTarget.TryGetComponent(out CombatantCharacter combatant))
             {
+                Debug.LogError($"Is not a combatan character!");
                 return;
             }
 

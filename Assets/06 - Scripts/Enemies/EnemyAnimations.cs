@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using PaladinsFaith.Combat;
 
-namespace PaladinsFaith
+namespace PaladinsFaith.Enemies
 {
     public class EnemyAnimations : MonoBehaviour
     {

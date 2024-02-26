@@ -5,11 +5,9 @@ using UnityEngine;
 
 namespace PaladinsFaith
 {
-    public class Destructible : MonoBehaviour, AttackReceiver
+    public class Destructible : MonoBehaviour, AttackReceiver, DamageReceiver
     {
         [SerializeField]
-        private bool oneHit = true;
-        [SerializeField, HideIf("oneHit")]
         private HealthBar healthBar = new HealthBar();
 
         [ShowInInspector, ReadOnly]
@@ -28,14 +26,17 @@ namespace PaladinsFaith
                 return;
             }
 
-            if (oneHit)
+            attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject);
+        }
+
+        public void ReceiveDamage(float damage)
+        {
+            if (destroyed)
             {
-                Destroy();
+                return;
             }
-            else
-            {
-                healthBar.InflictDamage(attack.damage);
-            }
+
+            healthBar.ReceiveDamage(damage);
         }
 
         public void Destroy()
