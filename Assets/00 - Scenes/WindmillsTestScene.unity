@@ -123,6 +123,39 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &62126116 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2428910193493357411, guid: 565bd9ec955829f42913ca20e11a4c06,
+    type: 3}
+  m_PrefabInstance: {fileID: 4299264877742261780}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &62126120
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 62126116}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &83700381 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
@@ -2416,6 +2449,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 817110960}
   m_CullTransparentMesh: 1
+--- !u!1 &824932578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 824932580}
+  - component: {fileID: 824932579}
+  m_Layer: 0
+  m_Name: InteresectTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &824932579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824932578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27600eda0ab3b464c8a7b1fc2f5b66ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {x: 0, y: 0, z: 0}
+  size: {x: 1, y: 1, z: 1}
+  forward: {x: -1, y: 0, z: 0}
+  up: {x: 0, y: 1, z: 0}
+  point: {x: 0.49, y: 0, z: 0}
+--- !u!4 &824932580
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824932578}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -4257,6 +4339,7 @@ GameObject:
   - component: {fileID: 1487302859}
   - component: {fileID: 1487302858}
   - component: {fileID: 1487302857}
+  - component: {fileID: 1487302861}
   m_Layer: 14
   m_Name: Crate (2)
   m_TagString: Untagged
@@ -4291,8 +4374,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f168ac8d47b654bb6368cf73c654a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oneHit: 0
   healthBar:
+    oneHit: 0
     maxHealth: 15
     OnHealthChanged:
       m_PersistentCalls:
@@ -4374,6 +4457,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1487302855}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &1487302861
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487302855}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1508661086
 GameObject:
   m_ObjectHideFlags: 0
@@ -4387,6 +4497,7 @@ GameObject:
   - component: {fileID: 1508661090}
   - component: {fileID: 1508661089}
   - component: {fileID: 1508661088}
+  - component: {fileID: 1508661092}
   m_Layer: 14
   m_Name: Crate
   m_TagString: Untagged
@@ -4421,8 +4532,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f168ac8d47b654bb6368cf73c654a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oneHit: 1
   healthBar:
+    oneHit: 0
     maxHealth: 10
     OnHealthChanged:
       m_PersistentCalls:
@@ -4504,6 +4615,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1508661086}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &1508661092
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508661086}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1512971543
 GameObject:
   m_ObjectHideFlags: 0
@@ -5083,6 +5221,7 @@ GameObject:
   - component: {fileID: 1718818580}
   - component: {fileID: 1718818579}
   - component: {fileID: 1718818578}
+  - component: {fileID: 1718818582}
   m_Layer: 14
   m_Name: Crate (1)
   m_TagString: Untagged
@@ -5117,8 +5256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f168ac8d47b654bb6368cf73c654a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oneHit: 0
   healthBar:
+    oneHit: 0
     maxHealth: 30
     OnHealthChanged:
       m_PersistentCalls:
@@ -5200,6 +5339,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1718818576}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &1718818582
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718818576}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1001 &1726738201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6225,7 +6391,17 @@ PrefabInstance:
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: mana.maxValue
-      value: 100
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: mana.autoRegainPerSecond
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.autoRegainPerSecond
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
@@ -6427,6 +6603,11 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7675604490045391321, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8015107053838727025, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6550,7 +6731,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2428910193493357411, guid: 565bd9ec955829f42913ca20e11a4c06,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 62126120}
   m_SourcePrefab: {fileID: 100100000, guid: 565bd9ec955829f42913ca20e11a4c06, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -6565,3 +6750,4 @@ SceneRoots:
   - {fileID: 1093799549}
   - {fileID: 1615641116}
   - {fileID: 398445934}
+  - {fileID: 824932580}

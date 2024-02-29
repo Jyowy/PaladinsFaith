@@ -38,7 +38,7 @@ namespace PaladinsFaith.Combat
 
         public virtual void ReceiveAttack(Attack attack)
         {
-            attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject);
+            attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint);
         }
 
         public virtual void ReceiveDamage(float damage)

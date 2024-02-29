@@ -16,11 +16,11 @@ namespace PaladinsFaith.Effects
             }
         }
 
-        public void ApplyOnImpact(GameObject caster, GameObject impactedTarget)
+        public void ApplyOnImpact(GameObject caster, GameObject impactedTarget, Vector3 impactPoint)
         {
             foreach (EffectBase effect in effects)
             {
-                effect.ApplyOnImpacted(caster, impactedTarget);
+                effect.ApplyOnImpacted(caster, impactedTarget, impactPoint);
             }
         }
     }

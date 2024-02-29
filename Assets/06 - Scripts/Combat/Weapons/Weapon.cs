@@ -15,6 +15,7 @@ namespace PaladinsFaith.Combat
 
         private GameObject wielder = null;
         private AttackData currentAttackData = null;
+        private Collider weaponCollider = null;
 
         public float GetBaseDamage() => baseDamage;
 
@@ -28,6 +29,11 @@ namespace PaladinsFaith.Combat
             currentAttackData = attackData;
         }
 
+        private void Awake()
+        {
+            weaponCollider = GetComponent<Collider>();
+        }
+
         private void OnDisable()
         {
             receiversDamaged.Clear();
@@ -35,20 +41,34 @@ namespace PaladinsFaith.Combat
 
         private void OnTriggerEnter(Collider other)
         {
-            AttackReceiver receiver = other.GetComponent<AttackReceiver>();
-            if (receiver != null
-                && currentAttackData != null
+            Debug.Log($"OnTriggerEnter");
+
+            if (other.TryGetComponent(out AttackReceiver receiver)
                 && other.gameObject.layer != gameObject.layer)
             {
-                Attack attack = GetAttack();
+                AttackData attackData = GetCurrentAttackData();
+                Vector3 impactPoint = GetImpactPointWith(other);
+                Attack attack = CreateAttack(attackData, impactPoint);
                 Attack(receiver, attack);
             }
         }
 
-        private Attack GetAttack()
+        private AttackData GetCurrentAttackData()
         {
-            EffectSet effectsOnImpact = currentAttackData.effectsOnImpact;
-            Attack attack = new Attack(wielder, effectsOnImpact);
+            return currentAttackData;
+        }
+
+        private Vector3 GetImpactPointWith(Collider other)
+        {
+            Vector3 impactPoint = Vector3.zero;
+            // TODO
+            return impactPoint;
+        }
+
+        private Attack CreateAttack(AttackData attackData, Vector3 impactPoint)
+        {
+            EffectSet effectsOnImpact = attackData.effectsOnImpact;
+            Attack attack = new Attack(wielder, effectsOnImpact, impactPoint);
             return attack;
         }
 

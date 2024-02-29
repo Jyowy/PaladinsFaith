@@ -26,7 +26,7 @@ namespace PaladinsFaith
                 return;
             }
 
-            attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject);
+            attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint);
         }
 
         public void ReceiveDamage(float damage)

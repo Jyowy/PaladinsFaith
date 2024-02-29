@@ -9,11 +9,13 @@ namespace PaladinsFaith
     {
         public GameObject attacker;
         public EffectSet effectsOnImpact;
+        public Vector3 impactPoint;
 
-        public Attack(GameObject attacker, EffectSet effectsOnImpact)
+        public Attack(GameObject attacker, EffectSet effectsOnImpact, Vector3 impactPoint)
         {
             this.attacker = attacker;
             this.effectsOnImpact = effectsOnImpact;
+            this.impactPoint = impactPoint;
         }
     }
 }
