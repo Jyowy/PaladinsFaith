@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PaladinsFaith.Combat;
+using PaladinsFaith.Player;
 
 namespace PaladinsFaith.Enemies
 {
@@ -63,7 +64,7 @@ namespace PaladinsFaith.Enemies
                 {
                     AttackPlayer();
                 }
-                else
+                else if (!combatModule.IsAttacking)
                 {
                     MoveToPlayer();
                 }
@@ -76,8 +77,9 @@ namespace PaladinsFaith.Enemies
             moveModule.MoveTo(position);
         }
 
-        private void OnDead()
+        protected override void OnDead()
         {
+            base.OnDead();
             Destroy(gameObject);
         }
 
@@ -97,7 +99,7 @@ namespace PaladinsFaith.Enemies
             if (!combatModule.IsAttacking)
             {
                 moveModule.LookAt(player.transform.position);
-                combatModule.Attack();
+                combatModule.TryToAttack();
             }
         }
     }

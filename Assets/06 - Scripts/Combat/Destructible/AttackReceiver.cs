@@ -4,8 +4,16 @@ using UnityEngine;
 
 namespace PaladinsFaith
 {
+    public enum AttackResult
+    {
+        Invalid,
+        Defended,
+        SuccessButNoDamage,
+        Success
+    }
+
     public interface AttackReceiver
     {
-        public void ReceiveAttack(Attack attack);
+        public AttackResult ReceiveAttack(Attack attack);
     }
 }

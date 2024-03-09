@@ -10,6 +10,11 @@ namespace PaladinsFaith.Combat
     {
         [SerializeField]
         protected List<AttackData> attacks = new List<AttackData>();
+        [SerializeField]
+        private float brokenDefenseRecovery = 2f;
+
+        [SerializeField]
+        private float staminaByAttack = 10f;
 
         public UnityEvent OnDefenseStarted = null;
         public UnityEvent OnDefenseFinished = null;
@@ -22,12 +27,43 @@ namespace PaladinsFaith.Combat
         public bool IsDefending { get; protected set; } = false;
         public bool IsAttacking { get; protected set; } = false;
 
+        protected bool defenseBroken = false;
+        protected bool attacksCancelled = false;
+
         public void SetStamina(ContinuousResource stamina)
         {
             this.stamina = stamina;
         }
 
-        public virtual void Attack() { }
+        public void CancelAttacks(float duration)
+        {
+            attacksCancelled = true;
+            Timers.StartGameTimer(gameObject, "AttackCancelled", duration, CancelAttacksFinished);
+        }
+
+        private void CancelAttacksFinished()
+        {
+            attacksCancelled = false;
+        }
+
+        public void TryToAttack()
+        {
+            if (!CanAttack())
+            {
+                return;
+            }
+
+            Attack();
+        }
+
+        protected virtual bool CanAttack()
+        {
+            bool can = !IsAttacking
+                && !attacksCancelled;
+            return can;
+        }
+
+        protected virtual void Attack() { }
 
         public virtual void NextAttackAvailable() { }
 
@@ -36,12 +72,25 @@ namespace PaladinsFaith.Combat
             IsAttacking = false;
         }
 
-        public virtual void CancelAttack() { }
+        public void CancelAttack()
+        {
+            if (!IsAttacking)
+            {
+                return;
+            }
+
+            AttackFinished();
+            OnAttackCancelled?.Invoke();
+            AttackCancelled();
+        }
+
+        protected virtual void AttackCancelled() { }
 
         public virtual void StartDefending()
         {
             if (IsDefending
-                || IsAttacking)
+                || IsAttacking
+                || defenseBroken)
             {
                 return;
             }
@@ -61,6 +110,41 @@ namespace PaladinsFaith.Combat
             IsDefending = false;
             stamina.RemoveAutomaticRegainBlocker();
             OnDefenseFinished?.Invoke();
+        }
+
+        public virtual bool CanBlock(Attack attack)
+        {
+            bool can = IsDefending && attack.canBeBlocked;
+            return can;
+        }
+
+        public void Block(Attack attack)
+        {
+            stamina.Deplete(staminaByAttack);
+            if (stamina.IsEmpty())
+            {
+                BreakDefense();
+            }
+        }
+
+        public virtual void BreakDefense()
+        {
+            if (!IsDefending)
+            {
+                return;
+            }
+
+            stamina.AddAutomaticRegainBlocker();
+            StopDefending();
+
+            defenseBroken = true;
+            Timers.StartGameTimer(gameObject, "DefenseBroken", brokenDefenseRecovery, DefenseRecovered);
+        }
+
+        private void DefenseRecovered()
+        {
+            defenseBroken = false;
+            stamina.RemoveAutomaticRegainBlocker();
         }
     }
 }

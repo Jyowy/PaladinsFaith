@@ -34,6 +34,8 @@ namespace PaladinsFaith
         [ShowInInspector, ReadOnly]
         public float Progress { get; private set; } = 0f;
 
+        public bool IsEmpty() => Progress == 0f;
+
         [Button]
         public void Fill()
         {
@@ -67,6 +69,13 @@ namespace PaladinsFaith
                 SetValue(Value - amount);
             }
             return hasEnough;
+        }
+
+        [Button]
+        public void Deplete(float amount)
+        {
+            amount = Mathf.Max(amount, 0f);
+            SetValue(Value - amount);
         }
 
         [Button]

@@ -32,15 +32,11 @@ namespace PaladinsFaith.Player
         private void Start()
         {
             weapon.SetWielder(player.gameObject);
+            shield.SetWielder(player.gameObject);
         }
 
-        public override void Attack()
+        protected override void Attack()
         {
-            if (!canAttack)
-            {
-                return;
-            }
-
             if (IsDefending)
             {
                 StopDefending();
@@ -56,6 +52,12 @@ namespace PaladinsFaith.Player
             }
 
             TriggerNextAttack();
+        }
+
+        protected override bool CanAttack()
+        {
+            bool can = !attacksCancelled && canAttack;
+            return can;
         }
 
         [Button]
@@ -94,13 +96,8 @@ namespace PaladinsFaith.Player
             }
         }
 
-        public override void CancelAttack()
+        protected override void AttackCancelled()
         {
-            if (!IsAttacking)
-            {
-                return;
-            }
-
             ResetAttacks();
             OnAttackCancelled?.Invoke();
         }
@@ -121,6 +118,13 @@ namespace PaladinsFaith.Player
 
             ResetAttacks();
             OnAttackFinished?.Invoke();
+        }
+
+        public override bool CanBlock(Attack attack)
+        {
+            bool can = base.CanBlock(attack)
+                && shield.CanBlock(attack);
+            return can;
         }
     }
 }

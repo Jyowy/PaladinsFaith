@@ -55,6 +55,9 @@ namespace PaladinsFaith.Player
         [SerializeField]
         private float moveFactor = 0.1f;
 
+        [SerializeField]
+        private Vector3 targetOffset = Vector3.up * 0.5f;
+
         private Vector3 startDirection = Vector3.zero;
 
         private void Awake()
@@ -86,11 +89,29 @@ namespace PaladinsFaith.Player
             UpdatePosition();
         }
 
+        private bool passing = false;
+
+        private void LateUpdate()
+        {
+            Vector3 targetPosition = GetTargetPosition();
+            Vector3 currentPosition = cameraTransform.position;
+            Vector3 cameraVector = targetPosition - currentPosition;
+            Vector3 cameraTargetPosition = targetPosition;
+
+            if (passing)
+            {
+                cameraTargetPosition = targetPosition - cameraVector;
+            }
+
+            cameraTransform.LookAt(cameraTargetPosition, Vector3.up);
+        }
+
         [Button]
         private void UpdatePosition()
         {
             Vector3 desiredPosition = GetDesiredPosition();
             MoveTo(desiredPosition);
+
             UpdateColliderToTarget();
         }
 
@@ -104,7 +125,7 @@ namespace PaladinsFaith.Player
 
         private Vector3 GetTargetPosition()
         {
-            Vector3 targetPosition = target.position;
+            Vector3 targetPosition = target.position + targetOffset;
             return targetPosition;
         }
 
@@ -116,11 +137,13 @@ namespace PaladinsFaith.Player
             return offsetPosition;
         }
 
-        private void MoveTo(Vector3 position)
+        private Vector3 MoveTo(Vector3 position)
         {
             Vector3 bestPosition = GetBestPosition(position);
             Vector3 halfwayPosition = cameraTransform.position * (1f - moveFactor) + bestPosition * moveFactor;
-            cameraRigidbody.Move(halfwayPosition, Quaternion.identity);
+            Vector3 newPosition = halfwayPosition;
+            cameraRigidbody.Move(newPosition, Quaternion.identity);
+            return newPosition;
         }
 
         private Vector3 GetBestPosition(Vector3 desiredPosition)
@@ -145,6 +168,7 @@ namespace PaladinsFaith.Player
             {
                 distance = info.distance - distanceFromScenary;
             }
+            passing = distance < 0f;
 
             return distance;
         }

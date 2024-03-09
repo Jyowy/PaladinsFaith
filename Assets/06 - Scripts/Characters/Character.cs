@@ -14,7 +14,6 @@ namespace PaladinsFaith.Characters
             None = 0,
             Pushed
         }
-
         [SerializeField]
         protected CharacterMoveModule moveModule = null;
 
@@ -46,6 +45,11 @@ namespace PaladinsFaith.Characters
         public void Push(Vector3 direction, float strength, float duration)
         {
             moveModule.Push(direction, strength, duration);
+        }
+
+        public void SimplePushBack()
+        {
+            moveModule.SimplePushBack();
         }
     }
 }

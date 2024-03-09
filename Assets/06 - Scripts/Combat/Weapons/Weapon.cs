@@ -1,8 +1,10 @@
 using PaladinsFaith.Effects;
+using PaladinsFaith.Math;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace PaladinsFaith.Combat
 {
@@ -10,6 +12,11 @@ namespace PaladinsFaith.Combat
     {
         [SerializeField]
         private float baseDamage = 10f;
+
+        [SerializeField]
+        private Impact impactPrefab = null;
+
+        public UnityEvent OnBlocked = null;
 
         private readonly List<AttackReceiver> receiversDamaged = new List<AttackReceiver>();
 
@@ -60,15 +67,17 @@ namespace PaladinsFaith.Combat
 
         private Vector3 GetImpactPointWith(Collider other)
         {
-            Vector3 impactPoint = Vector3.zero;
-            // TODO
+            bool collision = IntersectionCalculator.IntersectColliders(weaponCollider, other, out Vector3 impactPoint);
+            if (!collision)
+            {
+                impactPoint = (transform.position + other.transform.position) * 0.5f;
+            }
             return impactPoint;
         }
 
         private Attack CreateAttack(AttackData attackData, Vector3 impactPoint)
         {
-            EffectSet effectsOnImpact = attackData.effectsOnImpact;
-            Attack attack = new Attack(wielder, effectsOnImpact, impactPoint);
+            Attack attack = new Attack(wielder, impactPoint, attackData);
             return attack;
         }
 
@@ -86,8 +95,26 @@ namespace PaladinsFaith.Combat
                 return;
             }
 
-            receiver.ReceiveAttack(attack);
-            receiversDamaged.Add(receiver);
+            AttackResult result = receiver.ReceiveAttack(attack);
+
+            if (result == AttackResult.Defended)
+            {
+                OnBlocked?.Invoke();
+            }
+            else if (result != AttackResult.Invalid)
+            {
+                receiversDamaged.Add(receiver);
+                if (impactPrefab != null)
+                {
+                    Impact.CreateAttackImpact(impactPrefab, attack);
+                }
+            }
+        }
+
+        public void CancelAttack()
+        {
+            currentAttackData = null;
+            gameObject.SetActive(false);
         }
     }
 }

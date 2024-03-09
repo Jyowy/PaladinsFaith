@@ -76,16 +76,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efdf63790a49fe943b2258445f8b9709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterTransform: {fileID: 0}
   defaultMoveType: 0
   walkFactor: 1
   runFactor: 2
+  dashConsume: 25
+  runConsumePerSecond: 10
+  simplePushBackStrength: 1
+  simplePushBackDuration: 0.5
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
   OnStopped:
     m_PersistentCalls:
       m_Calls: []
+  OnPushed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPushedDuration:
+    m_PersistentCalls:
+      m_Calls: []
   rigidbody: {fileID: 7871733014303789619}
+  onlyApplyPhysicsWhenMoving: 0
+  glueToFloor: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  minDistanceToGlue: 0
+  floorDetectionHeightOffset: 0.5
+  glueFactor: 0.5
   force: 1
 --- !u!1 &1570863420066816838
 GameObject:
@@ -380,6 +399,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d667121560b4c1f45b706955a8f16060, type: 2}
   - {fileID: 11400000, guid: 3112f790fb7c50142a299f0cdf7d95c9, type: 2}
   - {fileID: 11400000, guid: 59caa279a7c4a984cb1a8f27771a4b34, type: 2}
+  brokenDefenseRecovery: 2
+  staminaByAttack: 10
   OnDefenseStarted:
     m_PersistentCalls:
       m_Calls:
@@ -514,7 +535,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveModule: {fileID: 7613817612412428374}
+  stamina:
+    maxValue: 100
+    autoRegainPerSecond: 10
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    OnProgressChanged:
+      m_PersistentCalls:
+        m_Calls: []
   healthBar:
+    oneHit: 0
     maxHealth: 50
     OnHealthChanged:
       m_PersistentCalls:
@@ -537,11 +568,23 @@ MonoBehaviour:
     OnDead:
       m_PersistentCalls:
         m_Calls: []
+  mana:
+    maxValue: 100
+    autoRegainPerSecond: 10
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    OnProgressChanged:
+      m_PersistentCalls:
+        m_Calls: []
   combatModule: {fileID: 4665628607627025148}
+  spellModule: {fileID: 2210828089482978324}
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
   inputDataProvider: {fileID: 1070679038022560085}
   dataProvider: {fileID: 2536670283354568713}
   camera: {fileID: 0}
-  spellModule: {fileID: 2210828089482978324}
   defendingMovePenalizer: 0.5
   OnPlayerMoveModeChanged:
     m_PersistentCalls:
@@ -877,7 +920,13 @@ MonoBehaviour:
   spells:
   - {fileID: 11400000, guid: 7572b3fc6e3c30e429dad9c5d05581c1, type: 2}
   - {fileID: 11400000, guid: f9a784068c254b44bab73cd438b6d6a7, type: 2}
+  NoSpellPrepared:
+    m_PersistentCalls:
+      m_Calls: []
   OnAvailableSpellChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  NotEnoughMana:
     m_PersistentCalls:
       m_Calls: []
   OnSpellCasted:
@@ -982,9 +1031,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d6728b63356ce9498e3772bc191cc10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterTransform: {fileID: 0}
   defaultMoveType: 0
   walkFactor: 1
   runFactor: 1.5
+  dashConsume: 25
+  runConsumePerSecond: 10
+  simplePushBackStrength: 1
+  simplePushBackDuration: 0.5
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1003,8 +1057,37 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnPushed:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPushedDuration:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4665628607627025148}
+        m_TargetAssemblyTypeName: PaladinsFaith.Combat.CombatModule, Assembly-CSharp
+        m_MethodName: CancelAttacks
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   rigidbody: {fileID: 7871733014303789619}
-  velocity: 12
+  onlyApplyPhysicsWhenMoving: 0
+  glueToFloor: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  minDistanceToGlue: 0
+  floorDetectionHeightOffset: 0.5
+  glueFactor: 0.5
+  speed: 1
+  dashDistance: 2
+  dashDuration: 0.5
+  stopTime: 0.25
 --- !u!1001 &711099388951170264
 PrefabInstance:
   m_ObjectHideFlags: 0

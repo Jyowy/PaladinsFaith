@@ -318,17 +318,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419a42152fc133f408b7530e08072157, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterTransform: {fileID: 3956642202366862705}
   defaultMoveType: 0
   walkFactor: 1
   runFactor: 2
   dashConsume: 25
   runConsumePerSecond: 10
+  simplePushBackStrength: 2
+  simplePushBackDuration: 1
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
   OnStopped:
     m_PersistentCalls:
       m_Calls: []
+  OnPushed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2875999323649147632}
+        m_TargetAssemblyTypeName: PaladinsFaith.Combat.CombatModule, Assembly-CSharp
+        m_MethodName: CancelAttack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPushedDuration:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2875999323649147632}
+        m_TargetAssemblyTypeName: PaladinsFaith.Combat.CombatModule, Assembly-CSharp
+        m_MethodName: CancelAttacks
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   agent: {fileID: 718615963811065220}
   speed: 10
   acceleration: 10
@@ -626,6 +659,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseDamage: 10
+  impactPrefab: {fileID: 0}
+  OnBlocked:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &5423374785723160925
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -817,7 +854,7 @@ GameObject:
   - component: {fileID: 8712795290372400269}
   - component: {fileID: 2875999323649147632}
   m_Layer: 15
-  m_Name: CombatModule_v0
+  m_Name: CombatModule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -851,6 +888,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attacks: []
+  brokenDefenseRecovery: 2
+  staminaByAttack: 10
   OnDefenseStarted:
     m_PersistentCalls:
       m_Calls: []
@@ -874,7 +913,19 @@ MonoBehaviour:
         m_CallState: 2
   OnAttackCancelled:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7793230233452126018}
+        m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+        m_MethodName: Stop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnAttackFinished:
     m_PersistentCalls:
       m_Calls: []
@@ -1769,6 +1820,9 @@ MonoBehaviour:
         m_Calls: []
   combatModule: {fileID: 2875999323649147632}
   spellModule: {fileID: 0}
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
   detector: {fileID: 5871466623715499589}
   range: {fileID: 890583857084088008}
 --- !u!54 &4897435398182475902

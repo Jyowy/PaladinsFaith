@@ -19,14 +19,19 @@ namespace PaladinsFaith
         }
 
         [Button]
-        public void ReceiveAttack(Attack attack)
+        public AttackResult ReceiveAttack(Attack attack)
         {
+            AttackResult attackResult = AttackResult.Success;
             if (destroyed)
             {
-                return;
+                attackResult = AttackResult.Invalid;
+            }
+            else
+            {
+                attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint);
             }
 
-            attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint);
+            return attackResult;
         }
 
         public void ReceiveDamage(float damage)

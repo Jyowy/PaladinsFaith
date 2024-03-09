@@ -1,3 +1,4 @@
+using PaladinsFaith.Combat;
 using PaladinsFaith.Effects;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,12 +11,14 @@ namespace PaladinsFaith
         public GameObject attacker;
         public EffectSet effectsOnImpact;
         public Vector3 impactPoint;
+        public bool canBeBlocked;
 
-        public Attack(GameObject attacker, EffectSet effectsOnImpact, Vector3 impactPoint)
+        public Attack(GameObject attacker, Vector3 impactPoint, AttackData attackData)
         {
             this.attacker = attacker;
-            this.effectsOnImpact = effectsOnImpact;
             this.impactPoint = impactPoint;
+            this.effectsOnImpact = attackData.effectsOnImpact;
+            this.canBeBlocked = attackData.canBeBlocked;
         }
     }
 }

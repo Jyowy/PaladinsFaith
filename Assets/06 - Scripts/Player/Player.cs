@@ -64,8 +64,6 @@ namespace PaladinsFaith.Player
 
         private void Initialize()
         {
-            healthBar.Initialize(OnDead);
-            stamina.Fill();
             mana.Fill();
 
             InitializeSharedData();
@@ -310,7 +308,7 @@ namespace PaladinsFaith.Player
                 if (inputData.IsLightAttackActive())
                 {
                     inputData.ConsumeLightAttack();
-                    combatModule.Attack();
+                    combatModule.TryToAttack();
                 }
                 else if (inputData.defenseActive
                     && !combatModule.IsDefending)
@@ -329,7 +327,7 @@ namespace PaladinsFaith.Player
                 if (inputData.IsLightAttackActive())
                 {
                     inputData.ConsumeLightAttack();
-                    combatModule.Attack();
+                    combatModule.TryToAttack();
                 }
             }
         }
@@ -382,21 +380,11 @@ namespace PaladinsFaith.Player
             SetMoveState();
         }
 
-        public override void ReceiveAttack(Attack attack)
-        {
-            if (combatModule.IsDefending)
-            {
-                return;
-            }
-
-            base.ReceiveAttack(attack);
-        }
-
-        private void OnDead()
+        protected override void OnDead()
         {
             Debug.Log($"GameOver");
-
             gameObject.SetActive(false);
+            base.OnDead();
         }
     }
 }

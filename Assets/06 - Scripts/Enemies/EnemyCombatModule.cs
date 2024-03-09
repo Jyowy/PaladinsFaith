@@ -22,21 +22,28 @@ namespace PaladinsFaith.Enemies
             weapon.SetWielder(enemy.gameObject);
         }
 
-        public override void Attack()
+        protected override void Attack()
         {
-            if (IsAttacking)
-            {
-                return;
-            }
-
             IsAttacking = true;
             weapon.SetAttackData(attackData);
+            weapon.OnBlocked?.AddListener(AttackBlocked);
             OnAttackTriggered?.Invoke(attackData);
+        }
+
+        private void AttackBlocked()
+        {
+            enemy.SimplePushBack();
+            IsAttacking = false;
         }
 
         public override void AttackFinished()
         {
             IsAttacking = false;
+        }
+
+        protected override void AttackCancelled()
+        {
+            weapon.CancelAttack();
         }
     }
 }

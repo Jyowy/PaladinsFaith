@@ -15,5 +15,6 @@ namespace PaladinsFaith.Combat
         public string description = "";
         public PlayableAsset animation = null;
         public EffectSet effectsOnImpact = null;
+        public bool canBeBlocked = true;
     }
 }

@@ -16,6 +16,8 @@ namespace PaladinsFaith.Characters
     public abstract class CharacterMoveModule : MonoBehaviour
     {
         [SerializeField]
+        private Transform characterTransform = null;
+        [SerializeField]
         protected CharacterMoveType defaultMoveType = CharacterMoveType.Walking;
         [SerializeField]
         protected float walkFactor = 1f;
@@ -26,12 +28,18 @@ namespace PaladinsFaith.Characters
         [SerializeField]
         private float runConsumePerSecond = 10f;
 
+        [SerializeField]
+        private float simplePushBackStrength = 1f;
+        [SerializeField]
+        private float simplePushBackDuration = 0.5f;
+
         [ShowInInspector, ReadOnly]
         public CharacterMoveType MoveType { get; private set; } = CharacterMoveType.Walking;
 
         public UnityEvent<CharacterMoveType> OnMoveTypeChanged = new UnityEvent<CharacterMoveType>();
         public UnityEvent OnStopped = null;
         public UnityEvent OnPushed = null;
+        public UnityEvent<float> OnPushedDuration = null;
 
         private ContinuousResource stamina = null;
         private bool fastMoveCancelled = false;
@@ -149,6 +157,14 @@ namespace PaladinsFaith.Characters
             Timers.StartGameTimer(this, "Being Pushed", duration, PushProgress, PushFinished);
             PushStarted(direction, power);
             OnPushed?.Invoke();
+            OnPushedDuration?.Invoke(duration);
+        }
+
+        [Button]
+        public virtual void SimplePushBack()
+        {
+            Vector3 backwards = -characterTransform.forward;
+            Push(backwards, simplePushBackStrength, simplePushBackDuration);
         }
 
         protected virtual void PushStarted(Vector3 direction, float power) { }

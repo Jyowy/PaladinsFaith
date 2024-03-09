@@ -405,29 +405,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa587868d766a854080a17bfef8a248a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 5356265476197509521}
+  cameraTransform: {fileID: 0}
   cameraRigidbody: {fileID: 7109578527317487591}
-  defaultDistance: 10
   minDistance: 7.5
   maxDistance: 15
-  horizontalRotationSpeedFactor: 1.25
-  verticalRotationSpeedFactor: 0.75
-  rotationSpeedFactor: 2
-  zoomSpeedFactor: 0.15
-  separationDistance: 0.25
-  radiusToCheck: 0.5
-  layersToCheck:
+  horizontalSpeed: 1.25
+  verticalSpeed: 1.25
+  scenaryLayers:
     serializedVersion: 2
-    m_Bits: 512
-  height: 5
-  distance: 20
+    m_Bits: 0
+  distanceFromScenary: 0.25
+  radiusToCheckScenary: 0.5
   invertedHorizontal: 0
   invertedVertical: 1
   maxVerticalAngle: 60
   minVerticalAngle: 5
-  target: {fileID: 5356265476197509521}
   colliderToTarget: {fileID: 4820799945332864233}
   colliderToTargetWidth: 0.5
-  positionFactor: 0.1
+  moveFactor: 0.1
 --- !u!1 &8176124270138645418
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,6 +615,12 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 112
       objectReference: {fileID: 0}
+    - target: {fileID: 8829872858627796409, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
+        type: 3}
+      propertyPath: impactPrefab
+      value: 
+      objectReference: {fileID: 1451520726988680581, guid: 5526e81240f93014d88773efd82412b1,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

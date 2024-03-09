@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PaladinsFaith.Characters;
 using PaladinsFaith.Spells;
+using UnityEngine.Events;
 
 namespace PaladinsFaith.Combat
 {
@@ -17,10 +18,14 @@ namespace PaladinsFaith.Combat
         [SerializeField]
         protected SpellModule spellModule = null;
 
+        public UnityEvent OnDeath = null;
+
         protected override void Awake()
         {
             base.Awake();
+            healthBar.Initialize(OnDead);
             combatModule.SetStamina(stamina);
+            stamina.Fill();
             if (spellModule != null )
             {
                 spellModule.SetMana(mana);
@@ -36,9 +41,21 @@ namespace PaladinsFaith.Combat
             mana.Update(dt);
         }
 
-        public virtual void ReceiveAttack(Attack attack)
+        public virtual AttackResult ReceiveAttack(Attack attack)
         {
-            attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint);
+            AttackResult result = AttackResult.Success;
+
+            if (combatModule.CanBlock(attack))
+            {
+                combatModule.Block(attack);
+                result = AttackResult.Defended;
+            }
+            else
+            {
+                attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint);
+            }
+
+            return result;
         }
 
         public virtual void ReceiveDamage(float damage)
@@ -51,9 +68,14 @@ namespace PaladinsFaith.Combat
             healthBar.Heal(heal);
         }
 
+        protected virtual void OnDead()
+        {
+            OnDeath?.Invoke();
+        }
+
         public virtual void Attack()
         {
-            combatModule.Attack();
+            combatModule.TryToAttack();
         }
 
         protected virtual void OnPushed()
