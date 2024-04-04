@@ -3458,6 +3458,7 @@ GameObject:
   - component: {fileID: 878511698}
   - component: {fileID: 878511697}
   - component: {fileID: 878511696}
+  - component: {fileID: 878511699}
   m_Layer: 5
   m_Name: StaminaBar
   m_TagString: Untagged
@@ -3546,6 +3547,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 878511694}
   m_CullTransparentMesh: 1
+--- !u!114 &878511699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878511694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccaa55abe485ef1409e0b6fc576bbbe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 395067730}
+  ink: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 1}
 --- !u!114 &896226875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7194,6 +7209,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Asset: {fileID: -944628639613478452, guid: fcf676fd2ae5a5f4698203a9275992be, type: 3}
   m_ActionId: eb4986de-c6d3-4545-86b7-3541835a5c5d
+--- !u!114 &1964070629 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3397272335514068364, guid: 6220a7c2faa3d90429713a8cd5972230,
+    type: 3}
+  m_PrefabInstance: {fileID: 2873294168507767559}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7405fb1c886c5d49a78a43b7e8645c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2067545025
 GameObject:
   m_ObjectHideFlags: 0
@@ -7426,6 +7453,41 @@ PrefabInstance:
       propertyPath: characterTransform
       value: 
       objectReference: {fileID: 512293974}
+    - target: {fileID: 446871796799840038, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: OnMoveTypeChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 446871796799840038, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: OnMoveTypeChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 446871796799840038, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: OnMoveTypeChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1964070629}
+    - target: {fileID: 446871796799840038, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: OnMoveTypeChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 446871796799840038, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: OnMoveTypeChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetMoveType
+      objectReference: {fileID: 0}
+    - target: {fileID: 446871796799840038, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: OnMoveTypeChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PaladinsFaith.Combat.CombatModule, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 446871796799840038, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: OnMoveTypeChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1780607662132191263, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: distance
@@ -7568,6 +7630,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
+      propertyPath: immuneTo
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
       propertyPath: mana.maxValue
       value: 30
       objectReference: {fileID: 0}
@@ -7594,6 +7661,16 @@ PrefabInstance:
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: stamina.OnProgressChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillStarted.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillFinished.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
@@ -7628,6 +7705,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
+      propertyPath: stamina.OnFullRefillStarted.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
       propertyPath: stamina.OnProgressChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 878511696}
@@ -7638,14 +7720,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
+      propertyPath: stamina.OnFullRefillFinished.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
       propertyPath: OnStaminaProgressChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
+      propertyPath: stamina.OnFullRefillStarted.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 878511699}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
       propertyPath: OnStaminaProgressChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetProgress
       objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillFinished.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 878511699}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: stamina.OnProgressChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -7655,6 +7752,26 @@ PrefabInstance:
         type: 3}
       propertyPath: stamina.OnProgressChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetProgress
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillStarted.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillFinished.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillStarted.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Ink
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillFinished.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RemoveInk
       objectReference: {fileID: 0}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
@@ -7678,6 +7795,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
+      propertyPath: stamina.OnFullRefillStarted.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ImageInker, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillFinished.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ImageInker, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
       propertyPath: mana.OnProgressChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -7689,6 +7816,16 @@ PrefabInstance:
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: stamina.OnProgressChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillStarted.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
+        type: 3}
+      propertyPath: stamina.OnFullRefillFinished.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6913182056841743834, guid: 6220a7c2faa3d90429713a8cd5972230,
@@ -7851,7 +7988,7 @@ PrefabInstance:
     - target: {fileID: 266369585238239703, guid: 565bd9ec955829f42913ca20e11a4c06,
         type: 3}
       propertyPath: healthBar.maxHealth
-      value: 20
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 3956642202366862705, guid: 565bd9ec955829f42913ca20e11a4c06,
         type: 3}

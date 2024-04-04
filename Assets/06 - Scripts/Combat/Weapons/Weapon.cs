@@ -24,6 +24,8 @@ namespace PaladinsFaith.Combat
         private AttackData currentAttackData = null;
         private Collider weaponCollider = null;
 
+        private float holdingTime = 0f;
+
         public float GetBaseDamage() => baseDamage;
 
         public void SetWielder(GameObject wielder)
@@ -33,7 +35,13 @@ namespace PaladinsFaith.Combat
 
         public void SetAttackData(AttackData attackData)
         {
+            holdingTime = 0f;
             currentAttackData = attackData;
+        }
+
+        public void HoldingAttack(float holdingTime)
+        {
+            this.holdingTime = holdingTime;
         }
 
         private void Awake()
@@ -55,7 +63,7 @@ namespace PaladinsFaith.Combat
             {
                 AttackData attackData = GetCurrentAttackData();
                 Vector3 impactPoint = GetImpactPointWith(other);
-                Attack attack = CreateAttack(attackData, impactPoint);
+                Attack attack = CreateAttack(attackData, impactPoint, holdingTime);
                 Attack(receiver, attack);
             }
         }
@@ -70,22 +78,15 @@ namespace PaladinsFaith.Combat
             bool collision = IntersectionCalculator.IntersectColliders(weaponCollider, other, out Vector3 impactPoint);
             if (!collision)
             {
-                impactPoint = (transform.position + other.transform.position) * 0.5f;
+                impactPoint = weaponCollider.ClosestPoint(other.transform.position);
             }
             return impactPoint;
         }
 
-        private Attack CreateAttack(AttackData attackData, Vector3 impactPoint)
+        private Attack CreateAttack(AttackData attackData, Vector3 impactPoint, float holdingTime)
         {
-            Attack attack = new Attack(wielder, impactPoint, attackData);
+            Attack attack = new Attack(wielder, impactPoint, attackData, holdingTime);
             return attack;
-        }
-
-        private bool CanDamage(AttackReceiver damageReceiver)
-        {
-            bool canDamage = damageReceiver != null
-                && !receiversDamaged.Contains(damageReceiver);
-            return canDamage;
         }
 
         public void Attack(AttackReceiver receiver, Attack attack)
@@ -109,6 +110,13 @@ namespace PaladinsFaith.Combat
                     Impact.CreateAttackImpact(impactPrefab, attack);
                 }
             }
+        }
+
+        private bool CanDamage(AttackReceiver damageReceiver)
+        {
+            bool canDamage = damageReceiver != null
+                && !receiversDamaged.Contains(damageReceiver);
+            return canDamage;
         }
 
         public void CancelAttack()

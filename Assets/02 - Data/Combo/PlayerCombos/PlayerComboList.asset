@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1bf2f91111eb74284c4ec4e2a8eae0, type: 3}
+  m_Name: PlayerComboList
+  m_EditorClassIdentifier: 
+  combos:
+  - {fileID: 11400000, guid: 88769d3b24c36ba4bbe3c6a06839d381, type: 2}
+  - {fileID: 11400000, guid: 626f8c07a7e03e746ab5c2f35fb045aa, type: 2}
+  - {fileID: 11400000, guid: 41ec7ae0452ce2f469cfa35c9105f5fd, type: 2}
+  - {fileID: 11400000, guid: 05728e0ef09de2843b39b6c3ffe78f09, type: 2}

@@ -1,4 +1,6 @@
-using PaladinsFaith.Player;
+using PaladinsFaith.Characters;
+using PaladinsFaith.Combat.Combos;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +8,18 @@ using UnityEngine.Events;
 
 namespace PaladinsFaith.Combat
 {
+    public enum CombatMove
+    {
+        LightAttack,
+        HeavyAttack
+    }
+
     public abstract class CombatModule : MonoBehaviour
     {
         [SerializeField]
-        protected List<AttackData> attacks = new List<AttackData>();
+        protected ComboList comboList = null;
+        [SerializeField]
+        private float comboAvailableTime = 2f;
         [SerializeField]
         private float brokenDefenseRecovery = 2f;
 
@@ -21,49 +31,109 @@ namespace PaladinsFaith.Combat
         public UnityEvent<AttackData> OnAttackTriggered = null;
         public UnityEvent OnAttackCancelled = null;
         public UnityEvent OnAttackFinished = null;
+        public UnityEvent OnReleaseHoldingAttack = null;
 
         private ContinuousResource stamina = null;
 
+        [ShowInInspector, ReadOnly]
         public bool IsDefending { get; protected set; } = false;
+        [ShowInInspector, ReadOnly]
         public bool IsAttacking { get; protected set; } = false;
+        [ShowInInspector, ReadOnly]
+        public bool IsHoldingAttack { get; protected set; } = false;
 
+        [ShowInInspector, ReadOnly]
+        protected CharacterMoveType currentMoveType = CharacterMoveType.Walking;
+        [ShowInInspector, ReadOnly]
         protected bool defenseBroken = false;
-        protected bool attacksCancelled = false;
+        [ShowInInspector, ReadOnly]
+        protected bool attacksDisabled = false;
+
+        private ComboManager comboManager = null;
+
+        protected virtual void Awake()
+        {
+            comboManager = new ComboManager(comboList);
+        }
 
         public void SetStamina(ContinuousResource stamina)
         {
             this.stamina = stamina;
         }
 
-        public void CancelAttacks(float duration)
+        public void SetMoveType(CharacterMoveType moveType)
         {
-            attacksCancelled = true;
-            Timers.StartGameTimer(gameObject, "AttackCancelled", duration, CancelAttacksFinished);
+            Debug.Log($"CombatModule.SetMoveType: {moveType}");
+            currentMoveType = moveType;
         }
 
-        private void CancelAttacksFinished()
+        public void DisableAttacks()
         {
-            attacksCancelled = false;
+            attacksDisabled = true;
+            Timers.StopTimer(gameObject, "AttackCancelled");
         }
 
-        public void TryToAttack()
+        public void DisableAttacksForSeconds(float duration)
+        {
+            DisableAttacks();
+            Timers.StartGameTimer(gameObject, "AttackCancelled", duration, EnableAttacks);
+        }
+
+        public void EnableAttacks()
+        {
+            Timers.StopTimer(gameObject, "AttackCancelled");
+            attacksDisabled = false;
+        }
+
+        public void TryToAttack(CombatMove comboElement)
         {
             if (!CanAttack())
             {
                 return;
             }
 
-            Attack();
+            Attack(comboElement);
         }
 
         protected virtual bool CanAttack()
         {
             bool can = !IsAttacking
-                && !attacksCancelled;
+                && !attacksDisabled;
             return can;
         }
 
-        protected virtual void Attack() { }
+        protected virtual void Attack(CombatMove comboElement) { }
+
+        protected AttackData AddMoveToCombo(CombatMove comboElement)
+        {
+            AttackData attack = comboManager.AddCombo(comboElement);
+            Timers.StartGameTimer(gameObject, "ComboAvailable", comboAvailableTime, BreakCombo);
+            return attack;
+        }
+
+        protected void BreakCombo()
+        {
+            comboManager.BreakCombo();
+        }
+
+        protected void StartHoldingAttack()
+        {
+            IsHoldingAttack = true;
+        }
+
+        public virtual void HoldingAttack(CombatMove combatMove, float duration) { }
+
+        public void StopHoldingAttack()
+        {
+            ReleaseHoldingAttack();
+        }
+
+        protected void ReleaseHoldingAttack()
+        {
+            Debug.Log($"Release Holding Attack");
+            IsHoldingAttack = false;
+            OnReleaseHoldingAttack?.Invoke();
+        }
 
         public virtual void NextAttackAvailable() { }
 
@@ -120,7 +190,7 @@ namespace PaladinsFaith.Combat
 
         public void Block(Attack attack)
         {
-            stamina.Deplete(staminaByAttack);
+            stamina.Consume(staminaByAttack);
             if (stamina.IsEmpty())
             {
                 BreakDefense();
@@ -145,6 +215,12 @@ namespace PaladinsFaith.Combat
         {
             defenseBroken = false;
             stamina.RemoveAutomaticRegainBlocker();
+        }
+
+        public void Stop()
+        {
+            DisableAttacks();
+            StopDefending();
         }
     }
 }

@@ -84,6 +84,7 @@ MonoBehaviour:
   runConsumePerSecond: 10
   simplePushBackStrength: 1
   simplePushBackDuration: 0.5
+  standUpDuration: 1
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -94,6 +95,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnPushedDuration:
+    m_PersistentCalls:
+      m_Calls: []
+  OnKnockedDown:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStandUp:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStandedUp:
     m_PersistentCalls:
       m_Calls: []
   rigidbody: {fileID: 7871733014303789619}
@@ -180,9 +190,9 @@ PlayableDirector:
   m_GameObject: {fileID: 2357613627804093000}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 1e3dc3e13b530784da7a68ad27de577a, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 98fbed1695b5e414893c67750a3979b2, type: 2}
   m_InitialState: 0
-  m_WrapMode: 2
+  m_WrapMode: 0
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
@@ -206,6 +216,12 @@ PlayableDirector:
     value: {fileID: 1396771594427629552}
   - key: {fileID: 3250505842522999968, guid: cf80c3ceccad6e545a3140f9bd47c383, type: 2}
     value: {fileID: 6109748067236554437}
+  - key: {fileID: -2731092939691463101, guid: 98fbed1695b5e414893c67750a3979b2, type: 2}
+    value: {fileID: 6109748067236554437}
+  - key: {fileID: 6171282216005249913, guid: 98fbed1695b5e414893c67750a3979b2, type: 2}
+    value: {fileID: 5031807032384829763}
+  - key: {fileID: 1063536304540923216, guid: 98fbed1695b5e414893c67750a3979b2, type: 2}
+    value: {fileID: 1396771594427629552}
   m_ExposedReferences:
     m_References: []
 --- !u!1 &2977435676183522817
@@ -395,10 +411,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7405fb1c886c5d49a78a43b7e8645c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attacks:
-  - {fileID: 11400000, guid: d667121560b4c1f45b706955a8f16060, type: 2}
-  - {fileID: 11400000, guid: 3112f790fb7c50142a299f0cdf7d95c9, type: 2}
-  - {fileID: 11400000, guid: 59caa279a7c4a984cb1a8f27771a4b34, type: 2}
+  comboList: {fileID: 11400000, guid: cf947b58b44f10346aa88e635a50f2ed, type: 2}
+  comboAvailableTime: 1
   brokenDefenseRecovery: 2
   staminaByAttack: 10
   OnDefenseStarted:
@@ -476,6 +490,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnReleaseHoldingAttack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6565613740540865526}
+        m_TargetAssemblyTypeName: PaladinsFaith.Player.PlayerAnimations, Assembly-CSharp
+        m_MethodName: ReleaseHoldingAttack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   player: {fileID: 6261241833337126506}
   weapon: {fileID: 8829872858627796409}
   shield: {fileID: 6430016344413741076}
@@ -536,12 +565,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveModule: {fileID: 7613817612412428374}
   stamina:
+    resourceName: Stamina
     maxValue: 100
     autoRegainPerSecond: 10
+    cooldownAfterConsume: 1
+    progressToConsiderEmpty: 0.05
+    fullRefillAfterDeplete: 1
     OnValueChanged:
       m_PersistentCalls:
         m_Calls: []
     OnProgressChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFullRefillStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFullRefillFinished:
       m_PersistentCalls:
         m_Calls: []
   healthBar:
@@ -569,16 +608,27 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   mana:
+    resourceName: Mana
     maxValue: 100
     autoRegainPerSecond: 10
+    cooldownAfterConsume: 1
+    progressToConsiderEmpty: 0.05
+    fullRefillAfterDeplete: 1
     OnValueChanged:
       m_PersistentCalls:
         m_Calls: []
     OnProgressChanged:
       m_PersistentCalls:
         m_Calls: []
+    OnFullRefillStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFullRefillFinished:
+      m_PersistentCalls:
+        m_Calls: []
   combatModule: {fileID: 4665628607627025148}
   spellModule: {fileID: 2210828089482978324}
+  immuneTo: 0
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -586,6 +636,7 @@ MonoBehaviour:
   dataProvider: {fileID: 2536670283354568713}
   camera: {fileID: 0}
   defendingMovePenalizer: 0.5
+  defendingChargeMultplier: 1.5
   OnPlayerMoveModeChanged:
     m_PersistentCalls:
       m_Calls:
@@ -789,6 +840,7 @@ MonoBehaviour:
     m_Signals:
     - {fileID: 11400000, guid: 7b266fb8791e8d345bfb435167be7add, type: 2}
     - {fileID: 11400000, guid: 385721a0e4d7c9d4f8b0ec39a31e87f9, type: 2}
+    - {fileID: 11400000, guid: 29cbeb9c284d814409c7579b8dcf3d3d, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -809,6 +861,20 @@ MonoBehaviour:
         - m_Target: {fileID: 6565613740540865526}
           m_TargetAssemblyTypeName: FirstSlice.Player.PlayerAnimations, FirstSliceAssembley
           m_MethodName: AttackFinished
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6565613740540865526}
+          m_TargetAssemblyTypeName: PaladinsFaith.Player.PlayerAnimations, Assembly-CSharp
+          m_MethodName: LoopAttack
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1039,6 +1105,7 @@ MonoBehaviour:
   runConsumePerSecond: 10
   simplePushBackStrength: 1
   simplePushBackDuration: 0.5
+  standUpDuration: 1
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1075,6 +1142,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnKnockedDown:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStandUp:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStandedUp:
+    m_PersistentCalls:
+      m_Calls: []
   rigidbody: {fileID: 7871733014303789619}
   onlyApplyPhysicsWhenMoving: 0
   glueToFloor: 0
@@ -1168,26 +1244,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3683112001630455472, guid: be6efa3a43a61934bb9638f154ddd9d3,
         type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3683112001630455472, guid: be6efa3a43a61934bb9638f154ddd9d3,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3683112001630455472, guid: be6efa3a43a61934bb9638f154ddd9d3,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3683112001630455472, guid: be6efa3a43a61934bb9638f154ddd9d3,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3683112001630455472, guid: be6efa3a43a61934bb9638f154ddd9d3,
-        type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 90
       objectReference: {fileID: 0}
@@ -1206,6 +1262,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Model
       objectReference: {fileID: 0}
+    - target: {fileID: 5828314241480928460, guid: be6efa3a43a61934bb9638f154ddd9d3,
+        type: 3}
+      propertyPath: chargeAttack
+      value: 
+      objectReference: {fileID: 11400000, guid: 7f17f3cd28b2c4f4e8fbf6cfc82f59e3,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 9200503424876451086, guid: be6efa3a43a61934bb9638f154ddd9d3, type: 3}
     m_RemovedGameObjects:

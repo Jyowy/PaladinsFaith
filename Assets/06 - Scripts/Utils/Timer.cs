@@ -71,4 +71,9 @@ public class Timer
             onFinished?.Invoke();
         }
     }
+
+    public void Stop()
+    {
+        CurrentTime = Duration;
+    }
 }

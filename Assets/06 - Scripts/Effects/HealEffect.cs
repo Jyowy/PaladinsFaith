@@ -12,12 +12,12 @@ namespace PaladinsFaith.Effects
         [SerializeField]
         private float amount = 10f;
 
-        protected override void ApplyToTarget(GameObject owner, GameObject target)
+        protected override void ApplyToTarget(GameObject owner, GameObject target, float multiplier)
         {
-            HealCombatantCharacter(target);
+            HealCombatantCharacter(target, multiplier);
         }
 
-        private void HealCombatantCharacter(GameObject healingTarget)
+        private void HealCombatantCharacter(GameObject healingTarget, float multiplier)
         {
             Debug.Log($"Trying to apply heal to '{healingTarget.name}'");
             if (!healingTarget.TryGetComponent(out CombatantCharacter combatant))
@@ -27,7 +27,7 @@ namespace PaladinsFaith.Effects
             }
 
             Debug.Log($"Healed '{combatant.name}': {amount} hp");
-            combatant.Heal(amount);
+            combatant.Heal(amount * multiplier);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using PaladinsFaith.Combat;
+using PaladinsFaith.Combat.Combos;
 
 namespace PaladinsFaith.Enemies
 {
@@ -22,9 +23,11 @@ namespace PaladinsFaith.Enemies
             weapon.SetWielder(enemy.gameObject);
         }
 
-        protected override void Attack()
+        protected override void Attack(CombatMove comboElement)
         {
             IsAttacking = true;
+            AttackData attackData = AddMoveToCombo(comboElement);
+
             weapon.SetAttackData(attackData);
             weapon.OnBlocked?.AddListener(AttackBlocked);
             OnAttackTriggered?.Invoke(attackData);

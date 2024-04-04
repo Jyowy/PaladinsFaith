@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PaladinsFaith.Combat;
+using PaladinsFaith.Combat.Combos;
 
 namespace PaladinsFaith.Player
 {
@@ -23,11 +24,15 @@ namespace PaladinsFaith.Player
         private bool canAttack = true;
 
         [ShowInInspector, ReadOnly]
-        protected int currentAttackIndex = -1;
+        protected AttackData currentAttack = null;
         [ShowInInspector, ReadOnly]
-        private bool canTriggerNextAttack = false;
+        private CombatMove currentComboMove = CombatMove.LightAttack;
         [ShowInInspector, ReadOnly]
-        private bool nextAttackRequested = false;
+        private bool CanContinueAttacking = false;
+        [ShowInInspector, ReadOnly]
+        private bool attackRequested = false;
+        [ShowInInspector, ReadOnly]
+        private CombatMove combatMoveRequested = CombatMove.LightAttack;
 
         private void Start()
         {
@@ -35,7 +40,7 @@ namespace PaladinsFaith.Player
             shield.SetWielder(player.gameObject);
         }
 
-        protected override void Attack()
+        protected override void Attack(CombatMove combatMove)
         {
             if (IsDefending)
             {
@@ -44,56 +49,81 @@ namespace PaladinsFaith.Player
 
             if (IsAttacking)
             {
-                nextAttackRequested = true;
-                if (!canTriggerNextAttack)
+                RequestAttack(combatMove);
+                if (!CanContinueAttacking)
                 {
                     return;
                 }
             }
 
-            TriggerNextAttack();
+            TriggerComboAttack(combatMove);
+        }
+
+        private void RequestAttack(CombatMove combatMove)
+        {
+            Debug.Log($"Request Attack {combatMove}");
+            attackRequested = true;
+            combatMoveRequested = combatMove;
+        }
+
+        private void ClearRequestedAttack()
+        {
+            attackRequested = false;
+        }
+
+        private void TriggerComboAttack(CombatMove combatMove)
+        {
+            ClearRequestedAttack();
+            currentComboMove = combatMove;
+            AttackData attack = AddMoveToCombo(combatMove);
+            Debug.Log($"Trigger Combo Attack {combatMove} => {attack.attackName}");
+            TriggerAttack(attack);
         }
 
         protected override bool CanAttack()
         {
-            bool can = !attacksCancelled && canAttack;
+            bool can = !attacksDisabled && canAttack;
             return can;
         }
 
-        [Button]
-        private void TriggerNextAttack()
+        private void TriggerAttack(AttackData attackData)
         {
-            int nextAttack = Mathf.Min(currentAttackIndex + 1, maxSteps - 1);
-            TriggerAttack(nextAttack);
-        }
-
-        private void TriggerAttack(int attackIndex)
-        {
-            canAttack = attackIndex < maxSteps - 1;
-
-            currentAttackIndex = attackIndex;
+            currentAttack = attackData;
             IsAttacking = true;
-            canTriggerNextAttack = false;
-            nextAttackRequested = false;
-
-            AttackData attackData = GetAttackData(attackIndex);
+            CanContinueAttacking = false;
+            IsHoldingAttack = attackData.canBeCharged;
             weapon.SetAttackData(attackData);
             OnAttackTriggered?.Invoke(attackData);
         }
 
-        private AttackData GetAttackData(int attackIndex)
+        public override void HoldingAttack(CombatMove combatMove, float holdingTime)
         {
-            AttackData attack = attacks[attackIndex];
-            return attack;
+            if (!IsHoldingAttack
+                || currentComboMove != combatMove)
+            {
+                return;
+            }
+
+            Debug.Log($"HoldingAttack {holdingTime}");
+            weapon.HoldingAttack(holdingTime);
+            if (holdingTime >= currentAttack.maxChargeTime)
+            {
+                ReleaseHoldingAttack();
+            }
         }
 
         public override void NextAttackAvailable()
         {
-            canTriggerNextAttack = true;
-            if (nextAttackRequested)
+            CanContinueAttacking = true;
+            if (attackRequested)
             {
-                TriggerNextAttack();
+                TriggerRequestedAttack();
             }
+        }
+
+        private void TriggerRequestedAttack()
+        {
+            TriggerComboAttack(combatMoveRequested);
         }
 
         protected override void AttackCancelled()
@@ -105,8 +135,9 @@ namespace PaladinsFaith.Player
         private void ResetAttacks()
         {
             IsAttacking = false;
-            canAttack = true;
-            currentAttackIndex = -1;
+            IsHoldingAttack = false;
+            currentAttack = null;
+            BreakCombo();
         }
 
         public override void AttackFinished()
@@ -125,6 +156,26 @@ namespace PaladinsFaith.Player
             bool can = base.CanBlock(attack)
                 && shield.CanBlock(attack);
             return can;
+        }
+
+        protected void Update()
+        {
+            UpdateShieldCharging();
+        }
+
+        private void UpdateShieldCharging()
+        {
+            bool isCharging = IsCharging();
+            shield.SetCharging(isCharging);
+        }
+
+        [Button]
+        private bool IsCharging()
+        {
+            bool fastMove = currentMoveType == Characters.CharacterMoveType.Running
+                || currentMoveType == Characters.CharacterMoveType.Dashing;
+            return IsDefending
+                && fastMove;
         }
     }
 }

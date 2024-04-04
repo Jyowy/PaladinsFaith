@@ -12,7 +12,7 @@ namespace PaladinsFaith.Effects
         [SerializeField]
         private float amount = 10f;
 
-        protected override void ApplyToTarget(GameObject owner, GameObject target)
+        protected override void ApplyToTarget(GameObject owner, GameObject target, float multiplier)
         {
             Debug.Log($"Trying to apply damage to '{target.name}'");
             if (!target.TryGetComponent(out DamageReceiver damageReceiver))
@@ -20,7 +20,7 @@ namespace PaladinsFaith.Effects
                 return;
             }
 
-            damageReceiver.ReceiveDamage(amount);
+            damageReceiver.ReceiveDamage(amount * multiplier);
         }
     }
 }

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51744e5a86bd28d45b6eb6618572e458, type: 3}
+  m_Name: PlayerHeavyAttack
+  m_EditorClassIdentifier: 
+  comboName: Heavy Attack
+  attack: {fileID: 11400000, guid: ef8878af627cca74d8f320703f6a8e90, type: 2}
+  comboElement: 1
+  hasChainCondition: 0
+  chainCondition:
+    matchMode: 0
+    conditions: []

@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0954cd6df17f1224fb584d6d1db84942, type: 3}
+  m_Name: PlayerHeavyAttack
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: effectsOnImpact
+      Entry: 7
+      Data: 0|PaladinsFaith.Effects.EffectSet, Assembly-CSharp
+    - Name: effects
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[PaladinsFaith.Effects.EffectBase,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 2|PaladinsFaith.Effects.PushEffect, Assembly-CSharp
+    - Name: targetDetector
+      Entry: 7
+      Data: 3|PaladinsFaith.TargetDetector, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 1
+    - Name: hasFriendlyFire
+      Entry: 5
+      Data: false
+    - Name: possibleTargets
+      Entry: 7
+      Data: UnityEngine.LayerMask, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 32896
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: distance
+      Entry: 4
+      Data: 5
+    - Name: rayWidth
+      Entry: 4
+      Data: 0
+    - Name: coneAngle
+      Entry: 4
+      Data: 90
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: prefab
+      Entry: 6
+      Data: 
+    - Name: strength
+      Entry: 4
+      Data: 50
+    - Name: duration
+      Entry: 4
+      Data: 0.5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|PaladinsFaith.Effects.DamageEffect, Assembly-CSharp
+    - Name: targetDetector
+      Entry: 7
+      Data: 5|PaladinsFaith.TargetDetector, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 1
+    - Name: hasFriendlyFire
+      Entry: 5
+      Data: false
+    - Name: possibleTargets
+      Entry: 7
+      Data: UnityEngine.LayerMask, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 32896
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: distance
+      Entry: 4
+      Data: 5
+    - Name: rayWidth
+      Entry: 4
+      Data: 0
+    - Name: coneAngle
+      Entry: 4
+      Data: 90
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: prefab
+      Entry: 6
+      Data: 
+    - Name: amount
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  attackName: HeavyAttack
+  description: 
+  animation: {fileID: 11400000, guid: 98fbed1695b5e414893c67750a3979b2, type: 2}
+  canBeBlocked: 0
+  canBeCharged: 1
+  minChargeTime: 1
+  maxChargeTime: 3
+  chargeMultiplierEvolution:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.09408951
+      value: 0.6864929
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1.0032845
+      inSlope: 0.28977257
+      outSlope: 0.28977257
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07011956
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

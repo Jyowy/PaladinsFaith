@@ -28,7 +28,7 @@ namespace PaladinsFaith
             }
             else
             {
-                attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint);
+                attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint, attack.multiplier);
             }
 
             return attackResult;

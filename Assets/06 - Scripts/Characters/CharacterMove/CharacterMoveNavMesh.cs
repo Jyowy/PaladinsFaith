@@ -28,7 +28,9 @@ namespace PaladinsFaith.Characters
 
         public override void MoveTo(Vector3 position)
         {
-            if (beingPushed)
+            if (beingPushed
+                || knockedDown
+                || !agent.isOnNavMesh)
             {
                 return;
             }
@@ -61,7 +63,10 @@ namespace PaladinsFaith.Characters
             }
 
             moving = false;
-            agent.isStopped = true;
+            if (agent.isOnNavMesh)
+            {
+                agent.isStopped = true;
+            }
             agent.velocity = Vector3.zero;
 
             OnMoveFinished?.Invoke();
@@ -90,6 +95,11 @@ namespace PaladinsFaith.Characters
 
         protected override void PushStarted(Vector3 direction, float power)
         {
+            if (!agent.isActiveAndEnabled)
+            {
+                return;
+            }
+
             agent.velocity = Vector3.zero;
             agent.isStopped = false;
             Vector3 velocity = direction * power;
@@ -103,7 +113,22 @@ namespace PaladinsFaith.Characters
             base.PushFinished();
 
             agent.velocity = Vector3.zero;
-            agent.isStopped = false;
+            if (agent.isOnNavMesh)
+            {
+                agent.isStopped = false;
+            }
+        }
+
+        public override void KnockDownStarted()
+        {
+            agent.enabled = false;
+            base.KnockDownStarted();
+        }
+
+        public override void KnockDownFinished()
+        {
+            base.KnockDownFinished();
+            agent.enabled = true;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace PaladinsFaith.Effects
         [SerializeField]
         private float duration = 1f;
 
-        protected override void ApplyToTarget(GameObject caster, GameObject target)
+        protected override void ApplyToTarget(GameObject caster, GameObject target, float multiplier)
         {
             Debug.Log($"Trying to apply push to '{target.name}'");
             if (!target.TryGetComponent(out CombatantCharacter combatant))
@@ -25,7 +25,7 @@ namespace PaladinsFaith.Effects
             Debug.Log($"Push '{combatant.name}': {strength}");
             Vector3 direction = target.transform.position - caster.transform.position;
             Vector3 pushDirection = direction.NormalizedWithoutY();
-            combatant.Push(pushDirection, strength, duration);
+            combatant.Push(pushDirection, strength * multiplier, duration);
         }
     }
 }

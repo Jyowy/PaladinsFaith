@@ -33,6 +33,9 @@ namespace PaladinsFaith.Characters
         [SerializeField]
         private float simplePushBackDuration = 0.5f;
 
+        [SerializeField]
+        private float standUpDuration = 1f;
+
         [ShowInInspector, ReadOnly]
         public CharacterMoveType MoveType { get; private set; } = CharacterMoveType.Walking;
 
@@ -40,12 +43,17 @@ namespace PaladinsFaith.Characters
         public UnityEvent OnStopped = null;
         public UnityEvent OnPushed = null;
         public UnityEvent<float> OnPushedDuration = null;
+        public UnityEvent OnKnockedDown = null;
+        public UnityEvent OnStandUp = null;
+        public UnityEvent OnStandedUp = null;
 
         private ContinuousResource stamina = null;
         private bool fastMoveCancelled = false;
 
         [ShowInInspector, ReadOnly]
         protected bool beingPushed = false;
+        [ShowInInspector, ReadOnly]
+        protected bool knockedDown = false;
 
         public void SetStamina(ContinuousResource stamina)
         {
@@ -65,17 +73,29 @@ namespace PaladinsFaith.Characters
 
         private void Update()
         {
-            if (MoveType == CharacterMoveType.Running
-                && stamina != null)
+            CheckRunningStamina();
+        }
+
+        private void CheckRunningStamina()
+        {
+            if (MoveType != CharacterMoveType.Running
+                || stamina == null)
             {
-                float runConsume = runConsumePerSecond * Time.deltaTime;
-                bool consumed = stamina.Consume(runConsume);
-                if (!consumed)
-                {
-                    SetMoveType(CharacterMoveType.Walking);
-                    stamina.RemoveAutomaticRegainBlocker();
-                }
+                return;
             }
+
+            float runConsume = runConsumePerSecond * Time.deltaTime;
+            stamina.Consume(runConsume);
+            if (stamina.IsEmpty())
+            {
+                StaminaDepletedWhileRunning();
+            }
+        }
+
+        private void StaminaDepletedWhileRunning()
+        {
+            SetMoveType(CharacterMoveType.Walking);
+            stamina.RemoveAutomaticRegainBlocker();
         }
 
         public virtual void Move(Vector3 move) { }
@@ -84,13 +104,21 @@ namespace PaladinsFaith.Characters
 
         public virtual void MoveTo(Vector3 position) { }
 
+        bool canDashAgain = false;
+
         public void UpdateFastMove(bool fastMove, Vector3 direction, float speedFactor)
         {
+            if (!canDashAgain)
+            {
+                canDashAgain = !fastMove;
+            }
+
             if (fastMove && !beingPushed)
             {
                 fastMoveCancelled = false;
                 if (MoveType == CharacterMoveType.Walking
-                    && stamina.HasEnough(dashConsume))
+                    && stamina.HasEnough(dashConsume)
+                    && canDashAgain)
                 {
                     StartDash(direction, speedFactor);
                 }
@@ -108,13 +136,18 @@ namespace PaladinsFaith.Characters
 
         protected virtual void StartDash(Vector3 direction, float speedFactor)
         {
-            stamina.Consume(dashConsume);
-            SetMoveType(CharacterMoveType.Dashing);
-            stamina.AddAutomaticRegainBlocker();
+            Debug.Log($"DashStarted");
+            bool canDash = stamina.TryToConsume(dashConsume);
+            if (canDash)
+            {
+                SetMoveType(CharacterMoveType.Dashing);
+                stamina.AddAutomaticRegainBlocker();
+            }
         }
 
         protected virtual void DashCompleted()
         {
+            Debug.Log($"DashCompleted");
             if (fastMoveCancelled)
             {
                 Stop();
@@ -123,10 +156,15 @@ namespace PaladinsFaith.Characters
                 return;
             }
 
+            canDashAgain = false;
+
             SetMoveType(CharacterMoveType.Running);
         }
 
-        public virtual void Stop() { }
+        public virtual void Stop()
+        {
+            canDashAgain = false;
+        }
 
         public virtual void LookAt(Vector3 position) { }
 
@@ -175,6 +213,27 @@ namespace PaladinsFaith.Characters
         {
             beingPushed = false;
             MoveType = CharacterMoveType.Walking;
+        }
+
+        public virtual void KnockDownStarted()
+        {
+            knockedDown = true;
+            Stop();
+            OnKnockedDown?.Invoke();
+        }
+
+        public virtual void KnockDownFinished()
+        {
+            OnStandUp?.Invoke();
+
+            Debug.Log($"Character '{name}' is standing up");
+            Timers.StartGameTimer(this, "StandingUp", standUpDuration, StandedUp);
+        }
+
+        protected virtual void StandedUp()
+        {
+            knockedDown = false;
+            OnStandedUp?.Invoke();
         }
     }
 }

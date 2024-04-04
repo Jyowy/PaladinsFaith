@@ -11,6 +11,7 @@ using PaladinsFaith.Dialogs;
 using PaladinsFaith.Combat;
 
 using Sirenix.OdinInspector;
+using PaladinsFaith.Combat.AlteredStates;
 
 namespace PaladinsFaith.Player
 {
@@ -41,6 +42,8 @@ namespace PaladinsFaith.Player
 
         [SerializeField]
         private float defendingMovePenalizer = 0.5f;
+        [SerializeField]
+        private float defendingChargeMultplier = 1.5f;
 
         public UnityEvent<CharacterMoveType> OnPlayerMoveModeChanged = null;
         public UnityEvent OnPlayerStopped = null;
@@ -64,7 +67,7 @@ namespace PaladinsFaith.Player
 
         private void Initialize()
         {
-            mana.Fill();
+            mana.Initialize(gameObject);
 
             InitializeSharedData();
         }
@@ -218,13 +221,26 @@ namespace PaladinsFaith.Player
         private void UpdateMove(bool fastMove, Vector2 move)
         {
             Vector3 worldMove = GetWorldDirectionFrom2DInput(move);
+            Vector3 dashDirection = worldMove;
             float speedFactor = 1f;
             if (combatModule.IsDefending)
             {
-                speedFactor = defendingMovePenalizer;
+                if (worldMove.magnitude == 0f)
+                {
+                    dashDirection = transform.forward.NormalizedWithoutY();
+                }
+
+                if (moveModule.MoveType == CharacterMoveType.Walking)
+                {
+                    speedFactor = defendingMovePenalizer;
+                }
+                else
+                {
+                    speedFactor = defendingChargeMultplier;
+                }
             }
 
-            CheckFastMove(fastMove, worldMove, speedFactor);
+            CheckFastMove(fastMove, dashDirection, 1f);
             moveModule.PlanarMove(worldMove, speedFactor);
 
             float speed = move.magnitude;
@@ -305,10 +321,10 @@ namespace PaladinsFaith.Player
         {
             if (!combatModule.IsAttacking)
             {
-                if (inputData.IsLightAttackActive())
+                if (inputData.HasCombatMove())
                 {
-                    inputData.ConsumeLightAttack();
-                    combatModule.TryToAttack();
+                    inputData.ConsumeCombatMove();
+                    combatModule.TryToAttack(inputData.combatMove);
                 }
                 else if (inputData.defenseActive
                     && !combatModule.IsDefending)
@@ -324,10 +340,21 @@ namespace PaladinsFaith.Player
             }
             else
             {
-                if (inputData.IsLightAttackActive())
+                if (combatModule.IsHoldingAttack)
                 {
-                    inputData.ConsumeLightAttack();
-                    combatModule.TryToAttack();
+                    if (inputData.combatMoveHold.Active)
+                    {
+                        combatModule.HoldingAttack(inputData.combatMove, inputData.combatMoveHold.HoldingTime);
+                    }
+                    else
+                    {
+                        combatModule.StopHoldingAttack();
+                    }
+                }
+                else if (inputData.HasCombatMove())
+                {
+                    inputData.ConsumeCombatMove();
+                    combatModule.TryToAttack(inputData.combatMove);
                 }
             }
         }
@@ -385,6 +412,11 @@ namespace PaladinsFaith.Player
             Debug.Log($"GameOver");
             gameObject.SetActive(false);
             base.OnDead();
+        }
+
+        public override void ReceiveAlteredState(AlteredState state)
+        {
+            // TODO
         }
     }
 }

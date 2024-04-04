@@ -1,10 +1,12 @@
 using PaladinsFaith.Characters;
 using PaladinsFaith.Combat;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace PaladinsFaith.Player
 {
@@ -117,6 +119,39 @@ namespace PaladinsFaith.Player
         public void CancelAttack()
         {
             attackDirector.Stop();
+        }
+
+        public void LoopAttack()
+        {
+            TimelineAsset timeline = (TimelineAsset)attackDirector.playableAsset;
+            IEnumerable<IMarker> markers = timeline.markerTrack.GetMarkers();
+            foreach (IMarker marker in markers)
+            {
+                if (marker is LoopStartMarker)
+                {
+                    double time = marker.time;
+                    attackDirector.time = time;
+                    break;
+                }
+            }
+        }
+
+        [Button]
+        public void ReleaseHoldingAttack()
+        {
+            TimelineAsset asset = (TimelineAsset)attackDirector.playableAsset;
+            IEnumerable<IMarker> markers = asset.markerTrack.GetMarkers();
+            foreach (IMarker marker in markers)
+            {
+                if (marker is ReleaseAttackMarker)
+                {
+                    attackDirector.Pause();
+                    double time = marker.time;
+                    attackDirector.time = time;
+                    attackDirector.Resume();
+                    break;
+                }
+            }    
         }
     }
 }

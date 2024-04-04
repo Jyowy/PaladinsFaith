@@ -45,6 +45,8 @@ namespace PaladinsFaith.Characters
 
         public override void Stop()
         {
+            base.Stop();
+
             IsStopped = true;
             rigidbody.velocity = Vector3.zero;
             rigidbody.angularVelocity = Vector3.zero;

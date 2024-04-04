@@ -118,17 +118,11 @@ public class Timers : HiddenSingleton<Timers>
 
     private void StopTimers(List<Timer> timers, Object context, string name)
     {
-        int index = 0;
-        while (index < timers.Count)
+        foreach (Timer timer in timers)
         {
-            Timer timedAction = timers[index];
-            if (timedAction.IsTimer(context, name))
+            if (timer.IsTimer(context, name))
             {
-                timers.RemoveAt(index);
-            }
-            else
-            {
-                index++;
+                timer.Stop();
             }
         }
     }
@@ -169,6 +163,8 @@ public class Timers : HiddenSingleton<Timers>
                 index++;
             }
         }
+
+        CleanUnnecessaryTimers(PausedTimers);
 
         CheckComponentEnabled();
     }
@@ -226,25 +222,20 @@ public class Timers : HiddenSingleton<Timers>
             return;
         }
 
-        int index = 0;
-        while (index < OngoingTimers.Count)
+        for (int i = 0; i < OngoingTimers.Count; ++i)
         {
-            Timer timer = OngoingTimers[index];
+            Timer timer = OngoingTimers[i];
             timer.UpdateTime();
-
-            if (timer.IsCompleted())
-            {
-                OngoingTimers.RemoveAt(index);
-            }
-            else
-            {
-                index++;
-            }
         }
     }
 
     private void CleanUnnecessaryTimers(List<Timer> timers)
     {
+        if (timers.Count == 0)
+        {
+            return;
+        }
+
         int index = 0;
         while (index < timers.Count)
         {

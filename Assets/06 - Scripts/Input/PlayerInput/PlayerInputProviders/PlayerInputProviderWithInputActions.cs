@@ -140,9 +140,9 @@ namespace PaladinsFaith.Input
         {
             AddPerformedCanceledCallbacks(run, OnFastMoveStarted, OnFastMoveFinished);
             AddPerformedCanceledCallbacks(defense, OnDefenseStarted, OnDefenseFinished);
+            AddPerformedCanceledCallbacks(lightAttack, OnLightAttackStarted, OnLightAttackFinished);
             AddPerformedCanceledCallbacks(heavyAttack, OnHeavyAttackStarted, OnHeavyAttackFinished);
 
-            lightAttack.action.performed += OnLightAttack;
             prevSpell.action.performed += OnPrevSpell;
             nextSpell.action.performed += OnNextSpell;
             spell.action.performed += OnSpell;
@@ -166,9 +166,9 @@ namespace PaladinsFaith.Input
         {
             RemovePerformedCanceledCallbacks(run, OnFastMoveStarted, OnFastMoveFinished);
             RemovePerformedCanceledCallbacks(defense, OnDefenseStarted, OnDefenseFinished);
+            RemovePerformedCanceledCallbacks(lightAttack, OnLightAttackStarted, OnLightAttackFinished);
             RemovePerformedCanceledCallbacks(heavyAttack, OnHeavyAttackStarted, OnHeavyAttackFinished);
 
-            lightAttack.action.performed -= OnLightAttack;
             prevSpell.action.performed -= OnPrevSpell;
             nextSpell.action.performed -= OnNextSpell;
             spell.action.performed -= OnSpell;
@@ -203,19 +203,24 @@ namespace PaladinsFaith.Input
             playerInputData.defenseActive = false;
         }
 
-        private void OnLightAttack(InputAction.CallbackContext _)
+        private void OnLightAttackStarted(InputAction.CallbackContext _)
         {
-            playerInputData.LightAttack();
+            playerInputData.CombatMoveTriggered(Combat.CombatMove.LightAttack);
+        }
+
+        private void OnLightAttackFinished(InputAction.CallbackContext _)
+        {
+            playerInputData.CombatMoveReleased(Combat.CombatMove.LightAttack);
         }
 
         private void OnHeavyAttackStarted(InputAction.CallbackContext _)
         {
-            playerInputData.heavyAttack = false;
+            playerInputData.CombatMoveTriggered(Combat.CombatMove.HeavyAttack);
         }
 
         private void OnHeavyAttackFinished(InputAction.CallbackContext _)
         {
-            playerInputData.heavyAttack = false;
+            playerInputData.CombatMoveReleased(Combat.CombatMove.HeavyAttack);
         }
 
         private void OnPrevSpell(InputAction.CallbackContext _)

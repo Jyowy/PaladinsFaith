@@ -326,6 +326,7 @@ MonoBehaviour:
   runConsumePerSecond: 10
   simplePushBackStrength: 2
   simplePushBackDuration: 1
+  standUpDuration: 1
   OnMoveTypeChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -352,7 +353,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2875999323649147632}
         m_TargetAssemblyTypeName: PaladinsFaith.Combat.CombatModule, Assembly-CSharp
-        m_MethodName: CancelAttacks
+        m_MethodName: DisableAttacksForSeconds
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -362,6 +363,67 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnKnockedDown:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2321418635686222194}
+        m_TargetAssemblyTypeName: PlayableDirectorController, Assembly-CSharp
+        m_MethodName: Enable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 0
+      - m_Target: {fileID: 2321418635686222194}
+        m_TargetAssemblyTypeName: PlayableDirectorController, Assembly-CSharp
+        m_MethodName: PlayFromStart
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: c763206d84da60741a02a4525266e0fe,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Playables.PlayableAsset,
+            UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnStandUp:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2321418635686222194}
+        m_TargetAssemblyTypeName: PlayableDirectorController, Assembly-CSharp
+        m_MethodName: PlayFromStart
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 68ef62076f17e6848adcb63a196c0188,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Playables.PlayableAsset,
+            UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnStandedUp:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2321418635686222194}
+        m_TargetAssemblyTypeName: PlayableDirectorController, Assembly-CSharp
+        m_MethodName: Disable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 0
   agent: {fileID: 718615963811065220}
   speed: 10
   acceleration: 10
@@ -395,6 +457,73 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &1392565254111278195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8735467944529785767}
+  - component: {fileID: 5349804065242709612}
+  - component: {fileID: 2321418635686222194}
+  m_Layer: 15
+  m_Name: KnockDownAnimations
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8735467944529785767
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392565254111278195}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7695624424510851281}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!320 &5349804065242709612
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392565254111278195}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: c763206d84da60741a02a4525266e0fe, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 0
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -7364708572978685617, guid: c763206d84da60741a02a4525266e0fe, type: 2}
+    value: {fileID: 4285494753655646613}
+  - key: {fileID: -7364708572978685617, guid: 68ef62076f17e6848adcb63a196c0188, type: 2}
+    value: {fileID: 4285494753655646613}
+  m_ExposedReferences:
+    m_References: []
+--- !u!114 &2321418635686222194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392565254111278195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c5975849ecd5e428aca4d63ae2c300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 5349804065242709612}
 --- !u!1 &1705117832799945448
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,7 +1016,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12338b1fe84e85c4b937ae9409280f4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attacks: []
+  comboList: {fileID: 11400000, guid: 09850b64263232744a8eff7d984b7206, type: 2}
+  comboAvailableTime: 2
   brokenDefenseRecovery: 2
   staminaByAttack: 10
   OnDefenseStarted:
@@ -1777,12 +1907,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveModule: {fileID: 7737104836090843365}
   stamina:
+    resourceName: Stamina
     maxValue: 100
     autoRegainPerSecond: 10
+    cooldownAfterConsume: 1
+    progressToConsiderEmpty: 0.05
+    fullRefillAfterDeplete: 1
     OnValueChanged:
       m_PersistentCalls:
         m_Calls: []
     OnProgressChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFullRefillStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFullRefillFinished:
       m_PersistentCalls:
         m_Calls: []
   healthBar:
@@ -1810,16 +1950,27 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   mana:
+    resourceName: Mana
     maxValue: 100
     autoRegainPerSecond: 10
+    cooldownAfterConsume: 1
+    progressToConsiderEmpty: 0.05
+    fullRefillAfterDeplete: 1
     OnValueChanged:
       m_PersistentCalls:
         m_Calls: []
     OnProgressChanged:
       m_PersistentCalls:
         m_Calls: []
+    OnFullRefillStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFullRefillFinished:
+      m_PersistentCalls:
+        m_Calls: []
   combatModule: {fileID: 2875999323649147632}
   spellModule: {fileID: 0}
+  immuneTo: 0
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -2061,6 +2212,7 @@ Transform:
   m_Children:
   - {fileID: 7960211278762633304}
   - {fileID: 5151881987346641559}
+  - {fileID: 8735467944529785767}
   m_Father: {fileID: 3956642202366862705}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4080143225004559284

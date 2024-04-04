@@ -107,9 +107,9 @@ namespace PaladinsFaith.Cinematics
             IEnumerable<IMarker> markers = asset.markerTrack.GetMarkers();
             foreach (IMarker marker in markers)
             {
-                if (marker is EndPointMarker endPointMarker)
+                if (marker is EndPointMarker)
                 {
-                    time = endPointMarker.time;
+                    time = marker.time;
                     break;
                 }
             }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PaladinsFaith.Combat;
 using PaladinsFaith.Player;
+using PaladinsFaith.Combat.AlteredStates;
 
 namespace PaladinsFaith.Enemies
 {
@@ -99,8 +100,21 @@ namespace PaladinsFaith.Enemies
             if (!combatModule.IsAttacking)
             {
                 moveModule.LookAt(player.transform.position);
-                combatModule.TryToAttack();
+                CombatMove combatMove = CombatMove.LightAttack;
+                combatModule.TryToAttack(combatMove);
             }
+        }
+
+        protected override void KnockDownStarted()
+        {
+            base.KnockDownStarted();
+            Debug.Log($"Enemy '{name}' KnockDownStarted");
+        }
+
+        protected override void KnockDownFinished()
+        {
+            base.KnockDownFinished();
+            Debug.Log($"Enemy '{name}' KnockDownFinished");
         }
     }
 }

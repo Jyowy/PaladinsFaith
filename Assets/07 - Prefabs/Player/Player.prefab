@@ -424,6 +424,7 @@ MonoBehaviour:
   colliderToTarget: {fileID: 4820799945332864233}
   colliderToTargetWidth: 0.5
   moveFactor: 0.1
+  targetOffset: {x: 0, y: 0.5, z: 0}
 --- !u!1 &8176124270138645418
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,6 +605,11 @@ PrefabInstance:
         type: 3}
       propertyPath: onlyApplyPhysicsWhenMoving
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7613817612412428374, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
+        type: 3}
+      propertyPath: OnPushedDuration.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DisableAttacksForSeconds
       objectReference: {fileID: 0}
     - target: {fileID: 7871733014303789619, guid: 2876e93d9470bd44cb2b7a7dbafc5c73,
         type: 3}

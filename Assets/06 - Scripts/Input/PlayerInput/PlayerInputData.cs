@@ -1,3 +1,4 @@
+using PaladinsFaith.Combat;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,10 +12,11 @@ namespace PaladinsFaith.Input
         public bool fastMove = false;
 
         public bool defenseActive = false;
-        public bool heavyAttack = false;
 
-        private readonly BufferedActivation lightAttack = new BufferedActivation();
-        private readonly float lightAttackBufferTime = 1.5f;
+        private readonly float comboBufferTime = 1.5f;
+        private readonly BufferedActivation combatMoveTriggered = new BufferedActivation();
+        public CombatMove combatMove = CombatMove.LightAttack;
+        public readonly ButtonHoldingActivation combatMoveHold = new ButtonHoldingActivation();
 
         private readonly BufferedActivation spell = new BufferedActivation();
         private readonly float magicBufferTime = 1.5f;
@@ -23,7 +25,7 @@ namespace PaladinsFaith.Input
         public readonly ButtonActivation nextSpell = new ButtonActivation();
 
         public readonly BufferedActivation interact = new BufferedActivation();
-        private readonly float intearctionBufferTime = 0.25f;
+        private readonly float interactionBufferTime = 0.25f;
 
         private float prevUpdateTime = 0f;
 
@@ -39,24 +41,36 @@ namespace PaladinsFaith.Input
                 return;
             }
 
-            lightAttack.UpdateTime(dt);
             spell.UpdateTime(dt);
             interact.UpdateTime(dt);
         }
 
-        public void LightAttack()
+        public void CombatMoveTriggered(CombatMove combatMove)
         {
-            lightAttack.Activate(lightAttackBufferTime);
+            combatMoveTriggered.Activate(comboBufferTime);
+            this.combatMove = combatMove;
+            combatMoveHold.Activate();
         }
 
-        public bool IsLightAttackActive()
+        public void CombatMoveReleased(CombatMove combatMove)
         {
-            return lightAttack.Active;
+            if (this.combatMove != combatMove)
+            {
+                return;
+            }
+
+            combatMoveTriggered.Finish();
+            combatMoveHold.Consume();
         }
 
-        public void ConsumeLightAttack()
+        public bool HasCombatMove()
         {
-            lightAttack.Finish();
+            return combatMoveTriggered.Active;
+        }
+
+        public void ConsumeCombatMove()
+        {
+            combatMoveTriggered.Finish();
         }
 
         public bool IsPrevSpellRequested()
@@ -96,7 +110,7 @@ namespace PaladinsFaith.Input
 
         public void Interact()
         {
-            interact.Activate(intearctionBufferTime);
+            interact.Activate(interactionBufferTime);
         }
 
         public bool IsInteractActive()

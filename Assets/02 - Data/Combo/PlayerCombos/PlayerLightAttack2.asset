@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51744e5a86bd28d45b6eb6618572e458, type: 3}
+  m_Name: PlayerLightAttack2
+  m_EditorClassIdentifier: 
+  comboName: Light Attack 2
+  attack: {fileID: 11400000, guid: 3112f790fb7c50142a299f0cdf7d95c9, type: 2}
+  comboElement: 0
+  hasChainCondition: 1
+  chainCondition:
+    matchMode: 0
+    conditions:
+    - matchMode: 0
+      comboElement: 0
+      attack: {fileID: 0}

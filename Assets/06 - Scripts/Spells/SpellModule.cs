@@ -72,7 +72,7 @@ namespace PaladinsFaith.Spells
 
         private void ConsumeManaForSpell(SpellData spellData)
         {
-            mana.Consume(spellData.manaCost);
+            mana.TryToConsume(spellData.manaCost);
         }
 
         private bool HasEnoughMana(float amount)

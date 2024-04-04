@@ -4,10 +4,15 @@ using UnityEngine;
 using PaladinsFaith.Characters;
 using PaladinsFaith.Spells;
 using UnityEngine.Events;
+using PaladinsFaith.Combat.AlteredStates;
+using Sirenix.OdinInspector;
+using PaladinsFaith.Combat.Combos;
 
 namespace PaladinsFaith.Combat
 {
-    public class CombatantCharacter : Character, AttackReceiver, DamageReceiver
+    public abstract class CombatantCharacter : Character,
+        AttackReceiver, DamageReceiver,
+        AlteredStateReceiver
     {
         [SerializeField]
         protected HealthBar healthBar = null;
@@ -18,20 +23,27 @@ namespace PaladinsFaith.Combat
         [SerializeField]
         protected SpellModule spellModule = null;
 
+        [SerializeField]
+        protected AlteredState.Type immuneTo = 0;
+
         public UnityEvent OnDeath = null;
+
+        [ShowInInspector, ReadOnly]
+        public AlteredState.Type AlteredStates { get; set; } = 0;
 
         protected override void Awake()
         {
             base.Awake();
             healthBar.Initialize(OnDead);
             combatModule.SetStamina(stamina);
-            stamina.Fill();
-            if (spellModule != null )
+            stamina.Initialize(gameObject);
+            if (spellModule != null)
             {
                 spellModule.SetMana(mana);
             }
 
-            moveModule.OnPushed?.AddListener(OnPushed);
+            moveModule.OnPushed?.AddListener(Pushed);
+            moveModule.OnStandedUp?.AddListener(StandedUp);
         }
 
         protected override void Update()
@@ -52,7 +64,7 @@ namespace PaladinsFaith.Combat
             }
             else
             {
-                attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint);
+                attack.effectsOnImpact.ApplyOnImpact(attack.attacker, gameObject, attack.impactPoint, attack.multiplier);
             }
 
             return result;
@@ -73,14 +85,72 @@ namespace PaladinsFaith.Combat
             OnDeath?.Invoke();
         }
 
-        public virtual void Attack()
+        public virtual void Attack(CombatMove comboElement)
         {
-            combatModule.TryToAttack();
+            combatModule.TryToAttack(comboElement);
         }
 
-        protected virtual void OnPushed()
+        protected virtual void Pushed()
         {
             combatModule.CancelAttack();
+        }
+
+        public virtual void ReceiveAlteredState(AlteredState state)
+        {
+            AlteredState.Type type = state.type;
+            if (!CanReceiveAlteredState(type))
+            {
+                return;
+            }
+
+            float duration = state.duration;
+
+            switch (type)
+            {
+                case AlteredState.Type.KnockedDown:
+                    KnockDown(duration);
+                    break;
+            }
+
+            AddAlteredState(type);
+        }
+
+        private bool CanReceiveAlteredState(AlteredState.Type type)
+        {
+            return !immuneTo.HasFlag(type)
+                && !AlteredStates.HasFlag(type);
+        }
+
+        protected virtual void AddAlteredState(AlteredState.Type state)
+        {
+            AlteredStates |= state;
+        }
+
+        protected virtual void RemoveAlteredState(AlteredState.Type state)
+        {
+            AlteredStates &= ~state;
+        }
+
+        protected void KnockDown(float duration)
+        {
+            moveModule.KnockDownStarted();
+            combatModule.Stop();
+            combatModule.DisableAttacks();
+            KnockDownStarted();
+            Timers.StartGameTimer(this, "KnockedDown", duration, KnockDownFinished);
+        }
+
+        protected virtual void KnockDownStarted() { }
+
+        protected virtual void KnockDownFinished()
+        {
+            moveModule.KnockDownFinished();
+            RemoveAlteredState(AlteredState.Type.KnockedDown);
+        }
+
+        protected virtual void StandedUp()
+        {
+            combatModule.EnableAttacks();
         }
     }
 }
