@@ -15,16 +15,14 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 7980798599674523044, guid: 64a07a22d129b4442837f6cf2cde4e2a, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
     - Name: EffectsOnStartCasting
-      Entry: 6
-      Data: 
-    - Name: EffectsOnSpellCasted
       Entry: 7
       Data: 0|PaladinsFaith.Effects.EffectSet, Assembly-CSharp
     - Name: effects
@@ -33,37 +31,95 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: EffectsOnSpellCasted
+      Entry: 7
+      Data: 2|PaladinsFaith.Effects.EffectSet, Assembly-CSharp
+    - Name: effects
+      Entry: 7
+      Data: 3|System.Collections.Generic.List`1[[PaladinsFaith.Effects.EffectBase,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 2|PaladinsFaith.Effects.HealEffect, Assembly-CSharp
+      Data: 4|PaladinsFaith.Effects.PrefabEffect, Assembly-CSharp
     - Name: targetDetector
       Entry: 7
-      Data: 3|PaladinsFaith.Effects.TargetDetector, Assembly-CSharp
+      Data: 5|PaladinsFaith.TargetDetector, Assembly-CSharp
     - Name: type
       Entry: 3
       Data: 0
-    - Name: friendlyFire
+    - Name: hasFriendlyFire
       Entry: 5
       Data: false
-    - Name: blockingLayers
+    - Name: possibleTargets
       Entry: 7
       Data: UnityEngine.LayerMask, UnityEngine.CoreModule
     - Name: 
       Entry: 3
-      Data: 512
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
     - Name: distance
       Entry: 4
       Data: 5
-    - Name: width
+    - Name: rayWidth
       Entry: 4
       Data: 0.25
-    - Name: angle
+    - Name: coneAngle
       Entry: 4
       Data: 90
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: prefab
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|PaladinsFaith.Effects.HealEffect, Assembly-CSharp
+    - Name: targetDetector
+      Entry: 7
+      Data: 7|PaladinsFaith.TargetDetector, Assembly-CSharp
+    - Name: type
+      Entry: 3
+      Data: 0
+    - Name: hasFriendlyFire
+      Entry: 5
+      Data: false
+    - Name: possibleTargets
+      Entry: 7
+      Data: UnityEngine.LayerMask, UnityEngine.CoreModule
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: distance
+      Entry: 4
+      Data: 5
+    - Name: rayWidth
+      Entry: 4
+      Data: 0
+    - Name: coneAngle
+      Entry: 4
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -88,6 +144,6 @@ MonoBehaviour:
   spellName: Minor Healing Words
   description: Heals the caster a small amount of hit points.
   manaCost: 10
-  timeToCast: 2
+  timeToCast: 0
   castType: 0
   spellDuration: 2

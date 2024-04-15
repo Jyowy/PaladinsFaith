@@ -24,7 +24,7 @@ namespace PaladinsFaith
         [SerializeField]
         [ShowIf(nameof(CanHaveFriendlyFire))]
         private bool hasFriendlyFire = false;
-        [SerializeField]
+        [SerializeField, HideIf(nameof(type), RangeType.Self)]
         private LayerMask possibleTargets = LayerMask.GetMask("Enemy", "Player");
 
         [SerializeField]
@@ -80,7 +80,6 @@ namespace PaladinsFaith
                     Vector3 origin = center;
                     float radius = distance;
 
-                    //targetColliders = Physics.OverlapSphere(origin, radius, possibleTargets)
                     targetColliders = Physics.OverlapSphere(origin, radius, possibleTargets, QueryTriggerInteraction.Ignore)
                         .ToList();
 

@@ -7,7 +7,6 @@ namespace PaladinsFaith.Effects
     public abstract class EffectBase
     {
         public TargetDetector targetDetector = new TargetDetector();
-        public GameObject prefab = null;
 
         public virtual void Apply(GameObject caster, float multiplier)
         {
