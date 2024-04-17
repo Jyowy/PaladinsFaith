@@ -7630,11 +7630,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
-      propertyPath: immuneTo
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4142831211012571418, guid: 6220a7c2faa3d90429713a8cd5972230,
-        type: 3}
       propertyPath: mana.maxValue
       value: 30
       objectReference: {fileID: 0}
@@ -7953,17 +7948,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8157247218655894372, guid: 6220a7c2faa3d90429713a8cd5972230,
-        type: 3}
-      propertyPath: spells.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8157247218655894372, guid: 6220a7c2faa3d90429713a8cd5972230,
-        type: 3}
-      propertyPath: spells.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 07fd4ec9dae7fa74ebb5b6cc8790afe7,
-        type: 2}
     - target: {fileID: 8157247218655894372, guid: 6220a7c2faa3d90429713a8cd5972230,
         type: 3}
       propertyPath: serializationData.Prefab

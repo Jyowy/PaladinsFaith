@@ -28,7 +28,7 @@ namespace PaladinsFaith.Combat
 
         public UnityEvent OnDeath = null;
 
-        [ShowInInspector, ReadOnly]
+        [ShowInInspector]
         public AlteredState.Type AlteredStates { get; set; } = 0;
 
         protected override void Awake()
@@ -53,11 +53,21 @@ namespace PaladinsFaith.Combat
             mana.Update(dt);
         }
 
+        protected virtual bool CanMove()
+        {
+            return DoesntHaveAlteredState(AlteredState.Type.Stunned);
+        }
+
         public virtual AttackResult ReceiveAttack(Attack attack)
         {
             AttackResult result = AttackResult.Success;
 
-            if (combatModule.CanBlock(attack))
+            if (HasAlteredState(AlteredState.Type.Shielded))
+            {
+                ReceivedAttackWhileShielded(attack);
+                result = AttackResult.Defended;
+            }
+            else if (combatModule.CanBlock(attack))
             {
                 combatModule.Block(attack);
                 result = AttackResult.Defended;
@@ -110,6 +120,14 @@ namespace PaladinsFaith.Combat
                 case AlteredState.Type.KnockedDown:
                     KnockDown(duration);
                     break;
+
+                case AlteredState.Type.Shielded:
+                    Shielded(duration);
+                    break;
+
+                case AlteredState.Type.Stunned:
+                    Stun(duration);
+                    break;
             }
 
             AddAlteredState(type);
@@ -129,6 +147,16 @@ namespace PaladinsFaith.Combat
         protected virtual void RemoveAlteredState(AlteredState.Type state)
         {
             AlteredStates &= ~state;
+        }
+
+        protected virtual bool HasAlteredState(AlteredState.Type state)
+        {
+            return AlteredStates.HasFlag(state);
+        }
+
+        protected virtual bool DoesntHaveAlteredState(AlteredState.Type state)
+        {
+            return !AlteredStates.HasFlag(state);
         }
 
         protected void KnockDown(float duration)
@@ -151,6 +179,33 @@ namespace PaladinsFaith.Combat
         protected virtual void StandedUp()
         {
             combatModule.EnableAttacks();
+        }
+
+        protected void Shielded(float duration)
+        {
+            Timers.StartGameTimer(this, "Shielded", duration, ShieldedFinished);
+        }
+
+        protected virtual void ShieldedFinished()
+        {
+            RemoveAlteredState(AlteredState.Type.Shielded);
+        }
+
+        protected virtual void ReceivedAttackWhileShielded(Attack attack)
+        {
+        }
+
+
+        protected void Stun(float duration)
+        {
+            Timers.StartGameTimer(this, "Stunned", duration, StunFinished);
+        }
+
+        protected virtual void StunStarted() { }
+
+        protected virtual void StunFinished()
+        {
+            RemoveAlteredState(AlteredState.Type.Stunned);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace PaladinsFaith.Combat.AlteredStates
             None = 0,
             Stunned = 0x1,
             KnockedDown = 0x1 << 1,
+            Shielded = 0x1 << 2,
         }
 
         public Type type = Type.Stunned;

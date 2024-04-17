@@ -6,13 +6,14 @@ using UnityEngine.Events;
 
 namespace PaladinsFaith.Spells
 {
-    public class SpellModule : SerializedMonoBehaviour
+    public class SpellModule : MonoBehaviour
     {
         [SerializeField]
         private GameObject caster = null;
 
         [SerializeField]
         private List<SpellData> spells = new List<SpellData>();
+        [Space]
 
         public UnityEvent NoSpellPrepared = null;
         public UnityEvent<SpellData> OnAvailableSpellChanged = null;

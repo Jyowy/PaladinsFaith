@@ -74,6 +74,11 @@ namespace PaladinsFaith.Enemies
 
         private void MoveToPlayer()
         {
+            if (!CanMove())
+            {
+                return;
+            }
+
             Vector3 position = player.transform.position;
             moveModule.MoveTo(position);
         }
@@ -115,6 +120,11 @@ namespace PaladinsFaith.Enemies
         {
             base.KnockDownFinished();
             Debug.Log($"Enemy '{name}' KnockDownFinished");
+        }
+
+        protected override void StunStarted()
+        {
+            moveModule.Stop();
         }
     }
 }

@@ -973,19 +973,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57fadc0cccaa3bc4aaf0ebf61ff1cabe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   caster: {fileID: 4324059231694827579}
   spells:
   - {fileID: 11400000, guid: 7572b3fc6e3c30e429dad9c5d05581c1, type: 2}
   - {fileID: 11400000, guid: f9a784068c254b44bab73cd438b6d6a7, type: 2}
+  - {fileID: 11400000, guid: 07fd4ec9dae7fa74ebb5b6cc8790afe7, type: 2}
+  - {fileID: 11400000, guid: f53b60566240fed4b900c0c66b26df95, type: 2}
+  - {fileID: 11400000, guid: 63069fc3105bec24c9db92f0a419e6d8, type: 2}
   NoSpellPrepared:
     m_PersistentCalls:
       m_Calls: []

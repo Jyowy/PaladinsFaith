@@ -10,22 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df050bf641dce56459426217c63c16e0, type: 3}
-  m_Name: ShockWave
+  m_Name: EnergyShield
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 7980798599674523044, guid: 1cfa86b497d805644ba63d244c4e6f7d, type: 3}
+    - {fileID: 7980798599674523044, guid: aac1d4693ce1dca4190b79d76cfdf8b2, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
     - Name: EffectsOnStartCasting
-      Entry: 6
-      Data: 
-    - Name: EffectsOnSpellCasted
       Entry: 7
       Data: 0|PaladinsFaith.Effects.EffectSet, Assembly-CSharp
     - Name: effects
@@ -34,13 +31,32 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 4
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: EffectsOnSpellCasted
+      Entry: 7
+      Data: 2|PaladinsFaith.Effects.EffectSet, Assembly-CSharp
+    - Name: effects
+      Entry: 7
+      Data: 3|System.Collections.Generic.List`1[[PaladinsFaith.Effects.EffectBase,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 2|PaladinsFaith.Effects.PrefabEffect, Assembly-CSharp
+      Data: 4|PaladinsFaith.Effects.PrefabEffect, Assembly-CSharp
     - Name: targetDetector
       Entry: 7
-      Data: 3|PaladinsFaith.TargetDetector, Assembly-CSharp
+      Data: 5|PaladinsFaith.TargetDetector, Assembly-CSharp
     - Name: type
       Entry: 3
       Data: 0
@@ -52,7 +68,7 @@ MonoBehaviour:
       Data: UnityEngine.LayerMask, UnityEngine.CoreModule
     - Name: 
       Entry: 3
-      Data: 32896
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -76,55 +92,13 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 4|PaladinsFaith.Effects.PushEffect, Assembly-CSharp
-    - Name: targetDetector
-      Entry: 7
-      Data: 5|PaladinsFaith.TargetDetector, Assembly-CSharp
-    - Name: type
-      Entry: 3
-      Data: 4
-    - Name: hasFriendlyFire
-      Entry: 5
-      Data: false
-    - Name: possibleTargets
-      Entry: 7
-      Data: UnityEngine.LayerMask, UnityEngine.CoreModule
-    - Name: 
-      Entry: 3
-      Data: 32896
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: distance
-      Entry: 4
-      Data: 25
-    - Name: rayWidth
-      Entry: 4
-      Data: 0
-    - Name: coneAngle
-      Entry: 4
-      Data: 90
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: strength
-      Entry: 4
-      Data: 10
-    - Name: duration
-      Entry: 4
-      Data: 0.25
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 6|PaladinsFaith.Effects.DamageEffect, Assembly-CSharp
+      Data: 6|PaladinsFaith.Effects.AlteredStateEffect, Assembly-CSharp
     - Name: targetDetector
       Entry: 7
       Data: 7|PaladinsFaith.TargetDetector, Assembly-CSharp
     - Name: type
       Entry: 3
-      Data: 4
+      Data: 0
     - Name: hasFriendlyFire
       Entry: 5
       Data: false
@@ -133,52 +107,13 @@ MonoBehaviour:
       Data: UnityEngine.LayerMask, UnityEngine.CoreModule
     - Name: 
       Entry: 3
-      Data: 32896
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
     - Name: distance
       Entry: 4
-      Data: 25
-    - Name: rayWidth
-      Entry: 4
-      Data: 0.25
-    - Name: coneAngle
-      Entry: 4
-      Data: 90
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: amount
-      Entry: 4
-      Data: 10
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 8|PaladinsFaith.Effects.AlteredStateEffect, Assembly-CSharp
-    - Name: targetDetector
-      Entry: 7
-      Data: 9|PaladinsFaith.TargetDetector, Assembly-CSharp
-    - Name: type
-      Entry: 3
-      Data: 4
-    - Name: hasFriendlyFire
-      Entry: 5
-      Data: false
-    - Name: possibleTargets
-      Entry: 7
-      Data: UnityEngine.LayerMask, UnityEngine.CoreModule
-    - Name: 
-      Entry: 3
-      Data: 32896
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: distance
-      Entry: 4
-      Data: 25
+      Data: 5
     - Name: rayWidth
       Entry: 4
       Data: 0.25
@@ -190,13 +125,13 @@ MonoBehaviour:
       Data: 
     - Name: alteredState
       Entry: 7
-      Data: 10|PaladinsFaith.Combat.AlteredStates.AlteredState, Assembly-CSharp
+      Data: 8|PaladinsFaith.Combat.AlteredStates.AlteredState, Assembly-CSharp
     - Name: type
       Entry: 3
-      Data: 1
+      Data: 4
     - Name: duration
       Entry: 4
-      Data: 2.5
+      Data: 10
     - Name: 
       Entry: 8
       Data: 
@@ -215,9 +150,9 @@ MonoBehaviour:
     - Name: EffectsOnSpellFinished
       Entry: 6
       Data: 
-  spellName: Shock Wave
-  description: Pushes backward all enemies in range.
-  manaCost: 10
+  spellName: Energy Shield
+  description: Protects the caster from all atacks for a while.
+  manaCost: 25
   timeToCast: 0
   castType: 0
   spellDuration: 2

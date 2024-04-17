@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PaladinsFaith.Combat;
-using PaladinsFaith.Combat.Combos;
 
 namespace PaladinsFaith.Player
 {

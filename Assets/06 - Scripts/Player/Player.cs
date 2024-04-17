@@ -204,7 +204,8 @@ namespace PaladinsFaith.Player
             PlayerInputData playerInputData = inputDataProvider.UpdateAndGetPlayerInputData();
             PlayerData playerData = dataProvider.UpdateAndGetPlayerData(this);
 
-            if (CharacterControlBlocked())
+            if (CharacterControlBlocked()
+                || !CanMove())
             {
                 return;
             }
@@ -416,6 +417,7 @@ namespace PaladinsFaith.Player
 
         public override void ReceiveAlteredState(AlteredState state)
         {
+            base.ReceiveAlteredState(state);
             // TODO
         }
     }
